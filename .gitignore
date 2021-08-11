@@ -1,6 +1,3 @@
-# chezmoi objects that need not go
-*private_executable*
-
 .ssh/id_*
 .ssh/*.pem
 .ssh/known_hosts*

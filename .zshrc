@@ -11,6 +11,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   if [[ ${DISTRIB} = "Ubuntu"* ]]; then
     if uname -a | grep -q '^Linux.*Microsoft'; then
       # ubuntu via WSL Windows Subsystem for Linux
+
+      # Hack: Solve slow FZF issue
       unsetopt PATH_DIRS 
     else
       # native ubuntu
@@ -55,9 +57,6 @@ setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 # If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
 setopt HIST_IGNORE_ALL_DUPS
-# don't expand aliases _before_ completion has finished
-#   like: git comm-[tab]
-setopt COMPLETE_ALIASES
 
 ## History.
 HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
@@ -234,6 +233,9 @@ export PERSONAL_SCRIPTS_HOME="/Volumes/Google\ Drive/scripts"
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 
+#GPG config
+export GPG_TTY=$TTY
+
 # brew install 
 # shfmt
 # autopep8
@@ -307,7 +309,6 @@ alias mvncv=mvn clean verify
 alias mvnt='mvn clean test -T1.5C'
 
 alias a2inc="$SCRIPTS_HOME/scripts.sh log.a2inc"
-#alias update_repos="$SCRIPTS_HOME/git_scripts/update_all_repos_in_dir.sh"
 alias sql=/opt/sqlcl/bin/sql
 
 # virtual environments
