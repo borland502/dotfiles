@@ -11,6 +11,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   if [[ ${DISTRIB} = "Ubuntu"* ]]; then
     if uname -a | grep -q '^Linux.*Microsoft'; then
       # ubuntu via WSL Windows Subsystem for Linux
+
+      # Hack: Solve slow FZF issue
       unsetopt PATH_DIRS 
     else
       # native ubuntu
@@ -55,9 +57,6 @@ setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 # If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
 setopt HIST_IGNORE_ALL_DUPS
-# don't expand aliases _before_ completion has finished
-#   like: git comm-[tab]
-setopt COMPLETE_ALIASES
 
 ## History.
 HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
@@ -234,6 +233,9 @@ export PERSONAL_SCRIPTS_HOME="/Volumes/Google\ Drive/scripts"
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 
+#GPG config
+export GPG_TTY=$TTY
+
 # brew install 
 # shfmt
 # autopep8
@@ -298,8 +300,6 @@ alias zscripts='cd /.shellrc/zshrc.d'
 alias psnginx='ps -ef | grep nginx'
 alias startnginx='sudo nginx'
 alias stopnginx='sudo nginx -s stop'
-alias tnginxaccesslog='tail -100f /usr/local/Cellar/nginx/1.15.5/logs/access.log'
-alias tnginxerrorlog='tail -100f /usr/local/Cellar/nginx/1.15.5/logs/error.log'
 alias ping='prettyping --nolegend'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 alias top="sudo htop"
@@ -309,9 +309,7 @@ alias mvncv=mvn clean verify
 alias mvnt='mvn clean test -T1.5C'
 
 alias a2inc="$SCRIPTS_HOME/scripts.sh log.a2inc"
-#alias update_repos="$SCRIPTS_HOME/git_scripts/update_all_repos_in_dir.sh"
 alias sql=/opt/sqlcl/bin/sql
-alias vlabdb=sql "jhettenhouser@$VLAB_DB_HOST:1521:dte3"
 
 # virtual environments
 if command -v jenv &> /dev/null
