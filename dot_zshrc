@@ -88,18 +88,11 @@ zinit light-mode for \
 
 # End of Zinit's installer chunk
 
-## Self update
-# zinit self-update
-
-# Plugin update
-# cdzinit update
-
 ## Prompt
 zinit lucid for \
     as"command" from"gh-r" atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'eval "$(starship init zsh)"' bpick'*unknown-linux-gnu*' \
     starship/starship \
 ## End Prompt
-
 
 ## Zinit Packages
 zinit pack for fzf
@@ -148,7 +141,6 @@ zinit wait lucid for \
     djui/alias-tips 
 
 # zsh github plugins
-#TODO pyenv Does not work past cloning    
 
 zinit wait lucid for \
 light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
@@ -191,8 +183,6 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     trapd00r/LS_COLORS \
     lukechilds/zsh-nvm \
     paulirish/git-open 
-# has'pyenv' on-update-of="$(pyenv root)/bin" atclone'PREFIX="$(pyenv root)/plugins/pyenv-virtualenvwrapper" ./install.sh' wait'1' cloneonly \
-#    light-mode pyenv/pyenv-virtualenv 
 
 # github programs
 
@@ -211,8 +201,6 @@ zinit light sharkdp/bat
 zinit ice as"command" from"gh-r" mv"fd* -> fd" pick"fd/fd"
 zinit light sharkdp/fd
 
-# TODO JENV ICE
-
 # Pyenv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
@@ -225,10 +213,6 @@ export ZINIT_HOME="${ZDOTDIR:-${HOME/.zinit}}"
 ##Liquibase
 export LIQUIBASE_HOME="$HOME/Development/bitbucket/liquibase/codb/liquibase-3.2.2"
 
-## Scripts:  TODO: Migrate to a dir commen in wsl/linux/mac os
-export SCRIPTS_HOME="$HOME/Development/scripts"
-export PERSONAL_SCRIPTS_HOME="/Volumes/Google\ Drive/scripts"
-
 ## Homebrew
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_INSECURE_REDIRECT=1
@@ -240,6 +224,7 @@ export GPG_TTY=$TTY
 # shfmt
 # autopep8
 # clang-formatß
+# gpg2
 
 ##Maven
 export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
