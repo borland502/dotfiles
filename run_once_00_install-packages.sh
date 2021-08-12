@@ -2,9 +2,18 @@
 
 # Script can be used with linux, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
+# brew install 
+# shfmt
+# autopep8
+# clang-formatß
+# gpg2
+
 PLATFORM=${OSTYPE:-'unknown'}
 
 function sysinstall {
+
+  # silent install
+  CI=1
 
   echo "Preparing to install software on $PLATFORM"
 
@@ -19,42 +28,37 @@ function sysinstall {
 
   echo "Installing all homebrew apps"
 
+  #TODO Install languages using virtual env managers if possible
   programming_languages_homebrew=(openjdk node python3 golang typescript)
 
   for i in ${programming_languages_homebrew[@]}; do
     brew install $i
   done
 
-  build_tools_homebrew=(git subversion maven gradle npm)
+  build_tools_homebrew=(git maven gradle npm)
 
   for i in ${build_frameworks_homebrew[@]}; do
     brew install $i
   done
 
-  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping)
+  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm)
 
   for i in ${cli_applications_homebrew[@]}; do
     brew install $i
   done
 
-  echo "Installing all non-freeware packages with brew cask"
-
-  gui_app_cask=(Vivaldi google-chrome docker sourcetree visual-studio-code slack discord dropbox sublime-text intellij-idea onedrive adoptopenjdk8)
-  # TODO New security permissions with virtualbox
+  echo "Installing misc plugins"
+  brew install pyenv-virtualenv
+  brew install pyenv-ccache
 
   if [[ $PLATFORM == "darwin"* ]]; then
-    echo "Installing Mac specific apps"
-    # brew install mackup # Depends on dropbox or similar service
+    echo "Installing all non-freeware packages with brew cask"
+
+    gui_app_cask=(Vivaldi google-chrome docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
     gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown bartender)
     for i in ${gui_app_cask[@]}; do
-      brew cask install $i
+      brew install $i
     done
-
-    echo "Adding custom taps"
-    brew tap mas-cli/tap/mas
-
-    echo "Installing all Mac Store apps"
-    brew install mas
 
   elif [[ $PLATFORM == "linux"* ]]; then
     echo "Installing linux specific apps"
@@ -69,3 +73,4 @@ function sysinstall {
 
   echo "Install misc software that somehow isn't available in homebrew, cask, or the mac store"
 }
+
