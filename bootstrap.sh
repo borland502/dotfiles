@@ -7,7 +7,19 @@
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   local DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
 
+  # TODO Slot into debian/ubuntu/ami flavors
   # Options that apply to any linux system (WSL or otherwise)
+  if ![[ -x "$(command -v apt)" ]]; then
+    sudo apt-update
+    sudo apt-get install build-essential procps curl file git
+  elif ![[ -x "$(command -v yum)" ]]; then
+    sudo yum groupinstall 'Development Tools'
+    sudo yum install procps-ng curl file git
+    sudo yum install libxcrypt-compat # needed by Fedora 30 and up
+  else
+    echo "Unknown package manager for linux" || exit  
+  fi
+
 
   if [[ ${DISTRIB} = "Ubuntu"* ]]; then
 

@@ -94,6 +94,9 @@ zinit lucid for \
     starship/starship \
 ## End Prompt
 
+# hacks
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh 
+
 ## Oh My Zsh plugins, libraries, and functions
 setopt promptsubst
 

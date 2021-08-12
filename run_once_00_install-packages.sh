@@ -2,12 +2,6 @@
 
 # Script can be used with linux, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
-# brew install 
-# shfmt
-# autopep8
-# clang-formatß
-# gpg2
-
 PLATFORM=${OSTYPE:-'unknown'}
 
 function sysinstall {
@@ -41,7 +35,8 @@ function sysinstall {
     brew install $i
   done
 
-  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm)
+  # TODO: Extract brew targets that require super user permissions and place them in bootstrap
+  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr)
 
   for i in ${cli_applications_homebrew[@]}; do
     brew install $i
@@ -70,7 +65,6 @@ function sysinstall {
       echo "native Linux"
     fi
   fi
-
-  echo "Install misc software that somehow isn't available in homebrew, cask, or the mac store"
 }
 
+sysinstall
