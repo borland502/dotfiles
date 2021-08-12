@@ -1,11 +1,13 @@
 #!/bin/sh
 
+# 
+
 # install homebrew/linuxbrew
 if ! [ -x "$(command -v brew)" ] ; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-# TODO: Package installer script
+# Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
 if ! [ -x "$(command -v chezmoi)" ] ; then
     brew install chezmoi
 fi
