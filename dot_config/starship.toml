@@ -1,0 +1,83 @@
+# ~/.config/starship.toml
+
+command_timeout = 2000
+scan_timeout = 100
+
+[[battery.display]]
+threshold = 30
+style = "bold red"
+
+[character]
+error_symbol = "[✖](bold red) "
+
+[cmd_duration]
+min_time = 10_000  # Show command duration over 10,000 milliseconds (=10 sec)
+format = " took [$duration]($style)"
+
+[git_branch]
+format = " [$symbol$branch]($style) "
+symbol = "𐂷 "
+style = "bold #fce566"
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+
+[git_status]
+conflicted = "⚔️ "
+ahead = "🏎️ 💨 ×${count}"
+behind = "🐢 ×${count}"
+diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
+untracked = "🛤️  ×${count}"
+stashed = "📦 "
+modified = "📝 ×${count}"
+staged = "🗃️  ×${count}"
+renamed = "📛 ×${count}"
+deleted = "🗑️  ×${count}"
+style = "bright-white"
+format = "$all_status$ahead_behind"
+
+# shows the hostname on new lines
+[hostname]
+ssh_only = true
+# prefix = "💻️ "
+# suffix = ">>"
+trim_at = ".companyname.com"
+disabled = false
+style = "bold italic #7bd88f"
+
+[java]
+symbol = "☕ "
+style = "#fc618d"
+
+[python]
+format = "[$symbol$version]($style) "
+style = "bold #7bd88f"
+
+[time]
+time_format = "%T"
+format = "🕙 $time($style) "
+style = "#948ae3"
+disabled = false
+
+[username]
+style_user = "bold dimmed #5ad4e6"
+show_always = false
+
+[battery]
+full_symbol = "🔋💯 "
+charging_symbol = "🔋📈 "
+discharging_symbol = "🔋📉 "
+
+# configure directory
+[directory]
+truncation_length = 10
+truncate_to_repo = true # truncates directory to root folder if in github repo
+# prefix = " 📂️ "
+style = "bold italic #87A752"
+
+[aws]
+style = "#fce566"
