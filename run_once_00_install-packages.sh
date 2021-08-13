@@ -1,15 +1,13 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Script can be used with linux, WSL (Windows), or MacOS with linuxbrew or homebrew.
-
-PLATFORM=${OSTYPE:-'unknown'}
 
 function sysinstall {
 
   # silent install
   CI=1
 
-  echo "Preparing to install software on $PLATFORM"
+  echo "Preparing to install software on $OSTYPE"
 
   # Update any existing homebrew recipes
   brew update
@@ -36,7 +34,7 @@ function sysinstall {
   done
 
   # TODO: Extract brew targets that require super user permissions and place them in bootstrap
-  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr)
+  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr ncdu htop)
 
   for i in ${cli_applications_homebrew[@]}; do
     brew install $i
@@ -50,12 +48,12 @@ function sysinstall {
     echo "Installing all non-freeware packages with brew cask"
 
     gui_app_cask=(Vivaldi google-chrome docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
-    gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown bartender)
+    gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown)
     for i in ${gui_app_cask[@]}; do
       brew install $i
     done
 
-  elif [[ $PLATFORM == "linux"* ]]; then
+  elif [[ $OSTYPE == "linux-gnu"* ]]; then
     echo "Installing linux specific apps"
 
     # https://stackoverflow.com/questions/38859145/detect-ubuntu-on-windows-vs-native-ubuntu-from-bash-script

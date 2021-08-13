@@ -260,6 +260,9 @@ alias startnginx='sudo nginx'
 alias stopnginx='sudo nginx -s stop'
 alias ping='prettyping --nolegend'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
+
+# Override common commands
+alias cat="bat --pager=never"
 alias top="sudo htop"
 alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 
