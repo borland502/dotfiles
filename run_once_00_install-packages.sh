@@ -1,70 +1,63 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Script can be used with linux, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
-PLATFORM=${OSTYPE:-'unknown'}
+# silent install
+CI=1
 
-function sysinstall {
+echo "Preparing to install software on $OSTYPE"
 
-  # silent install
-  CI=1
+# Update any existing homebrew recipes
+brew update
 
-  echo "Preparing to install software on $PLATFORM"
+# Upgrade any already installed formulae
+brew upgrade
 
-  # Update any existing homebrew recipes
-  brew update
+echo "Adding custom taps"
+brew tap AdoptOpenJDK/openjdk
 
-  # Upgrade any already installed formulae
-  brew upgrade
+echo "Installing all homebrew apps"
 
-  echo "Adding custom taps"
-  brew tap AdoptOpenJDK/openjdk
+#TODO Install languages using virtual env managers if possible
+programming_languages_homebrew=(openjdk node python3 golang typescript)
 
-  echo "Installing all homebrew apps"
+for i in ${programming_languages_homebrew[@]}; do
+  brew install $i
+done
 
-  #TODO Install languages using virtual env managers if possible
-  programming_languages_homebrew=(openjdk node python3 golang typescript)
+build_tools_homebrew=(git maven gradle npm)
 
-  for i in ${programming_languages_homebrew[@]}; do
+for i in ${build_frameworks_homebrew[@]}; do
+  brew install $i
+done
+
+# TODO: Extract brew targets that require super user permissions and place them in bootstrap
+cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr)
+
+for i in ${cli_applications_homebrew[@]}; do
+  brew install $i
+done
+
+echo "Installing misc plugins"
+brew install pyenv-virtualenv
+brew install pyenv-ccache
+
+if [[ $OSTYPE == "darwin"* ]]; then
+  echo "Installing all non-freeware packages with brew cask"
+
+  gui_app_cask=(Vivaldi google-chrome docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
+  gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown bartender)
+  for i in ${gui_app_cask[@]}; do
     brew install $i
   done
 
-  build_tools_homebrew=(git maven gradle npm)
+elif [[ $OSTYPE == "linux-gnu"* ]]; then
+  echo "Installing linux specific apps"
 
-  for i in ${build_frameworks_homebrew[@]}; do
-    brew install $i
-  done
-
-  # TODO: Extract brew targets that require super user permissions and place them in bootstrap
-  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr)
-
-  for i in ${cli_applications_homebrew[@]}; do
-    brew install $i
-  done
-
-  echo "Installing misc plugins"
-  brew install pyenv-virtualenv
-  brew install pyenv-ccache
-
-  if [[ $PLATFORM == "darwin"* ]]; then
-    echo "Installing all non-freeware packages with brew cask"
-
-    gui_app_cask=(Vivaldi google-chrome docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
-    gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown bartender)
-    for i in ${gui_app_cask[@]}; do
-      brew install $i
-    done
-
-  elif [[ $PLATFORM == "linux"* ]]; then
-    echo "Installing linux specific apps"
-
-    # https://stackoverflow.com/questions/38859145/detect-ubuntu-on-windows-vs-native-ubuntu-from-bash-script
-    if [[ $(grep -q Microsoft /proc/version) ]]; then
-      echo "WSL"
-    else
-      echo "native Linux"
-    fi
+  # https://stackoverflow.com/questions/38859145/detect-ubuntu-on-windows-vs-native-ubuntu-from-bash-script
+  if [[ $(grep -q Microsoft /proc/version) ]]; then
+    echo "WSL"
+  else
+    echo "native Linux"
   fi
-}
-
-sysinstall
+fi
