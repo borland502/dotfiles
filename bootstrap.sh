@@ -122,10 +122,14 @@ if ! [[ -x "$(command -v chezmoi)" ]]; then
     brew install chezmoi
 fi
 
-# chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git 
-chezmoi init git@github.com:borland502/dotfiles.git
-chezmoi diff
+if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
+  # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git 
+  chezmoi init git@github.com:borland502/dotfiles.git
+  chezmoi diff
 
-#TODO Pause script here for user go/nogo
+  #TODO Pause script here for user go/nogo
 
-chezmoi apply
+  chezmoi apply
+else
+  echo 'Please uninstall chezmoi and delete ~/.local/share/chezmoi if you want to install from scratch again.  Otherwise use chezmoi itself'  
+fi  

@@ -2,16 +2,10 @@
 
 # Script can be used with linux, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
-# silent install
-CI=1
-
-echo "Preparing to install software on $OSTYPE"
-
 # Update any existing homebrew recipes
 brew update
 
-# Upgrade any already installed formulae
-brew upgrade
+echo "Preparing to install software on $OSTYPE"
 
 echo "Adding custom taps"
 brew tap AdoptOpenJDK/openjdk
@@ -42,8 +36,8 @@ echo "Installing misc plugins"
 brew install pyenv-virtualenv
 brew install pyenv-ccache
 
-if [[ $OSTYPE == "darwin"* ]]; then
-  echo "Installing all non-freeware packages with brew cask"
+  # TODO: Extract brew targets that require super user permissions and place them in bootstrap
+  cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr ncdu htop)
 
   gui_app_cask=(Vivaldi google-chrome docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
   gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown bartender)
@@ -54,10 +48,23 @@ if [[ $OSTYPE == "darwin"* ]]; then
 elif [[ $OSTYPE == "linux-gnu"* ]]; then
   echo "Installing linux specific apps"
 
-  # https://stackoverflow.com/questions/38859145/detect-ubuntu-on-windows-vs-native-ubuntu-from-bash-script
-  if [[ $(grep -q Microsoft /proc/version) ]]; then
-    echo "WSL"
-  else
-    echo "native Linux"
+  if [[ $PLATFORM == "darwin"* ]]; then
+    echo "Installing all non-freeware packages with brew cask"
+
+    gui_app_cask=(Vivaldi google-chrome docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
+    gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown)
+    for i in ${gui_app_cask[@]}; do
+      brew install $i
+    done
+
+  elif [[ $OSTYPE == "linux-gnu"* ]]; then
+    echo "Installing linux specific apps"
+
+    # https://stackoverflow.com/questions/38859145/detect-ubuntu-on-windows-vs-native-ubuntu-from-bash-script
+    if [[ $(grep -q Microsoft /proc/version) ]]; then
+      echo "WSL"
+    else
+      echo "native Linux"
+    fi
   fi
 fi
