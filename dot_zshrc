@@ -6,17 +6,20 @@
 # profiling
 # zmodload zsh/zprof
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+if [[ "$OSTYPE" == "linux"* ]]; then
   local DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+
+    # Hack: Solve slow FZF issue
+    unsetopt PATH_DIRS
+
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
   if [[ ${DISTRIB} = "Ubuntu"* ]]; then
     if uname -a | grep -iq '^Linux.*Microsoft'; then
       # ubuntu via WSL Windows Subsystem for Linux
       echo 'WSL Detected'
 
-      # Hack: Solve slow FZF issue
-      unsetopt PATH_DIRS
-
-      eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+      
     else
       # native ubuntu
     fi
