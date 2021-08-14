@@ -66,7 +66,7 @@ ask() {
 
 # System dependant options that cannot be avoided for subsequent brew installs
 if [[ "$OSTYPE" == "linux"* ]]; then
-    local DISTRIB=Other
+    DISTRIB=Other
 
     # rare, but some distros do not have this file
     if [[ -x "/etc/os-release" ]]; then
