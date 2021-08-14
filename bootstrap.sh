@@ -76,15 +76,15 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   # Options that apply to any linux system (WSL or otherwise)
 
   ## Linuxbrew preqs
-  if [ -x "$(command -v apt)"]; then
+  if [ -x "$(command -v apt)" ]; then
     sudo apt-get update
     sudo apt-get -y install build-essential procps curl file git
-  elif [ -x "$(command -v yum)"]; then
+  elif [ -x "$(command -v yum)" ]; then
     sudo yum update
     sudo yum -y groupinstall 'Development Tools'
     sudo yum -y install procps-ng curl file git
     sudo yum -y install libxcrypt-compat
-  elif [ -x "$(command -v opkg)"]; then
+  elif [ -x "$(command -v opkg)" ]; then
     # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
     sudo opkg update
     sudo opkg install -y build-essential procps curl file git ca-certificates ldd zsh
