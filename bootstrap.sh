@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This is the only script which needs to be downloaded ahead of time and executed outside the repo
 # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/borland502/dotfiles/main/bootstrap.sh)"
