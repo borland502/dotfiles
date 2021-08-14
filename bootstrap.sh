@@ -3,6 +3,8 @@
 # This is the only script which needs to be downloaded ahead of time and executed outside the repo
 # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/borland502/dotfiles/main/bootstrap.sh)"
 
+# TODO Flag for the level of installation
+
 ###############################################################################
 # Prompts from Slay: https://github.com/minamarkham/formation/blob/master/twirl
 ###############################################################################
@@ -77,6 +79,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     sudo yum -y groupinstall 'Development Tools'
     sudo yum -y install procps-ng curl file git
     sudo yum -y install libxcrypt-compat
+  elif [ -x "$(command -v opkg)"]; then
+    # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
+    sudo opkg update
+    sudo opkg install -y build-essential procps curl file git
   fi     
 
   #if [[ ${DISTRIB} = "Ubuntu"* ]]; then
