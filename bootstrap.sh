@@ -65,7 +65,7 @@ ask() {
 }
 
 # System dependant options that cannot be avoided for subsequent brew installs
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+if [[ "$OSTYPE" == "linux"* ]]; then
   local DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
 
   # Options that apply to any linux system (WSL or otherwise)
@@ -82,7 +82,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   elif [ -x "$(command -v opkg)"]; then
     # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
     sudo opkg update
-    sudo opkg install -y build-essential procps curl file git
+    sudo opkg install -y build-essential procps curl file git ca-certificates ldd zsh
   fi     
 
   #if [[ ${DISTRIB} = "Ubuntu"* ]]; then
@@ -132,10 +132,7 @@ if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git 
   chezmoi init git@github.com:borland502/dotfiles.git
   chezmoi diff
+fi
 
   #TODO Pause script here for user go/nogo
-
-  chezmoi apply
-else
-  echo 'Please uninstall chezmoi and delete ~/.local/share/chezmoi if you want to install from scratch again.  Otherwise use chezmoi itself'  
-fi  
+chezmoi apply  
