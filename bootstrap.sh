@@ -66,7 +66,12 @@ ask() {
 
 # System dependant options that cannot be avoided for subsequent brew installs
 if [[ "$OSTYPE" == "linux"* ]]; then
-  local DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+    local DISTRIB=Other
+
+    # rare, but some distros do not have this file
+    if [[ -x "/etc/os-release" ]]; then
+      DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+    fi
 
   # Options that apply to any linux system (WSL or otherwise)
 
