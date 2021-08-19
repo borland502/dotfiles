@@ -34,6 +34,8 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS OSX
+  #iTerm2
+  test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 fi
 
 # MacOs Configuration
@@ -285,6 +287,8 @@ alias mvnt='mvn clean test -T1.5C'
 
 alias a2inc="$SCRIPTS_HOME/scripts.sh log.a2inc"
 alias sql=/opt/sqlcl/bin/sql
+
+alias cdliquibase="$HOME/Development/bitbucket/liquibase"
 
 # virtual environments
 if command -v jenv &> /dev/null
