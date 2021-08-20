@@ -94,3 +94,5 @@ function update_repos {
 
   cd "$starting_dir" || exit
 }
+
+export -f update_repos

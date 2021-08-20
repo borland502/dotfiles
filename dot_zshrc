@@ -288,7 +288,7 @@ alias mvnt='mvn clean test -T1.5C'
 alias a2inc="$SCRIPTS_HOME/scripts.sh log.a2inc"
 alias sql=/opt/sqlcl/bin/sql
 
-alias cdliquibase="$HOME/Development/bitbucket/liquibase"
+alias cdliquibase="cd $HOME/Development/bitbucket/liquibase"
 
 # virtual environments
 if command -v jenv &> /dev/null
