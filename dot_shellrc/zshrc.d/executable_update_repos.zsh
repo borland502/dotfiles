@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env zsh
 
 # Tests
 # TODO Extract all tests
@@ -94,5 +94,3 @@ function update_repos {
 
   cd "$starting_dir" || exit
 }
-
-export -f update_repos
