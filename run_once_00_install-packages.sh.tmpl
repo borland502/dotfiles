@@ -7,6 +7,13 @@ brew update
 
 echo "Preparing to install software on $OSTYPE"
 
+#Install 1password for the mac before any other additional packages.  Linux should already be taken care of
+{{ if (eq .chezmoi.os "darwin") }}
+  brew install 1password-cli
+{{ end }}
+
+eval $(op signin my.1password.com {{ .email }})
+
 echo "Adding custom taps"
 brew tap AdoptOpenJDK/openjdk
 
@@ -26,7 +33,7 @@ for i in ${build_frameworks_homebrew[@]}; do
 done
 
 # TODO: Extract brew targets that require super user permissions and place them in bootstrap
-cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr ncdu htop)
+cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr ncdu htop nmap)
 
 for i in ${cli_applications_homebrew[@]}; do
   brew install $i

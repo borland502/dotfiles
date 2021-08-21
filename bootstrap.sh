@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # One password version
 OP_VERSION=1.11.2
 
