@@ -91,8 +91,8 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   elif [ -x "$(command -v opkg)" ]; then
     # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
     sudo opkg update
-    sudo opkg install build-essential procps curl file git ca-certificates ldd zsh
-  fi
+    sudo opkg install curl file git git-http ca-certificates ldd zsh ruby 
+  fi     
 
   #if [[ ${DISTRIB} = "Ubuntu"* ]]; then
   #if uname -a | grep -q '^Linux.*Microsoft'; then
