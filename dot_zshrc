@@ -300,5 +300,8 @@ fi
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+#1Password completion
+eval "$(op completion zsh)"; compdef _op op
+
 # end profiling
 #zprof
