@@ -12,6 +12,7 @@ echo "Preparing to install software on $OSTYPE"
   brew install 1password-cli
 {{ end }}
 
+# This script runs rarely, so assume init each time
 eval $(op signin my.1password.com {{ .email }})
 
 echo "Adding custom taps"
@@ -33,7 +34,7 @@ for i in ${build_frameworks_homebrew[@]}; do
 done
 
 # TODO: Extract brew targets that require super user permissions and place them in bootstrap
-cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format gpg2 exa jenv pyenv nvm tldr ncdu htop nmap)
+cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv pyenv nvm tldr ncdu htop nmap)
 
 for i in ${cli_applications_homebrew[@]}; do
   brew install $i

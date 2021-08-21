@@ -15,17 +15,16 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
   fi
 
-    # Hack: Solve slow FZF issue
-    unsetopt PATH_DIRS
+  #Path adjustment for 1password linux install
+  PATH="$PATH:./bin"
 
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
   if [[ ${DISTRIB} = "Ubuntu"* ]]; then
     if uname -a | grep -iq '^Linux.*Microsoft'; then
       # ubuntu via WSL Windows Subsystem for Linux
-      echo 'WSL Detected'
-
-      
+      # Hack: Solve slow FZF issue
+      unsetopt PATH_DIRS  
     else
       # native ubuntu
     fi
@@ -300,8 +299,11 @@ fi
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+#1Password signin.  Assume set up already by chezmoi
+eval $(op signin my)
+
 #1Password completion
-eval "$(op completion zsh)"; compdef _op op
+eval "$(op completion zsh)"
 
 # end profiling
 #zprof
