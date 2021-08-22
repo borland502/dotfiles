@@ -15,22 +15,18 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
   fi
 
-  #Path adjustment for 1password linux install
-  PATH="$PATH:./bin"
-
   eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  export PATH="$PATH:$HOME/.bin"
 
-  if [[ ${DISTRIB} = "Ubuntu"* ]]; then
-    if uname -a | grep -iq '^Linux.*Microsoft'; then
-      # ubuntu via WSL Windows Subsystem for Linux
-      # Hack: Solve slow FZF issue
-      unsetopt PATH_DIRS  
-    else
-      # native ubuntu
-    fi
-  elif [[ ${DISTRIB} = "Debian"* ]]; then
-    # debian
+  if uname -a | grep -iq '^Linux.*Microsoft'; then
+    # ubuntu via WSL Windows Subsystem for Linux
+    # Hack: Solve slow FZF issue
+    unsetopt PATH_DIRS      
+  else
+    # native ubuntu
+    tldr --update
   fi
+  
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS OSX
   #iTerm2
@@ -75,8 +71,6 @@ setopt HIST_IGNORE_ALL_DUPS
 HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
 HISTSIZE=100000
 SAVEHIST=5000
-setopt appendhistory notify
-unsetopt beep nomatch
 
 # Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then

@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # Script can be used with {{ .chezmoi.os }}, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
 # Update any existing homebrew recipes
 brew update
 
 echo "Preparing to install software on $OSTYPE"
+
+# Update Path to include helper binaries
+export PATH="$PATH:/.bin"
 
 #Install 1password for the mac before any other additional packages.  Linux should already be taken care of
 {{ if (eq .chezmoi.os "darwin") }}

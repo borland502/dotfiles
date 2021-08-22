@@ -102,37 +102,35 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gpg
   fi
 
-  # 1password: Set up, but do not sign in so that chezmoi can encrypt sensitive stuff
-  if [[ "$SYS_UNAME" == *'x86_64'* ]]; then
-    curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_amd64_v$OP_VERSION.zip"
-  elif [[ "$SYS_UNAME" == *"arm64"* ]]; then
-    curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_arm64_v$OP_VERSION.zip"
-  elif [[ "$SYS_UNAME" == *"arm"* ]]; then
-    curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_arm_v$OP_VERSION.zip"
-  else
-    echo "Cannot install 1password"
-  fi  
-
-  mkdir "$HOME/.bin"
-  unzip 1password.zip -d "$HOME/.bin" && \
-  rm 1password.zip
-
-  chmod 755 "$HOME/.bin/op"
-  chmod 755 "$HOME/.bin/op.sig"
-
-  # add .bin to the path
-  PATH=$PATH:./bin
-
-  # specify the firewall friendly keyserver form
-  gpg --keyserver hkp://keyserver.ubuntu.com:80 --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22 || exit
-  gpg --verify "$HOME/.bin/op.sig" "$HOME/.bin/op" || exit
-
-  op update
-
   if ! [[ -x "$(command -v op)" ]]; then
-    echo "1password install failed for linux"
-    exit -1
-  fi  
+  
+    # 1password: Set up, but do not sign in so that chezmoi can encrypt sensitive stuff
+    if [[ "$SYS_UNAME" == *'x86_64'* ]]; then
+      curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_amd64_v$OP_VERSION.zip"
+    elif [[ "$SYS_UNAME" == *"arm64"* ]]; then
+      curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_arm64_v$OP_VERSION.zip"
+    elif [[ "$SYS_UNAME" == *"arm"* ]]; then
+      curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_arm_v$OP_VERSION.zip"
+    else
+      echo "Cannot install 1password"
+    fi  
+
+    if ! [[ -d "$HOME/.bin" ]]; then
+      mkdir "$HOME/.bin"
+    fi  
+    unzip 1password.zip -d "$HOME/.bin" && \
+    rm 1password.zip
+
+    chmod 755 "$HOME/.bin/op"
+    chmod 755 "$HOME/.bin/op.sig"
+
+    # specify the firewall friendly keyserver form
+    gpg --keyserver hkp://keyserver.ubuntu.com:80 --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22 || exit
+    gpg --verify "$HOME/.bin/op.sig" "$HOME/.bin/op" || exit
+
+  fi
+
+  "$HOME/.bin/op" update
 
   #if [[ ${DISTRIB} = "Ubuntu"* ]]; then
   #if uname -a | grep -q '^Linux.*Microsoft'; then
