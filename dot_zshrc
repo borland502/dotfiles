@@ -288,6 +288,8 @@ alias a2inc="$SCRIPTS_HOME/scripts.sh log.a2inc"
 alias sql=/opt/sqlcl/bin/sql
 
 alias cdliquibase="cd $HOME/Development/bitbucket/liquibase"
+alias cdc="chezmoi cd"
+alias cddev="cd $HOME/Development"
 
 # virtual environments
 if command -v jenv &> /dev/null
@@ -300,10 +302,10 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 #1Password signin.  Assume set up already by chezmoi
-eval $(op signin my)
+# eval $(op signin my)
 
 #1Password completion
-eval "$(op completion zsh)"
+# eval "$(op completion zsh)"
 
 # end profiling
 #zprof
