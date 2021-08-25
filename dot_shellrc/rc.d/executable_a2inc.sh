@@ -21,7 +21,7 @@ function a2inc {
 
 	if [[ ! -f "$LOG_FILE" ]]; then
 		echo "No log downloaded"
-		exit -1
+		exit 2
 	fi
 
 	if [[ ! -x $(command -v lnav) ]]; then

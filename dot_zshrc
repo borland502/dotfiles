@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 # @author Jeremy Hettenhouser
 #
 # Sources
@@ -10,14 +8,14 @@
 
 if [[ "$OSTYPE" == "linux"* ]]; then
 
-  DISTRIB=Other
+  export DISTRIB=Other
 
   # rare, but some distros do not have this file
   if [[ -x "/etc/os-release" ]]; then
     DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
   fi
 
-  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   export PATH="$PATH:$HOME/.bin"
 
   if uname -a | grep -iq '^Linux.*Microsoft'; then
@@ -187,7 +185,8 @@ atpull'%atclone' pick"c.zsh" nocompile'!' \
 atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     trapd00r/LS_COLORS \
     lukechilds/zsh-nvm \
-    paulirish/git-open 
+    paulirish/git-open \
+    Tarrasch/zsh-autoenv
 
 export LANG=en_US.UTF-8
 
@@ -238,27 +237,18 @@ export IDEA_VM_OPTIONS="
 -Djavax.net.ssl.trustStore=/usr/local/etc/truststore/dev-20160524-01.truststore
 -Djavax.net.ssl.trustStorePassword=changeit"
 
-## Load .env sensitive variables into the shell
-if [ -e "$HOME/.env" ]
-then
-   # TODO fails if the .env is blank
-   export $(egrep -v '^#' "$HOME/.env" | xargs)
-else
-    touch "$HOME/.env"
-fi
-
 # Functions
 # Load all files from .shell/zshrc.d directory
-if [ -d $HOME/.shellrc/zshrc.d ]; then
-  for file in $HOME/.shellrc/zshrc.d/*.zsh; do
-    source $file
+if [[ -d "$HOME/.shellrc/zshrc.d" ]]; then
+  for file in "$HOME"/.shellrc/zshrc.d/*.zsh; do
+    source "$file"
   done
 fi
 
 # Load all files from .shell/rc.d directory
-if [ -d $HOME/.shellrc/rc.d ]; then
-  for file in $HOME/.shellrc/rc.d/*.sh; do
-    source $file
+if [ -d "$HOME"/.shellrc/rc.d ]; then
+  for file in "$HOME"/.shellrc/rc.d/*.sh; do
+    source "$file"
   done
 fi
 
@@ -282,9 +272,9 @@ alias mvnt='mvn clean test -T1.5C'
 
 alias sql=/opt/sqlcl/bin/sql
 
-alias cdliquibase="cd $HOME/Development/bitbucket/liquibase"
+alias cdliquibase=cd "$HOME/Development/bitbucket/liquibase"
 alias cdc="chezmoi cd"
-alias cddev="cd $HOME/Development"
+alias cddev=cd "$HOME/Development"
 
 # virtual environments
 if command -v jenv &> /dev/null
