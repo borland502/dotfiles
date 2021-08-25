@@ -32,9 +32,9 @@ for i in ${programming_languages_homebrew[@]}; do
   brew install $i
 done
 
-build_tools_homebrew=(git maven gradle npm)
+build_tools_homebrew=(maven gradle npm)
 
-for i in ${build_frameworks_homebrew[@]}; do
+for i in ${build_tools_homebrew[@]}; do
   brew install $i
 done
 

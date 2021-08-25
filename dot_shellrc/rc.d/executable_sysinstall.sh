@@ -1,10 +1,10 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Script can be used with linux, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
 PLATFORM=${OSTYPE:-'unknown'}
 
-function sysinstall {
+sysinstall() {
 
   echo "Preparing to install software on $PLATFORM"
 
@@ -21,20 +21,20 @@ function sysinstall {
 
   programming_languages_homebrew=(openjdk node python3 golang typescript)
 
-  for i in ${programming_languages_homebrew[@]}; do
-    brew install $i
+  for i in "${programming_languages_homebrew[@]}"; do
+    brew install "$i"
   done
 
   build_tools_homebrew=(git subversion maven gradle npm)
 
-  for i in ${build_frameworks_homebrew[@]}; do
-    brew install $i
+  for i in "${build_tools_homebrew[@]}"; do
+    brew install "$i"
   done
 
   cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq mackup jenv diff-so-fancy prettyping)
 
-  for i in ${cli_applications_homebrew[@]}; do
-    brew install $i
+  for i in "${cli_applications_homebrew[@]}"; do
+    brew install "$i"
   done
 
   echo "Installing all non-freeware packages with brew cask"
@@ -46,8 +46,8 @@ function sysinstall {
     echo "Installing Mac specific apps"
     # brew install mackup # Depends on dropbox or similar service
     gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown bartender)
-    for i in ${gui_app_cask[@]}; do
-      brew cask install $i
+    for i in "${gui_app_cask[@]}"; do
+      brew cask install "$i"
     done
 
     echo "Adding custom taps"

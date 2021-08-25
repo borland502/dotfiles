@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # @author Jeremy Hettenhouser
 #
 # Sources
@@ -8,7 +10,7 @@
 
 if [[ "$OSTYPE" == "linux"* ]]; then
 
-  local DISTRIB=Other
+  DISTRIB=Other
 
   # rare, but some distros do not have this file
   if [[ -x "/etc/os-release" ]]; then
@@ -278,7 +280,6 @@ alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias mvncv=mvn clean verify
 alias mvnt='mvn clean test -T1.5C'
 
-alias a2inc="$SCRIPTS_HOME/scripts.sh log.a2inc"
 alias sql=/opt/sqlcl/bin/sql
 
 alias cdliquibase="cd $HOME/Development/bitbucket/liquibase"
