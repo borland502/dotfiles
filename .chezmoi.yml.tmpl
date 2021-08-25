@@ -1,12 +1,10 @@
 {{- $name := promptString "name" -}}
 {{- $email := promptString "email" -}}
-{{- $homebrew_token := promptString "Homebrew Token" -}}
 
-encryption: gpg
+encryption: "gpg"
 gpg:
-    recipient: "{{ $name }}"
+  symmetric: true
 
 data:
   name: "{{ $name }}"
   email: "{{ $email }}"
-  homebrew_token: "{{ $homebrew_token }}"

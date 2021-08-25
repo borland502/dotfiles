@@ -23,7 +23,10 @@ if [[ ! -x $(command -v op) ]]; then
   # This script runs rarely, so assume init each time
   eval $(op signin my.1password.com {{ .email }})
 
-fi  
+fi
+
+# Get installed brew packages
+INSTALLED_PACKAGES=$(brew list)
 
 echo "Adding custom taps"
 brew tap AdoptOpenJDK/openjdk
@@ -34,20 +37,20 @@ echo "Installing all homebrew apps"
 programming_languages_homebrew=(openjdk node python3 golang typescript)
 
 for i in ${programming_languages_homebrew[@]}; do
-  brew install $i
+    brew install $i
 done
 
 build_tools_homebrew=(maven gradle npm)
 
 for i in ${build_tools_homebrew[@]}; do
-  brew install $i
+    brew install $i
 done
 
 # TODO: Extract brew targets that require super user permissions and place them in bootstrap
-cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq rsync mackup jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv pyenv nvm tldr ncdu htop nmap)
+cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv pyenv nvm tldr ncdu htop nmap)
 
-for i in ${cli_applications_homebrew[@]}; do
-  brew install $i
+for i in ${cli_applications_homebrew[@]}; do  
+    brew install $i
 done
 
 echo "Installing misc plugins"

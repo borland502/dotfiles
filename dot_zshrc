@@ -289,7 +289,6 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 # MOTD
-ansiweather
 
 #1Password signin.  Assume set up already by chezmoi
 # eval $(op signin my)

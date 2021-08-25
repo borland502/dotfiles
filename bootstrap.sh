@@ -78,7 +78,7 @@ ask() {
 
 # System dependant options that cannot be avoided for subsequent brew installs
 if [[ "$OSTYPE" == "linux"* ]]; then
-  DISTRIB=Other
+  export DISTRIB=Other
 
   # rare, but some distros do not have this file
   if [[ -x "/etc/os-release" ]]; then
@@ -167,7 +167,7 @@ fi
 
 if ! [ -x "$(command -v brew)" ]; then
   echo "brew did not install properly"
-  exit -1
+  exit 1
 fi
 
 # Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
