@@ -1,0 +1,4 @@
+location:Martinsburg, WV
+fetch_cmd:curl -sf
+units:imperial
+show_daylight:true

@@ -31,10 +31,10 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS OSX
   #iTerm2
   test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
-fi
 
-# MacOs Configuration
-export CLICOLOR=1
+  # MacOs Configuration
+  export CLICOLOR=1
+fi
 
 # Universal
 # do not beep at me dammit
@@ -186,7 +186,9 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     trapd00r/LS_COLORS \
     lukechilds/zsh-nvm \
     paulirish/git-open \
-    Tarrasch/zsh-autoenv
+    Tarrasch/zsh-autoenv \
+    djui/alias-tips \
+    fcambus/ansiweather
 
 export LANG=en_US.UTF-8
 
@@ -285,6 +287,9 @@ fi
 #TODO pyenv plugins do not zinit correctly
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
+# MOTD
+ansiweather
 
 #1Password signin.  Assume set up already by chezmoi
 # eval $(op signin my)
