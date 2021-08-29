@@ -23,6 +23,7 @@ export PATH="$PATH:/.bin"
 if [[ ! -x $(command -v op) ]]; then
 
   #Install 1password for the mac before any other additional packages.  Linux should already be taken care of
+  #shellcheck disable=SC1054,SC1073,SC1050,SC1072
   {{ if (eq .chezmoi.os "darwin") }}
     brew install 1password-cli
   {{ end }}

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # @author Jeremy Hettenhouser
 #
 # Sources
@@ -102,6 +103,7 @@ zinit lucid for \
 ## End Prompt
 
 # hacks
+# shellcheck source='$HOME/.fzf.zsh'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh 
 
 ## Oh My Zsh plugins, libraries, and functions
@@ -140,8 +142,7 @@ zinit wait lucid for \
         alias dcupb='docker-compose up --build'
     " \
 	OMZP::docker-compose \
-	as"completion" \
-    djui/alias-tips 
+	as"completion" 
 
 # zsh github plugins
 
@@ -188,7 +189,8 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     paulirish/git-open \
     Tarrasch/zsh-autoenv \
     djui/alias-tips \
-    fcambus/ansiweather
+    fcambus/ansiweather \
+    ptavares/zsh-exa    
 
 export LANG=en_US.UTF-8
 
@@ -243,6 +245,7 @@ export IDEA_VM_OPTIONS="
 # Load all files from .shell/zshrc.d directory
 if [[ -d "$HOME/.shellrc/zshrc.d" ]]; then
   for file in "$HOME"/.shellrc/zshrc.d/*.zsh; do
+    # shellcheck source=/dev/null
     source "$file"
   done
 fi
@@ -250,6 +253,7 @@ fi
 # Load all files from .shell/rc.d directory
 if [ -d "$HOME"/.shellrc/rc.d ]; then
   for file in "$HOME"/.shellrc/rc.d/*.sh; do
+    # shellcheck source=/dev/null
     source "$file"
   done
 fi
@@ -272,11 +276,13 @@ alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias mvncv=mvn clean verify
 alias mvnt='mvn clean test -T1.5C'
 
-alias sql=/opt/sqlcl/bin/sql
-
-alias cdliquibase=cd "$HOME/Development/bitbucket/liquibase"
+alias cdliquibase='cd $HOME/Development/bitbucket/liquibase'
 alias cdc="chezmoi cd"
-alias cddev=cd "$HOME/Development"
+alias cddev='cd $HOME/Development'
+
+alias weather='ansiweather'
+
+alias gcala='gcalcli agenda'
 
 # virtual environments
 if command -v jenv &> /dev/null
