@@ -212,28 +212,59 @@ export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 
 ##IntelliJ
 export IDEA_VM_OPTIONS="
+-ea
+-server
 -Xms1024m
 -Xmx4096m
+-Xss16m
+-XX:MaxMetaspaceSize=2G
+-XX:MetaspaceSize=1G
+-XX:ConcGCThreads=8
+-XX:ParallelGCThreads=8
+-XX:NewRatio=1
 -XX:ReservedCodeCacheSize=240m
--XX:+UseCompressedOops
--Dfile.encoding=UTF-8
--XX:+UseConcMarkSweepGC
+-XX:+AlwaysPreTouch
+-XX:+UseG1GC
+-XX:+DoEscapeAnalysis
+-XX:+TieredCompilationUseG1GC
 -XX:SoftRefLRUPolicyMSPerMB=50
--ea
--XX:CICompilerCount=2
+-XX:+UnlockExperimentalVMOptions
 -Dsun.io.useCanonPrefixCache=false
 -Djava.net.preferIPv4Stack=true
+-Dsun.io.useCanonCaches=false
+-XX:LargePageSizeInBytes=256m
+-XX:+UseCodeCacheFlushing
+-XX:+DisableExplicitGC
+-XX:+ExplicitGCInvokesConcurrent
+-XX:+PrintGCDetails
+-XX:+PrintFlagsFinal
+-XX:+AggressiveOpts
+-XX:+CMSClassUnloadingEnabled
+-XX:CMSInitiatingOccupancyFraction=60
+-XX:+CMSParallelRemarkEnabled
+-XX:+UseAdaptiveGCBoundary
+-XX:+UseSplitVerifier
+-XX:CompileThreshold=10000
+-XX:+OptimizeStringConcat
+-XX:+UseStringCache
+-XX:+UseFastAccessorMethods
+-XX:+UnlockDiagnosticVMOptions
 -Djdk.http.auth.tunneling.disabledSchemes=""
 -XX:+HeapDumpOnOutOfMemoryError
 -XX:-OmitStackTraceInFastThrow
--Djdk.attach.allowAttachSelf
+-Djdk.attach.allowAttachSelf=true
 -Dkotlinx.coroutines.debug=off
 -Djdk.module.illegalAccess.silent=true
+-XX:+UseCompressedOops
+-Dfile.encoding=UTF-8
+-XX:CICompilerCount=2
 -Xverify:none
+
 -XX:ErrorFile=$USER_HOME/java_error_in_idea_%p.log
 -XX:HeapDumpPath=$USER_HOME/java_error_in_idea.hprof
 -Djavax.net.ssl.trustStore=/usr/local/etc/truststore/dev-20160524-01.truststore
--Djavax.net.ssl.trustStorePassword=changeit"
+-Djavax.net.ssl.trustStorePassword=changeit
+"
 
 # Functions
 # Load all files from .shell/zshrc.d directory
