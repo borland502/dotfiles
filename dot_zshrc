@@ -137,12 +137,7 @@ zinit wait lucid for \
     OMZP::npm \
     OMZP::vscode \
     OMZP::python \
-    OMZP::aws \
-    atload"
-        alias dcupb='docker-compose up --build'
-    " \
-	OMZP::docker-compose \
-	as"completion" 
+    OMZP::aws 
 
 # zsh github plugins
 
@@ -189,8 +184,7 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     paulirish/git-open \
     Tarrasch/zsh-autoenv \
     djui/alias-tips \
-    fcambus/ansiweather \
-    ptavares/zsh-exa    
+    fcambus/ansiweather 
 
 export LANG=en_US.UTF-8
 

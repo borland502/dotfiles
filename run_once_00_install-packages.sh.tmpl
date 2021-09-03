@@ -4,7 +4,11 @@ set -euo pipefail
 
 # Script can be used with {{ .chezmoi.os }}, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
-export 
+# brew pathing gets lost on an initial load
+test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 
 # Update any existing homebrew recipes
 brew update
@@ -23,13 +27,10 @@ export PATH="$PATH:/.bin"
 if [[ ! -x $(command -v op) ]]; then
 
   #Install 1password for the mac before any other additional packages.  Linux should already be taken care of
-  #shellcheck disable=SC1054,SC1073,SC1050,SC1072
+  #shellcheck disable=SC1054,SC1073,SC1050,SC1072,SC1009
   {{ if (eq .chezmoi.os "darwin") }}
     brew install 1password-cli
   {{ end }}
-
-  # This script runs rarely, so assume init each time
-  eval $(op signin my.1password.com {{ .email }})
 
 fi
 
