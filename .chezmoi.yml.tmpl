@@ -1,5 +1,7 @@
+{{- $name := "" -}}
+{{- $email := "" -}}
 {{ if stdinIsATTY }}
-{{- $name := promptString "name" -}}
+{{- $name = promptString "name" -}}
 {{- $email = promptString "email" -}}
 
 encryption: "gpg"
