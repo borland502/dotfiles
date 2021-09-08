@@ -15,13 +15,28 @@ brew update
 
 echo "Preparing to install software on $OSTYPE"
 
+# essential foss stuff
+essential_brew=(python3 golang p7zip vim fzf fd bat jq yq pyenv tldr)
+
+for i in ${essential_brew[@]}; do  
+    brew install $i
+done
+
+echo "Installing misc plugins"
+brew install pyenv-virtualenv
+brew install pyenv-ccache
+
+# execute the following only if this is an attended install (TTY present)
+#shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
+{{ if stdinIsATTY }}
+
 # Import decrypted env tokens if not already loaded, especially the Homebrew one
 if [[ -z ${HOMEBREW_GITHUB_API_TOKEN+x} ]]; then
   export $(egrep -v '^#' .autoenv.zsh | xargs)
 fi  
 
 # Update Path to include helper binaries
-export PATH="$PATH:/.bin"
+export PATH="$PATH:/bin"
 
 # skip install if 1password is already been installed
 if [[ ! -x $(command -v op) ]]; then
@@ -43,7 +58,7 @@ brew tap AdoptOpenJDK/openjdk
 echo "Installing all homebrew apps"
 
 #TODO Install languages using virtual env managers if possible
-programming_languages_homebrew=(openjdk node python3 golang typescript)
+programming_languages_homebrew=(openjdk node typescript)
 
 for i in ${programming_languages_homebrew[@]}; do
     brew install $i
@@ -56,17 +71,13 @@ for i in ${build_tools_homebrew[@]}; do
 done
 
 # TODO: Extract brew targets that require super user permissions and place them in bootstrap
-cli_applications_homebrew=(nginx p7zip vim fzf fd bat jq yq rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv pyenv nvm tldr ncdu htop nmap)
+cli_applications_homebrew=(nginx rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv nvm ncdu htop nmap)
 
 for i in ${cli_applications_homebrew[@]}; do  
     brew install $i
 done
 
-echo "Installing misc plugins"
-brew install pyenv-virtualenv
-brew install pyenv-ccache
-
-{{ if (eq .chezmoi.os "darwin") }}
+  {{ if (eq .chezmoi.os "darwin") }}
 # darwin
   echo "Installing all non-freeware packages with brew cask"
 
@@ -75,12 +86,13 @@ brew install pyenv-ccache
   for i in ${gui_app_cask[@]}; do
     brew install $i
   done
-{{ else if (eq .chezmoi.os "linux" ) }}
+  {{ else if (eq .chezmoi.os "linux" ) }}
   #linux
-  {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
+    {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
   #WSL
   echo "WSL"
+    {{ end }}
+  {{ else }}
+  # other operating system
   {{ end }}
-{{ else }}
-# other operating system
 {{ end }}
