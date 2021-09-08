@@ -10,41 +10,24 @@
 #shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
 {{ if (eq .chezmoi.os "darwin") }}
 
-  export CLICOLOR=1
+export CLICOLOR=1
 
-  #iTerm2
-  test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
+#iTerm2
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
 {{ else if (eq .chezmoi.os "linux" ) }}
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  export PATH="$PATH:$HOME/bin"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export PATH="$PATH:$HOME/bin"
 
   {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
   #WSL
   # Hack: Solve slow FZF issue
-  unsetopt PATH_DIRS
+unsetopt PATH_DIRS
   {{ end }}
 {{ else }}
 
 {{ end }}
 
-if [[ "$OSTYPE" == "linux"* ]]; then
-  
-
-  if uname -a | grep -iq '^Linux.*Microsoft'; then
-    # ubuntu via WSL Windows Subsystem for Linux
-          
-  else
-    # native ubuntu
-    tldr --update
-  fi
-  
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-
-
-  # MacOs Configuration
-  
-fi
 
 # Universal
 # do not beep at me dammit
