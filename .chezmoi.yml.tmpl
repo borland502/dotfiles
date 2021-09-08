@@ -1,8 +1,10 @@
 {{- $name := "" -}}
 {{- $email := "" -}}
+{{- $minimal := true -}}
 {{ if stdinIsATTY }}
 {{- $name = promptString "name" -}}
 {{- $email = promptString "email" -}}
+{{ $minimal = promptBool "minimal" }}
 
 encryption: "gpg"
 gpg:
@@ -16,3 +18,4 @@ gpg:
 data:
   name: "{{ $name }}"
   email: "{{ $email }}"
+  minimal: "{{ $minimal }}" 

@@ -28,7 +28,7 @@ brew install pyenv-ccache
 
 # execute the following only if this is an attended install (TTY present)
 #shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
-{{ if stdinIsATTY }}
+{{ if not .minimal }}
 
 # Import decrypted env tokens if not already loaded, especially the Homebrew one
 if [[ -z ${HOMEBREW_GITHUB_API_TOKEN+x} ]]; then
