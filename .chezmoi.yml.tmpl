@@ -1,9 +1,15 @@
+{{ if stdinIsATTY }}
 {{- $name := promptString "name" -}}
-{{- $email := promptString "email" -}}
+{{- $email = promptString "email" -}}
 
 encryption: "gpg"
 gpg:
   symmetric: true
+
+{{ else }}
+{{-  $name = "Jeremy Hettenhouser" -}}
+{{-  $email = "jhettenh@gmail.com" -}}
+{{ end }}
 
 data:
   name: "{{ $name }}"
