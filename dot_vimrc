@@ -10,6 +10,10 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'https://github.com/tpope/vim-fugitive'
+
+Plugin 'tpope/vim-surround'
+
 Plugin 'phanviet/vim-monokai-pro'
 
 " Add maktaba and codefmt to the runtimepath.

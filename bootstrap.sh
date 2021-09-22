@@ -102,7 +102,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
   fi
 
-  chsh -s "$(which zsh)"
+  sudo chsh -s "$(which zsh)"
 
   #if ! [[ -x "$(command -v op)" ]]; then
   

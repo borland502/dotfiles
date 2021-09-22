@@ -13,15 +13,12 @@ function sysupdate {
 
   # NPM global update
   npm update -g
+  npm install -g npm
 
   # Python3 updates (will error if you have nothing to update)
   pip3 install -U $(pip3 freeze | awk '{split($0, a, "=="); print a[1]}')
 
   # misc updates
   tldr --update
-
-  # Mac Store update
-  echo “you can hit mas upgrade to upgrade theses apps from the app store:”
-  mas outdated
 
 }
