@@ -1,14 +1,16 @@
 {{- $name := "" -}}
 {{- $email := "" -}}
 {{- $minimal := true -}}
+{{- $home := env "HOME" -}}
 {{ if stdinIsATTY }}
 {{- $name = promptString "name" -}}
 {{- $email = promptString "email" -}}
 {{ $minimal = promptBool "minimal" }}
 
-encryption: "gpg"
-gpg:
-  symmetric: true
+encryption: "age"
+age:
+  identity: "{{ $home }}/bin/key.txt"
+  recipient: "age1lcu6z9m9ukm9d0c4m90v790rvujlkr5ftzhdmyt866cqzlwhe39sla86hm"
 
 {{ else }}
 {{-  $name = "Jeremy Hettenhouser" -}}
@@ -16,6 +18,7 @@ gpg:
 {{ end }}
 
 data:
+  home: "{{ $home }}"
   name: "{{ $name }}"
   email: "{{ $email }}"
   minimal: "{{ $minimal }}" 
