@@ -102,7 +102,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
   fi
 
-  sudo chsh -s "$(which zsh)"
+  chsh -s "$(which zsh)"
 
   #if ! [[ -x "$(command -v op)" ]]; then
   
@@ -168,6 +168,9 @@ if ! [ -x "$(command -v brew)" ]; then
   echo "brew did not install properly"
   exit 1
 fi
+
+# TODO Bootstrap the linux brew path -- on mac it is just redundant
+eval "$(~/.linuxbrew/bin/brew shellenv)" && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.profile
 
 # Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
 if ! [[ -x "$(command -v chezmoi)" ]]; then
