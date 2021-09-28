@@ -30,6 +30,9 @@ unsetopt PATH_DIRS
 
 
 # Universal
+export PATH="$PATH:$HOME/.google-drive-upload/bin"
+
+
 # do not beep at me dammit
 setopt NO_BEEP
 # no c-s/c-q output freezing
@@ -176,7 +179,8 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     paulirish/git-open \
     Tarrasch/zsh-autoenv \
     djui/alias-tips \
-    fcambus/ansiweather 
+    fcambus/ansiweather \
+    wfxr/forgit
 
 export LANG=en_US.UTF-8
 
@@ -300,6 +304,7 @@ alias cddev='cd $HOME/Development'
 alias weather='ansiweather'
 
 alias gcala='gcalcli agenda'
+alias gcah="gcalcli --calendar $HASSIO_CAL_NAME quick $1"
 
 # virtual environments
 if command -v jenv &> /dev/null

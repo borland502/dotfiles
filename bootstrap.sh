@@ -102,8 +102,6 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
   fi
 
-  chsh -s "$(which zsh)"
-
   #if ! [[ -x "$(command -v op)" ]]; then
   
     # 1password: Set up, but do not sign in so that chezmoi can encrypt sensitive stuff
