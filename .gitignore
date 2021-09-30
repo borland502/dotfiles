@@ -3,3 +3,5 @@
 .ssh/known_hosts*
 
 *.swp
+
+key.txt

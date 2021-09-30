@@ -172,6 +172,8 @@ if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   chezmoi diff
 fi
 
+#TODO check for the .ssh key and for access to github
+
 #Check for age key and binary
 if [ ! -f "$HOME/bin/key.txt" ]; then
     error "Age decryption key is not present"

@@ -10,7 +10,7 @@ brew update
 echo "Preparing to install software on $OSTYPE"
 
 # essential foss stuff
-essential_brew=(python3 golang p7zip vim fzf fd bat jq yq pyenv tldr)
+essential_brew=(python3 golang p7zip vim fzf fd bat jq yq pyenv tldr age)
 
 for i in ${essential_brew[@]}; do  
     brew install $i
@@ -30,7 +30,7 @@ if [[ -z ${HOMEBREW_GITHUB_API_TOKEN+x} ]]; then
 fi  
 
 # Update Path to include helper binaries
-export PATH="$PATH:/bin"
+export PATH="$PATH:$HOME/bin"
 
 # skip install if 1password is already been installed
 if [[ ! -x $(command -v op) ]]; then
