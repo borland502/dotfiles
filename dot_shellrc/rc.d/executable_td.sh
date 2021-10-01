@@ -4,7 +4,7 @@ TODO_DIR="$HOME/.todo"
 TODO_TXT="$TODO_DIR/todo.txt"
 
 td(){
-    gsync -fg "$TODO_DIR" -d "todo"
+    gdrive download --path "$TODO_DIR" --force "$GDRIVE_TODO_TXT"
     todo.sh "$@" || exit
-    gupload -o -r "$GDRIVE_TODO_ROOT" "$TODO_TXT"
+    gdrive update --parent "$GDRIVE_TODO_ROOT" "$GDRIVE_TODO_TXT" "$TODO_TXT"
 }
