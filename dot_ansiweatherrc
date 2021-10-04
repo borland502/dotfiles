@@ -1,3 +1,4 @@
+# Public api key, so have at it if you are reading this
 api_key:85a4e3c55b73909f42c6a23ec35b7147
 fetch_cmd:curl -sf
 location:Martinsburg,US
