@@ -141,11 +141,10 @@ if ! [ -x "$(command -v brew)" ]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 # TODO Bootstrap the linux brew path -- on mac it is just redundant.  Clobber what's there, we won't use it with zsh
 echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
-
-#current session
-source "$HOME/.profile"
 
 # Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
 if ! [[ -x "$(command -v chezmoi)" ]]; then
@@ -173,11 +172,9 @@ fi
 
 if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
-  chezmoi init https://borland502/dotfiles.git
+  chezmoi init https://borland502/dotfiles
   chezmoi diff
 fi
-
-#TODO check for the .ssh key and for access to github
 
 #Check for age key and binary
 if [ ! -f "$HOME/bin/key.txt" ]; then

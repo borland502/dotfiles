@@ -5,7 +5,7 @@ set -euo pipefail
 # Script can be used with {{ .chezmoi.os }}, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
 #current session -- load path set by boostrap or current linuxbrew path
-source "$HOME/.profile"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Update any existing homebrew recipes
 brew update
