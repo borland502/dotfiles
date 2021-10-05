@@ -1,17 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
-set -euo pipefail
+# Script outline and structure borrowed from https://raw.githubusercontent.com/home-assistant/supervised-installer/master/installer.sh
 
-# One password version
-# OP_VERSION=1.11.2
+declare -a MISSING_PACKAGES
 
-SYS_UNAME=$(uname -a)
-echo "$SYS_UNAME"
-
-# This is the only script which needs to be downloaded ahead of time and executed outside the repo
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/borland502/dotfiles/main/bootstrap.sh)"
-
-# TODO Flag for the level of installation
+function info { echo -e "[info] $*"; }
+function warn  { echo -e "[warn] $*"; }
+function error { echo -e "[error] $*"; exit 1; }
 
 ###############################################################################
 # Prompts from Slay: https://github.com/minamarkham/formation/blob/master/twirl
@@ -37,149 +33,163 @@ ask_for_sudo() {
   echo "Password cached"
 }
 
-ask_for_sudo
+if [ ! -d "/home" ]; then
+    error "Traditional /home root directory expected.  Is this a synology or other unique device?"
+fi
 
-ask() {
-  # https://djm.me/ask
-  local prompt default reply
+# get sudo permission early in the install
+# https://askubuntu.com/questions/15853/how-can-a-script-check-if-its-being-run-as-root
+if [[ $EUID -ne 0 ]]; then
+    echo "Enter credentials for sensitive installs"
+    ask_for_sudo
+fi
 
-  while true; do
+ARCH=$(uname -m)
 
-    if [ "${2:-}" = "Y" ]; then
-      prompt="Y/n"
-      default=Y
-    elif [ "${2:-}" = "N" ]; then
-      prompt="y/N"
-      default=N
-    else
-      prompt="y/n"
-      default=
-    fi
+# os and dist detection https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
+if [ -f /etc/os-release ]; then
+    # freedesktop.org and systemd
+    # shellcheck disable=SC1091
+    . /etc/os-release
+    OS=$NAME
+    VER=$VERSION_ID
+elif type lsb_release >/dev/null 2>&1; then
+    # linuxbase.org
+    OS=$(lsb_release -si)
+    VER=$(lsb_release -sr)
+elif [ -f /etc/lsb-release ]; then
+    # For some versions of Debian/Ubuntu without lsb_release command
+    # shellcheck disable=SC1091
+    . /etc/lsb-release
+    OS=$DISTRIB_ID
+    VER=$DISTRIB_RELEASE
+elif [ -f /etc/debian_version ]; then
+    # Older Debian/Ubuntu/etc.
+    OS=Debian
+    VER=$(cat /etc/debian_version)
+else
+    # Fall back to uname, e.g. "Linux <version>", also works for BSD, WSL, etc.
+    OS=$(uname -s)
+    VER=$(uname -r)
+fi
 
-    # Ask the question (not using "read -p" as it uses stderr not stdout)
-    echo -n "  [?] $1 [$prompt] "
-
-    # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
-    read reply < /dev/tty
-
-    # Default?
-    if [ -z "$reply" ]; then
-      reply=$default
-    fi
-
-    # Check if the reply is valid
-    case "$reply" in
-      Y* | y*) return 0 ;;
-      N* | n*) return 1 ;;
-    esac
-
-  done
-}
-
-# System dependant options that cannot be avoided for subsequent brew installs
-if [[ "$OSTYPE" == "linux"* ]]; then
-  export DISTRIB=Other
-
-  # rare, but some distros do not have this file
+if [ -z "$OSTYPE" ]; then
+  # rare, but some distros (wsl) do not have this file so sub in the $OS var
   if [[ -x "/etc/os-release" ]]; then
-    DISTRIB=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
-  fi
-
-  # Options that apply to any linux system (WSL or otherwise)
-
-  ## Linuxbrew preqs
-  if [ -x "$(command -v apt)" ]; then
-    sudo apt-get update
-    sudo apt-get -y install build-essential procps curl file git gnupg2 zsh
-  elif [[ -x "$(command -v yum)" ]]; then
-    sudo yum update
-    sudo yum -y groupinstall 'Development Tools'
-    sudo yum -y install procps-ng curl file git gnupg2 zsh
-    sudo yum -y install libxcrypt-compat
-  elif [ -x "$(command -v opkg)" ]; then
-    # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
-    sudo opkg update
-    sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
-  fi
-
-  #if ! [[ -x "$(command -v op)" ]]; then
-  
-    # 1password: Set up, but do not sign in so that chezmoi can encrypt sensitive stuff
-    # if [[ "$SYS_UNAME" == *'x86_64'* ]]; then
-    #   curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_amd64_v$OP_VERSION.zip"
-    # elif [[ "$SYS_UNAME" == *"arm64"* ]]; then
-    #   curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_arm64_v$OP_VERSION.zip"
-    # elif [[ "$SYS_UNAME" == *"arm"* ]]; then
-    #   curl -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v$OP_VERSION/op_linux_arm_v$OP_VERSION.zip"
-    # else
-    #   echo "Cannot install 1password"
-    # fi  
- 
-    # unzip 1password.zip -d "$HOME/.bin" && \
-    # rm 1password.zip
-
-    # chmod 755 "$HOME/.bin/op"
-    # chmod 755 "$HOME/.bin/op.sig"
-
-    # # specify the firewall friendly keyserver form
-    # gpg --keyserver hkp://keyserver.ubuntu.com:80 --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22 || exit
-    # gpg --verify "$HOME/.bin/op.sig" "$HOME/.bin/op" || exit
-
-  #fi
-
-  # "$HOME/.bin/op" update
-
-  #if [[ ${DISTRIB} = "Ubuntu"* ]]; then
-  #if uname -a | grep -q '^Linux.*Microsoft'; then
-  # ubuntu via WSL Windows Subsystem for Linux
-  #else
-  # native ubuntu
-  #fi
-  #elif [[ ${DISTRIB} = "Debian"* ]]; then
-  # debian
-  #fi
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-  # macOS OSX prerequisite -- no harm if run again and it will also take care of git well enough for the initial stuff
-  # -----------------------------------------------------------------------------
-  # XCode -- From Slay (https://github.com/minamarkham/formation/blob/master/slay)
-  # -----------------------------------------------------------------------------
-  if type xcode-select >&- && xpath=$(xcode-select --print-path) &&
-    test -d "${xpath}" && test -x "${xpath}"; then
-    echo "Xcode already installed. Skipping."
-  else
-    step "Installing Xcode…"
-    xcode-select --install
-    echo "Xcode installed!"
-  fi
-
-  if [ ! -d "$HOME/bin/" ]; then
-    mkdir "$HOME/bin"
+    OSTYPE=$OS
   fi
 fi
+
+IS_WSL=false
+
+info "Architecture: $ARCH"
+info "OS: $OS" "$VER"
+info "OSTYPE: $OSTYPE"
+info "HOME: $HOME"
+
+warn ""
+warn "If you want to abort, hit ctrl+c within 10 seconds..."
+warn ""
+
+sleep 10
+
+info "Installing prerequities"
+
+if [ ! -f "$HOME/bin/key.txt" ]; then
+    error "AGE encryption key not present"
+fi
+
+if [[ "$OSTYPE" == "linux"* ]]; then
+    if uname -a | grep -q '^Linux.*Microsoft'; then
+        IS_WSL=true
+    fi
+
+    ## Linuxbrew preqs
+    if [ -x "$(command -v apt)" ]; then
+        sudo apt-get update
+        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh
+    elif [[ -x "$(command -v yum)" ]]; then
+        sudo yum update
+        sudo yum -y groupinstall 'Development Tools'
+        sudo yum -y install procps-ng curl file git gnupg2 zsh
+        sudo yum -y install libxcrypt-compat
+    elif [ -x "$(command -v opkg)" ]; then
+        # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
+        sudo opkg update
+        sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
+    fi
+
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS OSX prerequisite -- no harm if run again and it will also take care of git well enough for the initial stuff
+    # -----------------------------------------------------------------------------
+    # XCode -- From Slay (https://github.com/minamarkham/formation/blob/master/slay)
+    # -----------------------------------------------------------------------------
+    if type xcode-select >&- && xpath=$(xcode-select --print-path) &&
+        test -d "${xpath}" && test -x "${xpath}"; then
+        echo "Xcode already installed. Skipping."
+    else
+        step "Installing Xcode…"
+        xcode-select --install
+        echo "Xcode installed!"
+    fi
+fi
+
+info "WSL? $IS_WSL"
 
 # install homebrew/linuxbrew
 if ! [ -x "$(command -v brew)" ]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-if ! [ -x "$(command -v brew)" ]; then
-  echo "brew did not install properly"
-  exit 1
-fi
+# TODO Bootstrap the linux brew path -- on mac it is just redundant.  Clobber what's there, we won't use it with zsh
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
 
-# TODO Bootstrap the linux brew path -- on mac it is just redundant
-eval "$(~/.linuxbrew/bin/brew shellenv)" && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >>~/.profile
+#current session
+source "$HOME/.profile"
 
 # Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
 if ! [[ -x "$(command -v chezmoi)" ]]; then
   brew install chezmoi
 fi
 
+# Required for decryption
+if ! [[ -x "$(command -v age)" ]]; then
+  brew install age
+fi
+
+# Check env after preliminaries -- TODO: More verification
+command -v zsh > /dev/null 2>&1 || MISSING_PACKAGES+=("zsh")
+command -v git > /dev/null 2>&1 || MISSING_PACKAGES+=("git")
+command -v curl > /dev/null 2>&1 || MISSING_PACKAGES+=("curl")
+command -v brew > /dev/null 2>&1 || MISSING_PACKAGES+=("brew")
+command -v chezmoi > /dev/null 2>&1 || MISSING_PACKAGES+=("chezmoi")
+command -v age > /dev/null 2>&1 || MISSING_PACKAGES+=("age")
+
+if [ -n "${MISSING_PACKAGES}" ]; then
+    warn "The following is missing on the host and needs "
+    warn "to be installed and configured before running this script again"
+    error "missing: ${MISSING_PACKAGES[@]}"
+fi
+
 if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
-  chezmoi init git@github.com:borland502/dotfiles.git
+  chezmoi init https://borland502/dotfiles.git
   chezmoi diff
 fi
 
-#TODO Pause script here for user go/nogo
+#TODO check for the .ssh key and for access to github
+
+#Check for age key and binary
+if [ ! -f "$HOME/bin/key.txt" ]; then
+    error "Age decryption key is not present"
+fi
+
+info "bootstrap complete."
+info ""
+warn ""
+warn "If you want to abort chezmoi download, hit ctrl+c within 10 seconds..."
+warn ""
+
+sleep 10
+
 chezmoi apply
