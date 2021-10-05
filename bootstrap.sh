@@ -172,7 +172,7 @@ fi
 
 if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
-  chezmoi init https://borland502/dotfiles
+  chezmoi init https://github.com/borland502/dotfiles
   chezmoi diff
 fi
 
