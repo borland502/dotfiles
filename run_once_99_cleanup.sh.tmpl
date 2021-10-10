@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Set up additional frameworks and any tweaks/hacks/cleanup after the main work is done
+
+# Vundle
+if ! [[ -d "$HOME/.vim/bundle" ]]; then
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  vim +PluginInstall +qall
+fi
+
+if [[ -z "$BASH_VERSION" ]];then 
+  # Change the shell
+  echo "Change shell to /bin/zsh"
+  chsh
+
+  # Invoke zsh for final plugin wave
+  zsh
+
+  # generate system key
+  ssh-keygen -o -a 100 -t ed25519 -f "$HOME/.ssh/id_ed25519" -C "{{- .email -}}"
+else
+  echo "zsh already configured"
+fi 
