@@ -9,6 +9,8 @@ if ! [[ -d "$HOME/.vim/bundle" ]]; then
 fi
 
 if [[ -z "$BASH_VERSION" ]];then 
+  
+
   # Change the shell
   echo "Change shell to /bin/zsh"
   chsh
@@ -18,6 +20,4 @@ if [[ -z "$BASH_VERSION" ]];then
 
   # generate system key
   ssh-keygen -o -a 100 -t ed25519 -f "$HOME/.ssh/id_ed25519" -C "{{- .email -}}"
-else
-  echo "zsh already configured"
 fi 

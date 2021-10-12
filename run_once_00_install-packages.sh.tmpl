@@ -68,7 +68,7 @@ for i in ${build_tools_homebrew[@]}; do
 done
 
 # TODO: Extract brew targets that require super user permissions and place them in bootstrap
-cli_applications_homebrew=(nginx rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv nvm ncdu htop nmap)
+cli_applications_homebrew=(nginx rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv nvm ncdu htop nmap gdrive gcalcli)
 
 for i in ${cli_applications_homebrew[@]}; do  
     brew install $i
