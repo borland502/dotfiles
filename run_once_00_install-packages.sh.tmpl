@@ -32,6 +32,10 @@ if [ ! -f "$HOME/bin/key.txt" ]; then
     error "Age decryption key is not present"
 fi
 
+if ! [[ -x "$(command -v age)" ]]; then
+  brew install age
+fi
+
 # Import decrypted env tokens if not already loaded, especially the Homebrew one
 if [[ -z ${HOMEBREW_GITHUB_API_TOKEN+x} ]]; then
   export $(egrep -v '^#' .autoenv.zsh | xargs)

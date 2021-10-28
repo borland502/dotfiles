@@ -95,10 +95,6 @@ sleep 10
 
 info "Installing prerequities"
 
-if [ ! -f "$HOME/bin/key.txt" ]; then
-    error "AGE encryption key not present"
-fi
-
 if [[ "$OSTYPE" == "linux"* ]]; then
     if uname -a | grep -q '^Linux.*Microsoft'; then
         IS_WSL=true
@@ -149,11 +145,6 @@ echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
 # Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
 if ! [[ -x "$(command -v chezmoi)" ]]; then
   brew install chezmoi
-fi
-
-# Required for decryption
-if ! [[ -x "$(command -v age)" ]]; then
-  brew install age
 fi
 
 # Check env after preliminaries -- TODO: More verification
