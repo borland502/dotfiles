@@ -27,6 +27,11 @@ brew install pyenv-ccache
 #shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
 {{ if not .minimal }}
 
+#Check for age key and binary
+if [ ! -f "$HOME/bin/key.txt" ]; then
+    error "Age decryption key is not present"
+fi
+
 # Import decrypted env tokens if not already loaded, especially the Homebrew one
 if [[ -z ${HOMEBREW_GITHUB_API_TOKEN+x} ]]; then
   export $(egrep -v '^#' .autoenv.zsh | xargs)

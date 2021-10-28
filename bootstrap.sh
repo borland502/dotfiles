@@ -176,11 +176,6 @@ if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   chezmoi diff
 fi
 
-#Check for age key and binary
-if [ ! -f "$HOME/bin/key.txt" ]; then
-    error "Age decryption key is not present"
-fi
-
 info "bootstrap complete."
 info ""
 warn ""
