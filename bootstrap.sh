@@ -113,10 +113,6 @@ sleep 10
 
 info "Installing prerequities"
 
-if [ ! -f "$HOME/bin/key.txt" ]; then
-    error "AGE encryption key not present"
-fi
-
 if [[ "$OSTYPE" == "linux"* ]]; then
     if uname -a | grep -q '^Linux.*Microsoft'; then
         IS_WSL=true
@@ -169,11 +165,6 @@ if ! [[ -x "$(command -v chezmoi)" ]]; then
   brew install chezmoi
 fi
 
-# Required for decryption
-if ! [[ -x "$(command -v age)" ]]; then
-  brew install age
-fi
-
 # Check env after preliminaries -- TODO: More verification
 command -v zsh > /dev/null 2>&1 || MISSING_PACKAGES+=("zsh")
 command -v git > /dev/null 2>&1 || MISSING_PACKAGES+=("git")
@@ -192,11 +183,6 @@ if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
   chezmoi init https://github.com/borland502/dotfiles
   chezmoi diff
-fi
-
-#Check for age key and binary
-if [ ! -f "$HOME/bin/key.txt" ]; then
-    error "Age decryption key is not present"
 fi
 
 info "bootstrap complete."
