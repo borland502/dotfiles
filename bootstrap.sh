@@ -44,7 +44,25 @@ if [[ $EUID -ne 0 ]]; then
     ask_for_sudo
 fi
 
-ARCH=$(uname -m)
+ARCH="$(uname -m)"
+case $ARCH in
+  x86_64|amd64)
+    ARCH='amd64'
+    ;;
+  aarch64)
+    ARCH='arm64'
+    ;;
+  i?86|x86)
+    ARCH='386'
+    ;;
+  arm*)
+    ARCH='arm'
+    ;;
+  *)
+    echo 'OS type not supported'
+    exit 2
+    ;;
+esac
 
 # os and dist detection https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
 if [ -f /etc/os-release ]; then
