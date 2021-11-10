@@ -150,47 +150,70 @@ fi
 
 info "WSL? $IS_WSL"
 
-# install homebrew/linuxbrew
-if ! [ -x "$(command -v brew)" ]; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
+# linuxbrew isn't supported on arm yet -- so provide a mininmum install using traditional package managers
+if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    # install homebrew/linuxbrew
+    if ! [ -x "$(command -v brew)" ]; then
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
 
-# TODO Bootstrap the linux brew path -- on mac it is just redundant.  Clobber what's there, we won't use it with zsh
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-# Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
-if ! [[ -x "$(command -v chezmoi)" ]]; then
-  brew install chezmoi
-fi
+    # TODO Bootstrap the linux brew path -- on mac it is just redundant.  Clobber what's there, we won't use it with zsh
+    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
 
-# Check env after preliminaries -- TODO: More verification
-command -v zsh > /dev/null 2>&1 || MISSING_PACKAGES+=("zsh")
-command -v git > /dev/null 2>&1 || MISSING_PACKAGES+=("git")
-command -v curl > /dev/null 2>&1 || MISSING_PACKAGES+=("curl")
-command -v brew > /dev/null 2>&1 || MISSING_PACKAGES+=("brew")
-command -v chezmoi > /dev/null 2>&1 || MISSING_PACKAGES+=("chezmoi")
-command -v age > /dev/null 2>&1 || MISSING_PACKAGES+=("age")
+  # Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
+  if ! [[ -x "$(command -v chezmoi)" ]]; then
+    brew install chezmoi
+  fi
 
-if [ -n "${MISSING_PACKAGES}" ]; then
-    warn "The following is missing on the host and needs "
-    warn "to be installed and configured before running this script again"
-    error "missing: ${MISSING_PACKAGES[@]}"
-fi
+  # Check env after preliminaries -- TODO: More verification
+  command -v zsh > /dev/null 2>&1 || MISSING_PACKAGES+=("zsh")
+  command -v git > /dev/null 2>&1 || MISSING_PACKAGES+=("git")
+  command -v curl > /dev/null 2>&1 || MISSING_PACKAGES+=("curl")
+  command -v brew > /dev/null 2>&1 || MISSING_PACKAGES+=("brew")
+  command -v chezmoi > /dev/null 2>&1 || MISSING_PACKAGES+=("chezmoi")
+  command -v age > /dev/null 2>&1 || MISSING_PACKAGES+=("age")
 
-if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
-  # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
-  chezmoi init https://github.com/borland502/dotfiles
-  chezmoi diff
-fi
+  if [ -n "${MISSING_PACKAGES}" ]; then
+      warn "The following is missing on the host and needs "
+      warn "to be installed and configured before running this script again"
+      error "missing: ${MISSING_PACKAGES[@]}"
+  fi
 
-info "bootstrap complete."
-info ""
-warn ""
-warn "If you want to abort chezmoi download, hit ctrl+c within 10 seconds..."
-warn ""
+  if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
+    # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
+    chezmoi init https://github.com/borland502/dotfiles
+    chezmoi diff
+  fi
 
-sleep 10
+  info "bootstrap complete."
+  info ""
+  warn ""
+  warn "If you want to abort chezmoi download, hit ctrl+c within 10 seconds..."
+  warn ""
 
-chezmoi apply
+  sleep 10
+
+  chezmoi apply
+
+else
+
+    ## arm minimal install pending linuxbrew
+    if [ -x "$(command -v apt)" ]; then
+        sudo apt-get update
+        # python3 golang p7zip vim fzf fd bat jq yq pyenv tldr age
+    elif [[ -x "$(command -v yum)" ]]; then
+        sudo yum update
+        #TODO
+    elif [ -x "$(command -v opkg)" ]; then
+        # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
+        sudo opkg update
+    fi
+
+
+  info "bootstrap complete on arm.  Guess we'll wait for linuxbrew to support it"
+  exit 0
+
+fi  
