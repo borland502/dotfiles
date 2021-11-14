@@ -28,10 +28,8 @@ unsetopt PATH_DIRS
 
 {{ end }}
 
-
 # Universal
 export PATH="$PATH:$HOME/.google-drive-upload/bin"
-
 
 # do not beep at me dammit
 setopt NO_BEEP
@@ -312,7 +310,7 @@ alias lS='exa -1'                                                              #
 alias lt='exa --tree --level=2'                                   # tree
 
 ## The price of using an unusual terminal
-alias ssh="kitty +kitten ssh"
+# alias ssh="kitty +kitten ssh"
 
 # virtual environments
 if command -v jenv &> /dev/null
@@ -320,8 +318,6 @@ then
     eval "$(jenv init -)"
 fi
 
-#TODO pyenv plugins do not zinit correctly
-eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 # MOTD
