@@ -32,7 +32,7 @@ unsetopt PATH_DIRS
 # Universal
 export PATH="$PATH:$HOME/.google-drive-upload/bin"
 
-export XDG_DATA_HOME="${HOME}/.local/share}"
+export XDG_DATA_HOME="${HOME}/.local/share"
 
 # do not beep at me dammit
 setopt NO_BEEP
@@ -72,8 +72,7 @@ SAVEHIST=5000
 # zinit-configuration necessary for the automation
 NO_EDIT=1
 ZINIT_REPO=zdharma-continuum/zinit
-ZINIT_BRANCH=master
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+ZINIT_BRANCH=masteZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
 # Added by Zinit's installer
 if [[ ! -f "$ZINIT_HOME/zinit.zsh" ]]; then

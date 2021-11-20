@@ -157,10 +157,12 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
 
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    if [[ "$OSTYPE" != "darwin"* ]]; then
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-    # TODO Bootstrap the linux brew path -- on mac it is just redundant.  Clobber what's there, we won't use it with zsh
-    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
+      # TODO Bootstrap the linux brew path -- on mac it is just redundant.  Clobber what's there, we won't use it with zsh
+      echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
+    fi  
 
   # Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
   if ! [[ -x "$(command -v chezmoi)" ]]; then
