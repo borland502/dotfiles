@@ -121,16 +121,15 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     ## Linuxbrew preqs
     if [ -x "$(command -v apt)" ]; then
         sudo apt-get update
-        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh
+        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum update
         sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install procps-ng curl file git gnupg2 zsh
+        sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil
         sudo yum -y install libxcrypt-compat
     elif [ -x "$(command -v opkg)" ]; then
-        # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
-        sudo opkg update
-        sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
+        warn 'opkg is usually found on embedded devices like routers -- very little will install properly'
+        sleep 2
     fi
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -140,11 +139,11 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     # -----------------------------------------------------------------------------
     if type xcode-select >&- && xpath=$(xcode-select --print-path) &&
         test -d "${xpath}" && test -x "${xpath}"; then
-        echo "Xcode already installed. Skipping."
+        info "Xcode already installed. Skipping."
     else
         step "Installing Xcode…"
         xcode-select --install
-        echo "Xcode installed!"
+        info "Xcode installed!"
     fi
 fi
 
