@@ -32,6 +32,8 @@ unsetopt PATH_DIRS
 # Universal
 export PATH="$PATH:$HOME/.google-drive-upload/bin"
 
+export XDG_DATA_HOME="${HOME}/.local/share}"
+
 # do not beep at me dammit
 setopt NO_BEEP
 # no c-s/c-q output freezing
@@ -67,14 +69,18 @@ HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
 HISTSIZE=100000
 SAVEHIST=5000
 
+# zinit-configuration necessary for the automation
+NO_EDIT=1
+ZINIT_REPO=zdharma-continuum/zinit
+ZINIT_BRANCH=master
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
 # Added by Zinit's installer
-if [[ ! -f ${HOME}/.local/share}/zinit/zinit.git/zinit.zsh ]]; then
-    ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [[ ! -f "$ZINIT_HOME/zinit.zsh" ]]; then
     mkdir -p "$(dirname $ZINIT_HOME)"
     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 source "${ZINIT_HOME}/zinit.zsh"
 
 autoload -Uz _zinit
@@ -85,7 +91,7 @@ autoload -Uz _zinit
 zinit light-mode for \
     zinit-zsh/z-a-rust \
     zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \ch
+    zinit-zsh/z-a-patch-dl \
     zinit-zsh/z-a-bin-gem-node \
 
 # End of Zinit's installer chunk
@@ -93,7 +99,7 @@ zinit light-mode for \
 ## Prompt
 zinit lucid for \
     as"command" from"gh-r" atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'eval "$(starship init zsh)"' bpick'*unknown-linux-gnu*' \
-    starship/starship \
+    starship/starship 
 ## End Prompt
 
 ## Oh My Zsh plugins, libraries, and functions
