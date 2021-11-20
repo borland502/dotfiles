@@ -13,7 +13,7 @@ brew update
 echo "Preparing to install software on $OSTYPE"
 
 # essential foss stuff
-essential_brew=(python3 golang p7zip vim fzf fd bat jq yq pyenv tldr age)
+essential_brew=(python3 golang p7zip vim fzf fd bat jq yq pyenv tldr starship)
 
 for i in ${essential_brew[@]}; do  
     brew install $i

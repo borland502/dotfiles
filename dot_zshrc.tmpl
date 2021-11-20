@@ -70,19 +70,26 @@ HISTSIZE=100000
 SAVEHIST=5000
 
 # zinit-configuration necessary for the automation
-NO_EDIT=1
-export ZINIT="" # clear out existing 
+declare -A ZINIT
+ZINIT_HOME="${HOME}/.local/share/zinit"
+
+ZINIT[BIN_DIR]="$ZINIT_HOME/zinit.git"
+ZINIT[HOME_DIR]="$ZINIT_HOME"
+ZINIT[PLUGINS_DIR]="$ZINIT_HOME/plugins"
+ZINIT[COMPLETIONS_DIR]="$ZINIT_HOME/completions"
+ZINIT[SNIPPETS_DIR]="$ZINIT_HOME/snippits"
+
+NO_EDIT=1 
 export ZINIT_REPO=zdharma-continuum/zinit
 export ZINIT_BRANCH=master
-export ZINIT_HOME="${HOME}/.local/share/zinit/zinit.git"
 
 # Added by Zinit's installer
-if [[ ! -f "$ZINIT_HOME/zinit.zsh" ]]; then
+if [[ ! -f "$ZINIT_HOME/zinit.git/zinit.zsh" ]]; then
     mkdir -p "$(dirname $ZINIT_HOME)"
     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
-source "${ZINIT_HOME}/zinit.zsh"
+source "${ZINIT_HOME}/zinit.git/zinit.zsh"
 
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
@@ -90,18 +97,12 @@ autoload -Uz _zinit
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-    zinit-zsh/z-a-rust \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node \
+    zdharma-continuum/z-a-rust \
+    zdharma-continuum/z-a-as-monitor \
+    zdharma-continuum/z-a-patch-dl \
+    zdharma-continuum/z-a-bin-gem-node \
 
 # End of Zinit's installer chunk
-
-## Prompt
-zinit lucid for \
-    as"command" from"gh-r" atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'eval "$(starship init zsh)"' bpick'*unknown-linux-gnu*' \
-    starship/starship 
-## End Prompt
 
 ## Oh My Zsh plugins, libraries, and functions
 setopt promptsubst
@@ -139,7 +140,7 @@ light-mode atinit"
     zpcompinit;
     zpcdreplay;
 " \
-    zdharma/fast-syntax-highlighting \
+    zdharma-continuum/fast-syntax-highlighting \
 light-mode blockf atpull'zinit creinstall -q .' \
 atinit"
     zstyle ':completion:*' completer _expand _complete _ignored _approximate
@@ -160,7 +161,7 @@ bindmap"^R -> ^H" atinit"
     zstyle :history-search-multi-word highlight-color fg=red,bold
     zstyle :plugin:history-search-multi-word reset-prompt-protect 1
 " \
-    zdharma/history-search-multi-word \
+    zdharma-continuum/history-search-multi-word \
 reset \
 atclone"local P=${${(M)OSTYPE:#*darwin*}:+g}
         \${P}sed -i \
@@ -183,9 +184,6 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 # Nodejs
 export NVM_AUTO_USE=true
-
-# zinit vars
-export ZINIT_HOME="${ZDOTDIR:-${HOME/.zinit}}"
 
 ##Liquibase
 export LIQUIBASE_HOME="$HOME/Development/bitbucket/liquibase/codb/liquibase-3.2.2"
@@ -327,6 +325,9 @@ then
 fi
 
 eval "$(pyenv virtualenv-init -)"
+
+# starship prompt
+eval $(starship init zsh)
 
 # MOTD
 
