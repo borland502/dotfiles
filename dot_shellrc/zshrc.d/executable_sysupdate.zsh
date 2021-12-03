@@ -21,4 +21,9 @@ function sysupdate {
   # misc updates
   tldr --update
 
+  # OSX Specific updates
+  if [[ -x "$(command -v softwareupdate)" ]]; then
+    softwareupdate --all --install --force
+  fi
+
 }
