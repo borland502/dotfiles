@@ -86,7 +86,7 @@ export ZINIT_BRANCH=master
 # Added by Zinit's installer
 if [[ ! -f "$ZINIT_HOME/zinit.git/zinit.zsh" ]]; then
     mkdir -p "$(dirname $ZINIT_HOME)"
-    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT[BIN_DIR]"
 fi
 
 source "${ZINIT_HOME}/zinit.git/zinit.zsh"
