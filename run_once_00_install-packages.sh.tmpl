@@ -27,15 +27,6 @@ brew install pyenv-ccache
 #shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
 {{ if not .minimal }}
 
-#Check for age key and binary
-if [ ! -f "$HOME/bin/key.txt" ]; then
-    error "Age decryption key is not present"
-fi
-
-if ! [[ -x "$(command -v age)" ]]; then
-  brew install age
-fi
-
 # Import decrypted env tokens if not already loaded, especially the Homebrew one
 if [[ -z ${HOMEBREW_GITHUB_API_TOKEN+x} ]]; then
   export $(egrep -v '^#' .autoenv.zsh | xargs)
@@ -63,7 +54,6 @@ brew tap AdoptOpenJDK/openjdk
 
 echo "Installing all homebrew apps"
 
-#TODO Install languages using virtual env managers if possible
 programming_languages_homebrew=(openjdk node typescript)
 
 for i in ${programming_languages_homebrew[@]}; do
@@ -76,7 +66,6 @@ for i in ${build_tools_homebrew[@]}; do
     brew install $i
 done
 
-# TODO: Extract brew targets that require super user permissions and place them in bootstrap
 cli_applications_homebrew=(nginx rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv nvm ncdu htop nmap gdrive gcalcli todo-txt ripgrep)
 
 for i in ${cli_applications_homebrew[@]}; do  

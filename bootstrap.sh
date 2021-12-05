@@ -59,10 +59,13 @@ case $ARCH in
     ARCH='arm'
     ;;
   *)
-    echo 'OS type not supported'
-    exit 2
+    error 'OS type not supported'
     ;;
 esac
+
+if ! [[ -f $HOME/bin/key.txt ]]; then 
+  error 'encryption key missing from ~/bin folder'
+fi
 
 # os and dist detection https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
 if [ -f /etc/os-release ]; then
@@ -121,11 +124,11 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     ## Linuxbrew preqs
     if [ -x "$(command -v apt)" ]; then
         sudo apt-get update
-        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil
+        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil age
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum update
         sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil
+        sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil age
         sudo yum -y install libxcrypt-compat
     elif [ -x "$(command -v opkg)" ]; then
         warn 'opkg is usually found on embedded devices like routers -- very little will install properly'
