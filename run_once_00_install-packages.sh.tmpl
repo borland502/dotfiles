@@ -4,15 +4,20 @@ set -euo pipefail
 
 # Script can be used with {{ .chezmoi.os }}, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
+  #shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
+  {{ if (not eq .chezmoi.os "darwin") }}
 #current session -- load path set by boostrap or current linuxbrew path
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  {{ end }}
 
 # Update any existing homebrew recipes
 brew update
 
 echo "Preparing to install software on $OSTYPE"
 
-# essential foss stuff
+# Lists of software to validate
+
+## essential foss stuff
 essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim)
 
 echo "Installing minimal packages"
@@ -25,8 +30,7 @@ brew install pyenv-virtualenv
 brew install pyenv-ccache
 
 # execute the following only if this is an attended install (TTY present)
-#shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
-{{ if eq .minimal "false" }}
+{{ if (eq .minimal "false") }}
 
 echo "Installing the full course"
 
