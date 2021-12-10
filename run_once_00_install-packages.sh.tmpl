@@ -13,8 +13,9 @@ brew update
 echo "Preparing to install software on $OSTYPE"
 
 # essential foss stuff
-essential_brew=(python3 golang p7zip vim fzf fd bat jq yq pyenv tldr starship)
+essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim)
 
+echo "Installing minimal packages"
 for i in ${essential_brew[@]}; do  
     brew install $i
 done
@@ -26,6 +27,8 @@ brew install pyenv-ccache
 # execute the following only if this is an attended install (TTY present)
 #shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
 {{ if not .minimal }}
+
+echo "Installing the full course"
 
 # Import decrypted env tokens if not already loaded, especially the Homebrew one
 if [[ -z ${HOMEBREW_GITHUB_API_TOKEN+x} ]]; then
