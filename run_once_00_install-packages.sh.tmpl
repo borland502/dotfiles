@@ -42,17 +42,6 @@ fi
 # Update Path to include helper binaries
 export PATH="$PATH:$HOME/bin"
 
-# skip install if 1password is already been installed
-if [[ ! -x $(command -v op) ]]; then
-
-  #Install 1password for the mac before any other additional packages.  Linux should already be taken care of
-  #shellcheck disable=SC1054,SC1073,SC1050,SC1072,SC1009
-  {{ if (eq .chezmoi.os "darwin") }}
-    brew install 1password-cli
-  {{ end }}
-
-fi
-
 # Get installed brew packages
 INSTALLED_PACKAGES=$(brew list)
 
