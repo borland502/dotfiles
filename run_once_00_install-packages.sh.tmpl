@@ -64,6 +64,9 @@ done
 
 cli_applications_homebrew=(nginx rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv nvm ncdu htop nmap gdrive gcalcli todo-txt ripgrep)
 
+# terminator is not in a bottle on some flavors of linux
+brew install --build-from-source terminator
+
 for i in ${cli_applications_homebrew[@]}; do  
     brew install $i
 done

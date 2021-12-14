@@ -14,6 +14,9 @@ if [[ -z "$BASH_VERSION" ]];then
 
   # generate system key
   ssh-keygen -o -a 100 -t ed25519 -f "$HOME/.ssh/id_ed25519" -C "{{- .email -}}"
+
+  # Standard directory layout
+  mkdir $HOME/Development
 fi 
 
 # Vundle -- this screws things up so do it last
