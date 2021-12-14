@@ -9,6 +9,7 @@ function info { echo -e "[info] $*"; }
 function warn  { echo -e "[warn] $*"; }
 function error { echo -e "[error] $*"; exit 1; }
 
+#TODO Extract these functions into helper scripts
 ###############################################################################
 # Prompts from Slay: https://github.com/minamarkham/formation/blob/master/twirl
 ###############################################################################
@@ -121,14 +122,16 @@ if [[ "$OSTYPE" == "linux"* ]]; then
         IS_WSL=true
     fi
 
-    ## Linuxbrew preqs
+    ## Linuxbrew preqs & flatpak (aka our linux casks)
     if [ -x "$(command -v apt)" ]; then
         sudo apt-get update
-        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil age
+        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil age flatpak
+
+        flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum update
         sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil age
+        sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil age flatpak
         sudo yum -y install libxcrypt-compat
     elif [ -x "$(command -v opkg)" ]; then
         warn 'opkg is usually found on embedded devices like routers -- very little will install properly'
@@ -163,7 +166,7 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     if [[ "$OSTYPE" != "darwin"* ]]; then
       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-      # TODO Bootstrap the linux brew path -- on mac it is just redundant.  Clobber what's there, we won't use it with zsh
+      # lobber what's there, we won't use it with zsh
       echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" > "$HOME/.profile"
     fi  
 
@@ -192,6 +195,9 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     chezmoi diff
   fi
 
+  info "changing shell now"
+  sudo chsh -s /bin/zsh
+
   info "bootstrap complete."
   info ""
   warn ""
@@ -204,6 +210,7 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 
 else
 
+    ## TODO expand on minimal arm
     ## arm minimal install pending linuxbrew
     if [ -x "$(command -v apt)" ]; then
         sudo apt-get update

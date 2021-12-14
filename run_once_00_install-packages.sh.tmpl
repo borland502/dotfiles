@@ -82,6 +82,8 @@ done
   done
   {{ else if (eq .chezmoi.os "linux" ) }}
   #linux
+    #TODO: Flatpak ahoy
+
     {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
   #WSL
   echo "WSL"
