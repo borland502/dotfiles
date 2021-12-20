@@ -81,8 +81,12 @@ done
     brew install $i
   done
   {{ else if (eq .chezmoi.os "linux" ) }}
-  #linux
-    #TODO: Flatpak ahoy
+  #linux //TODO: detect X before installing the majority of these
+  linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd)
+
+  for i in ${linux_gui_app_cask[@]}; do
+    flatpak install -y --noninteractive $i
+  done
 
     {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
   #WSL
