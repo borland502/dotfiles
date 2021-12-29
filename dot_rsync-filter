@@ -1,0 +1,13 @@
+# include
++ .config/**
++ .gdrive/**
++ .shellrc/**
++ .ssh/**
++ .todo/**
++ bin/**
+
+#exclude
+- .cache/**
+- .pyenv/**
+- .zhistory
+- .zcompdump
