@@ -1,0 +1,12 @@
+# global dir / file inclusions
++ **/*.cfg
++ .ssh
+
+# global dir / file exclusions
+- **/*.log
+- **/*log.tar.gz
+- *.Trash
+- Photos\ Library*
+- .virtualenvs
+- .git
+- github/**
