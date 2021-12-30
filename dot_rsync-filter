@@ -5,9 +5,40 @@
 + .ssh/**
 + .todo/**
 + bin/**
++ .gnupg/**
++ .tldrc/**
++ scripts/**
 
 #exclude
 - .cache/**
 - .pyenv/**
 - .zhistory
 - .zcompdump
+- .m2/**
+- .docker/**
+- .dropbox/**
+- .minikube/**
+- .node-gyp/**
+- .npm/**
+- .npm-global/**
+- .nvm/**
+- .Trash/**
+- Applications/**
+- Appliactions\ (Parallels)
+- Downloads/**
+- Dropbox/**
+- Google*/**
+- Library/**
+- OneDrive*/**
+- oradiag*/**
+- Parallels/**
+- VirtualBox\ VMs
+- **/node_modules/*
+- **/classes/*
+- **/.log*
+- **/target/**
+- **/venv/**
+- **/go/pkg/**
+
+# danger!  Jboss recursion possible on softlink resolution
+- **/jboss/modules/**
