@@ -10,3 +10,4 @@
 - .virtualenvs
 - .git
 - github/**
+- .vscode-server/**
