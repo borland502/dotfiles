@@ -1,5 +1,4 @@
 # include
-+ .config/**
 + .gdrive/**
 + .shellrc/**
 + .ssh/**
@@ -10,19 +9,6 @@
 + scripts/**
 
 #exclude
-- .cache/**
-- .pyenv/**
-- .zhistory
-- .zcompdump
-- .m2/**
-- .docker/**
-- .dropbox/**
-- .minikube/**
-- .node-gyp/**
-- .npm/**
-- .npm-global/**
-- .nvm/**
-- .Trash/**
 - Applications/**
 - Appliactions\ (Parallels)
 - Downloads/**
@@ -33,12 +19,10 @@
 - oradiag*/**
 - Parallels/**
 - VirtualBox\ VMs
-- **/node_modules/*
-- **/classes/*
-- **/.log*
-- **/target/**
-- **/venv/**
 - **/go/pkg/**
+- .local/share/flatpak
+- .config/vivaldi/**
 
 # danger!  Jboss recursion possible on softlink resolution
 - **/jboss/modules/**
+- *[cC]ache*

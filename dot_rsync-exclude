@@ -1,6 +1,7 @@
 # global dir / file inclusions
 + **/*.cfg
 + .ssh
++ *.db
 
 # global dir / file exclusions
 - **/*.log
@@ -11,3 +12,36 @@
 - .git
 - github/**
 - .vscode-server/**
+- Games/**
+- RetroPie/**
+- Games/**
+- RetroPie/**
+- node_modules
+- classes/**
+- **/.log*
+- /target/**
+- venv/**
+- *[cC]ache*
+- .cache/**
+- .pyenv/**
+- .zhistory
+- .zcompdump
+- .m2/**
+- .docker/**
+- .dropbox/**
+- .minikube/**
+- .node-gyp/**
+- .npm/**
+- .npm-global/**
+- .nvm/**
+- .Trash/**
+- Trash/**
+- .local/share/flatpak
+- .config/vivaldi/**
+- .config/discord
+- .config/slack
+- *.so*
+- .local/share/lutris/runners/**
+- .local/share/lutris/runtime
+- **/steamapps/**
+- .var/app/org.mozilla.firefox/**
