@@ -54,6 +54,8 @@ symbol = "☕ "
 style = "#fc618d"
 
 [python]
+pyenv_version_name = true
+python_binary = ["python3","python"]
 format = "[$symbol$version]($style) "
 style = "bold #7bd88f"
 
@@ -81,3 +83,7 @@ style = "bold italic #87A752"
 
 [aws]
 style = "#fce566"
+
+[memory_usage]
+disabled = false
+

@@ -1,0 +1,34 @@
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = vim
+	autocrlf = input
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[diff]
+    tool = vimdiff	
+[difftool]
+    prompt = false
+[user]
+	name = Jeremy Hettenhouser
+	email = {{- .email -}}
+[commit]
+	template = ~/.stCommitMsg
+	gpgsign = false
+{{ if (eq .chezmoi.os "darwin") }}	
+[credential]
+	helper = osxkeychain
+{{ else if (eq .chezmoi.os "linux" ) }}
+
+{{ else if (eq .chezmoi.os "windows" ) }}
+[credential]
+	helper = manager-core
+{{ end }}	
+[init]
+	templatedir = ~/.git-templates
+[alias]
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	find = "!git ls-files | grep -i"
+[gpg]
+	program = gpg
+[pull]
+	rebase = true
