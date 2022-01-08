@@ -269,7 +269,7 @@ fi
 
 # Load all files from .shell/rc.d directory
 if [[ -d "$SCRIPTS"/shell/rc.d ]]; then
-  for file in "$HOME"/shell/rc.d/*.sh; do
+  for file in "$SCRIPTS"/shell/rc.d/*.sh; do
     # shellcheck source=/dev/null
     source "$file"
   done
