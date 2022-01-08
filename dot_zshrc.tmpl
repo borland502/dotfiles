@@ -125,7 +125,21 @@ zinit wait lucid for \
     OMZP::npm \
     OMZP::vscode \
     OMZP::python \
-    OMZP::aws 
+    OMZP::aws \
+    OMZP::docker \
+    OMZP::docker-compose \
+    OMZP::brew \
+    OMZP::colorize \
+    OMZP::cp \
+    OMZP::dotenv \
+    OMZP::gcloud \
+    OMZP::gpg-agent \
+    OMZP::ripgrep \
+    OMZP::spring 
+
+
+
+
 
 # zsh github plugins
 
@@ -170,7 +184,6 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     trapd00r/LS_COLORS \
     lukechilds/zsh-nvm \
     paulirish/git-open \
-    Tarrasch/zsh-autoenv \
     djui/alias-tips \
     fcambus/ansiweather \
     wfxr/forgit 
@@ -344,3 +357,11 @@ eval $(starship init zsh)
 
 # end profiling
 #zprof
+
+#TODO Mimic OMZP alias with own settings
+
+   
+# alias rsync-copy="rsync -avz --progress -h"
+# alias rsync-move="rsync -avz --progress -h --remove-source-files"
+# alias rsync-update="rsync -avzu --progress -h"
+# alias rsync-synchronize="rsync -avzu --delete --progress -h"

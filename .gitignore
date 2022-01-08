@@ -6,3 +6,6 @@
 
 key.txt
 .DS_Store
+
+.env
+.autoenv*

@@ -134,8 +134,13 @@ if [[ "$OSTYPE" == "linux"* ]]; then
         sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil age flatpak
         sudo yum -y install libxcrypt-compat
     elif [ -x "$(command -v opkg)" ]; then
-        warn 'opkg is usually found on embedded devices like routers -- very little will install properly'
-        sleep 2
+        sudo opkg update
+        sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
+
+        curl "$HOME"/https://github.com/FiloSottile/age/releases/download/v1.0.0/age-v1.0.0-linux-amd64.tar.gz | tar -xz -C "$HOME/bin"
+
+        # specific to synology with opkg
+        # /var/services/homes/jhettenh
     fi
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -186,13 +191,14 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
   command -v curl > /dev/null 2>&1 || MISSING_PACKAGES+=("curl")
   command -v brew > /dev/null 2>&1 || MISSING_PACKAGES+=("brew")
   command -v chezmoi > /dev/null 2>&1 || MISSING_PACKAGES+=("chezmoi")
-  command -v age > /dev/null 2>&1 || MISSING_PACKAGES+=("age")
 
   if [ -n "${MISSING_PACKAGES}" ]; then
       warn "The following is missing on the host and needs "
       warn "to be installed and configured before running this script again"
       error "missing: ${MISSING_PACKAGES[@]}"
   fi
+
+  # some repositories don't have age -- rather 
 
   if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
     # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
@@ -215,16 +221,13 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 
 else
 
-    ## TODO expand on minimal arm
     ## arm minimal install pending linuxbrew
     if [ -x "$(command -v apt)" ]; then
         sudo apt-get update
         # python3 golang p7zip vim fzf fd bat jq yq pyenv tldr age
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum update
-        #TODO
     elif [ -x "$(command -v opkg)" ]; then
-        # TODO Prune way back installs on this branch; the types of things that run opkg don't need full stack dev tools
         sudo opkg update
     fi
 
