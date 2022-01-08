@@ -155,6 +155,11 @@ fi
 
 info "WSL? $IS_WSL"
 
+# we are going all in on the XDG specifications
+if ! [[ -d "/etc/xdg" ]]; then
+  sudo mkdir /etc/xdg
+fi  
+
 # linuxbrew isn't supported on arm yet -- so provide a mininmum install using traditional package managers
 if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 

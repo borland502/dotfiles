@@ -1,0 +1,31 @@
+##  Make the defaults explicit
+## Comments grabbed from arch wiki on the variables
+
+# Where user-specific configurations should be written (analogous to /etc).
+export XDG_CONFIG_HOME="${HOME}/.config"
+
+# Where user-specific non-essential (cached) data should be written (analogous to /var/cache).
+export XDG_CACHE_HOME="${HOME}/.cache"
+
+# Where user-specific data files should be written (analogous to /usr/share).
+export XDG_DATA_HOME="${HOME}/.local/share"
+
+# Where user-specific state files should be written (analogous to /var/lib).
+export XDG_STATE_HOME="${HOME}/.local/state"
+
+{{ if (eq .chezmoi.os "linux") }}
+# Used for non-essential, user-specific data files such as sockets, named pipes, etc.
+# Not required to have a default value; warnings should be issued if not set or equivalents provided.
+# Must be owned by the user with an access mode of 0700.
+# Filesystem fully featured by standards of OS.
+# Must be on the local filesystem.
+# May be subject to periodic cleanup.
+# Modified every 6 hours or set sticky bit if persistence is desired.
+# Can only exist for the duration of the user's login.
+# Should not store large files as it may be mounted as a tmpfs.
+# pam_systemd sets this to /run/user/$UID.
+export XDG_RUNTIME_DIR="/run/user/${UID}"
+{{ end }}
+
+export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+export XDG_CONFIG_DIRS="/etc/xdg"

@@ -69,7 +69,7 @@ SAVEHIST=5000
 
 # zinit-configuration necessary for the automation
 declare -A ZINIT
-ZINIT_HOME="${HOME}/.local/share/zinit"
+ZINIT_HOME="${XDG_DATA_HOME}/zinit"
 
 ZINIT[BIN_DIR]="$ZINIT_HOME/zinit.git"
 ZINIT[HOME_DIR]="$ZINIT_HOME"
@@ -194,8 +194,8 @@ export HOMEBREW_NO_INSECURE_REDIRECT=1
 export GPG_TTY=$TTY
 
 #Death to Emacs and a thousand hells upon nano
-export EDITOR='vi'
-export VISUAL='vim'
+export EDITOR='vim'
+export VISUAL='vsc --wait'
 
 ##Maven
 export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
@@ -256,18 +256,20 @@ export IDEA_VM_OPTIONS="
 -Djavax.net.ssl.trustStorePassword=changeit
 "
 
+export SCRIPTS="$HOME/scripts"
+
 # Functions
 # Load all files from .shell/zshrc.d directory
-if [[ -d "$HOME/.shellrc/zshrc.d" ]]; then
-  for file in "$HOME"/.shellrc/zshrc.d/*.zsh; do
+if [[ -d "$SCRIPTS/shell/zshrc.d" ]]; then
+  for file in "$SCRIPTS"/shell/zshrc.d/*.zsh; do
     # shellcheck source=/dev/null
     source "$file"
   done
 fi
 
 # Load all files from .shell/rc.d directory
-if [ -d "$HOME"/.shellrc/rc.d ]; then
-  for file in "$HOME"/.shellrc/rc.d/*.sh; do
+if [[ -d "$SCRIPTS"/shell/rc.d ]]; then
+  for file in "$HOME"/shell/rc.d/*.sh; do
     # shellcheck source=/dev/null
     source "$file"
   done
