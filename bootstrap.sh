@@ -103,11 +103,13 @@ if [ -z "$OSTYPE" ]; then
 fi
 
 IS_WSL=false
+AGE_VERSION=$(curl -s "https://api.github.com/repos/FiloSottile/age/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
 
 info "Architecture: $ARCH"
 info "OS: $OS" "$VER"
 info "OSTYPE: $OSTYPE"
 info "HOME: $HOME"
+info "AGE Encryption: $AGE_VERSION" 
 
 warn ""
 warn "If you want to abort, hit ctrl+c within 10 seconds..."
@@ -122,21 +124,20 @@ if [[ "$OSTYPE" == "linux"* ]]; then
         IS_WSL=true
     fi
 
+    # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
+    curl -Lo "$HOME/age.tar.gz" "https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz"
+    tar xf "$HOME/age.tar.gz"
+    sudo mv age/age /usr/local/bin
+    sudo mv age/age-keygen /usr/local/bin
+    rm -rf "$HOME/age.tar.gz"
+    rm -rf "$HOME/age"
+
     ## Linuxbrew preqs & flatpak (aka our linux casks)
     if [ -x "$(command -v apt)" ]; then
         sudo apt-get update
         sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil flatpak
 
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-        # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
-        AGE_VERSION=$(curl -s "https://api.github.com/repos/FiloSottile/age/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
-        curl -Lo "$HOME/age.tar.gz" "https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz"
-        tar xf "$HOME/age.tar.gz"
-        sudo mv age/age /usr/local/bin
-        sudo mv age/age-keygen /usr/local/bin
-        rm -rf "$HOME/age.tar.gz"
-        rm -rf "$HOME/age"
 
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum update
