@@ -5,6 +5,7 @@
 *.swp
 
 key.txt
+private_key.txt
 .DS_Store
 
 .env
