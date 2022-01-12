@@ -125,13 +125,23 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     ## Linuxbrew preqs & flatpak (aka our linux casks)
     if [ -x "$(command -v apt)" ]; then
         sudo apt-get update
-        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil age flatpak
+        sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil flatpak
 
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+        # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
+        AGE_VERSION=$(curl -s "https://api.github.com/repos/FiloSottile/age/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
+        curl -Lo "$HOME/age.tar.gz" "https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz"
+        tar xf "$HOME/age.tar.gz"
+        sudo mv age/age /usr/local/bin
+        sudo mv age/age-keygen /usr/local/bin
+        rm -rf "$HOME/age.tar.gz"
+        rm -rf "$HOME/age"
+
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum update
         sudo yum -y groupinstall 'Development Tools'
-        sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil age flatpak
+        sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil flatpak
         sudo yum -y install libxcrypt-compat
     elif [ -x "$(command -v opkg)" ]; then
         sudo opkg update
