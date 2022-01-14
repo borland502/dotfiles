@@ -67,8 +67,11 @@ HISTSIZE=100000
 SAVEHIST=5000
 
 # zinit-configuration necessary for the automation
-declare -A ZINIT
-ZINIT_HOME="${XDG_DATA_HOME}/zinit"
+
+
+
+#declare -A ZINIT
+#ZINIT_HOME="${XDG_DATA_HOME}/zinit"
 
 #ZINIT[BIN_DIR]="$ZINIT_HOME/zinit.git"
 #ZINIT[HOME_DIR]="$ZINIT_HOME"
@@ -88,8 +91,8 @@ ZINIT_HOME="${XDG_DATA_HOME}/zinit"
 
 #source "${ZINIT_HOME}/zinit.git/zinit.zsh"
 
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+#autoload -Uz _zinit
+#(( ${+_comps} )) && _comps[zinit]=_zinit
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)

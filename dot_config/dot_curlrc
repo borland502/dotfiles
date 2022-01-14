@@ -2419,7 +2419,6 @@ tr-encoding
 #
 # If this option is used several times, the last one will be used.
 
-
 verbose
 # -v, --verbose
 #

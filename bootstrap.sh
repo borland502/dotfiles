@@ -107,8 +107,10 @@ if [ -z "$OSTYPE" ]; then
   fi
 fi
 
+cd "$HOME"
+
 IS_WSL=false
-AGE_VERSION=$(curl -s "https://api.github.com/repos/FiloSottile/age/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
+AGE_VERSION=$(wget -qO- "https://api.github.com/repos/FiloSottile/age/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 info "Architecture: $ARCH"
 info "OS: $OS" "$VER"
@@ -162,16 +164,16 @@ fi
 
 # TODO Hash these scripts.  Those used in the bootstrap shouldn't change very often, so we don't need to trust all that much
 info "Downloading helper scripts"
-curl -O --output-dir "$HOME/bin" https://raw.githubusercontent.com/kdabir/has/master/has
+wget https://raw.githubusercontent.com/kdabir/has/master/has -P "$HOME/bin" -O "has"
 chmod +x "$HOME/bin/has"
 
 # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
-curl -Lo "$HOME/age.tar.gz" "https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz"
-tar xf "$HOME/age.tar.gz"
+wget "https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz" -O "age.tar.gz"
+tar xf "age.tar.gz"
 sudo mv age/age /usr/local/bin
 sudo mv age/age-keygen /usr/local/bin
-rm -rf "$HOME/age.tar.gz"
-rm -rf "$HOME/age"
+rm "age.tar.gz"
+rm "age"
 
 info "WSL? $IS_WSL"
 
@@ -185,7 +187,7 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 
   # install homebrew/linuxbrew
   if ! has brew; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(wget -qO- https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 
   if [[ "$OSTYPE" != "darwin"* ]]; then
@@ -227,7 +229,7 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 
     source "$HOME/.zprofile"
 
-    sh -c "$(curl -fsSL https://git.io/zinit-install)"
+    sh -c "$(wget -qO- https://git.io/zinit-install)"
   fi
 
   info "bootstrap complete."
