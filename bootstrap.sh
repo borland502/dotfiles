@@ -46,6 +46,8 @@ fi
 if [[ $EUID -ne 0 ]]; then
   echo "Enter credentials for sensitive installs"
   ask_for_sudo
+else
+  error "This script assumes the user environment variables exist.  This branch can be erased if sudo inherits user envs"
 fi
 
 ARCH="$(uname -m)"
@@ -67,7 +69,7 @@ arm*)
   ;;
 esac
 
-if ! [[ -d $HOME/bin/key.txt ]]; then
+if ! [[ -f $HOME/bin/key.txt ]]; then
   error 'encryption key missing from ~/bin folder'
 fi
 
