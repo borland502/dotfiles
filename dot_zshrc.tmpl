@@ -18,7 +18,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 {{ else if (eq .chezmoi.os "linux" ) }}
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-export PATH="$PATH:$HOME/bin"
 
   {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
   #WSL
@@ -30,7 +29,7 @@ unsetopt PATH_DIRS
 {{ end }}
 
 # Universal
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/.google-drive-upload/bin"
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/.google-drive-upload/bin:${HOME}/bin"
 
 # do not beep at me dammit
 setopt NO_BEEP
@@ -71,23 +70,23 @@ SAVEHIST=5000
 declare -A ZINIT
 ZINIT_HOME="${XDG_DATA_HOME}/zinit"
 
-ZINIT[BIN_DIR]="$ZINIT_HOME/zinit.git"
-ZINIT[HOME_DIR]="$ZINIT_HOME"
-ZINIT[PLUGINS_DIR]="$ZINIT_HOME/plugins"
-ZINIT[COMPLETIONS_DIR]="$ZINIT_HOME/completions"
-ZINIT[SNIPPETS_DIR]="$ZINIT_HOME/snippits"
+#ZINIT[BIN_DIR]="$ZINIT_HOME/zinit.git"
+#ZINIT[HOME_DIR]="$ZINIT_HOME"
+#ZINIT[PLUGINS_DIR]="$ZINIT_HOME/plugins"
+#ZINIT[COMPLETIONS_DIR]="$ZINIT_HOME/completions"
+#ZINIT[SNIPPETS_DIR]="$ZINIT_HOME/snippits"
 
-NO_EDIT=1 
-export ZINIT_REPO=zdharma-continuum/zinit
-export ZINIT_BRANCH=master
+#NO_EDIT=1 
+#export ZINIT_REPO=zdharma-continuum/zinit
+#export ZINIT_BRANCH=main
 
 # Added by Zinit's installer
-if [[ ! -f "$ZINIT_HOME/zinit.git/zinit.zsh" ]]; then
-    mkdir -p "$(dirname $ZINIT_HOME)"
-    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT[BIN_DIR]"
-fi
+#if [[ ! -f "$ZINIT_HOME/zinit.git/zinit.zsh" ]]; then
+#    mkdir -p "$(dirname $ZINIT_HOME)"
+#    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT[BIN_DIR]"
+#fi
 
-source "${ZINIT_HOME}/zinit.git/zinit.zsh"
+#source "${ZINIT_HOME}/zinit.git/zinit.zsh"
 
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
@@ -115,7 +114,6 @@ zinit wait lucid for \
 	OMZL::correction.zsh \
 	OMZL::git.zsh \
 	OMZL::termsupport.zsh \
-    OMZ::plugins/git-auto-fetch/git-auto-fetch.plugin.zsh \
     atload"
         alias gcd='gco dev'
     " \
@@ -133,10 +131,6 @@ zinit wait lucid for \
     OMZP::dotenv \
     OMZP::gcloud \
     OMZP::gpg-agent 
-
-
-
-
 
 # zsh github plugins
 
@@ -182,9 +176,10 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     lukechilds/zsh-nvm \
     paulirish/git-open \
     djui/alias-tips \
-    fcambus/ansiweather \
     wfxr/forgit 
 
+source "$ZINIT_HOME/plugins/rupa---z/z.sh"
+    
 export LANG=en_US.UTF-8
 
 # Pyenv
@@ -286,9 +281,6 @@ if [[ -d "$SCRIPTS"/shell/rc.d ]]; then
 fi
 
 # Aliases
-alias cdnginx='cd /usr/local/etc/nginx'
-alias zscripts='cd /.shellrc/zshrc.d'
-
 alias psnginx='ps -ef | grep nginx'
 alias startnginx='sudo nginx'
 alias stopnginx='sudo nginx -s stop'
@@ -303,11 +295,14 @@ alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias mvncv=mvn clean verify
 alias mvnt='mvn clean test -T1.5C'
 
+alias cdnginx='cd /usr/local/etc/nginx'
 alias cdliquibase='cd $HOME/Development/bitbucket/liquibase'
 alias cdc="chezmoi cd"
 alias cddev='cd $HOME/Development'
-
-alias weather='ansiweather'
+alias cdbb='cd $HOME/Development/bitbucket'
+alias cda2web='cd $HOME/Development/bitbucket/assist2-web'
+alias cda2svc='cd $HOME/Development/bitbucket/assist2-services'
+alias cdgh='cd $HOME/Development/github'
 
 alias gcala='gcalcli agenda'
 alias gcah="gcalcli --calendar $HASSIO_CAL_NAME quick $1"
@@ -344,6 +339,12 @@ eval "$(pyenv virtualenv-init -)"
 # starship prompt
 eval $(starship init zsh)
 
+# fzf
+export FZF_DEFAULT_COMMAND='fd --type file'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND="fd --type file --color=always"
+export FZF_DEFAULT_OPTS="--ansi"
+
 # MOTD
 
 #1Password signin.  Assume set up already by chezmoi
@@ -354,11 +355,8 @@ eval $(starship init zsh)
 
 # end profiling
 #zprof
-
-#TODO Mimic OMZP alias with own settings
-
-   
-# alias rsync-copy="rsync -avz --progress -h"
-# alias rsync-move="rsync -avz --progress -h --remove-source-files"
-# alias rsync-update="rsync -avzu --progress -h"
-# alias rsync-synchronize="rsync -avzu --delete --progress -h"
+ 
+alias rsync-copy="rsync -avz --progress -h"
+alias rsync-move="rsync -avz --progress -h --remove-source-files"
+alias rsync-update="rsync -avzu --progress -h"
+alias rsync-synchronize="rsync -avzu --delete --progress -h"

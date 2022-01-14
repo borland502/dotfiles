@@ -894,7 +894,7 @@ ignore-content-length
 # See also --dns-interface.
 
 
-
+ipv4
 # -4, --ipv4
 #
 # This option tells curl to resolve names to IPv4 addresses only, and not for example try IPv6.
@@ -2420,7 +2420,7 @@ tr-encoding
 # If this option is used several times, the last one will be used.
 
 
-
+verbose
 # -v, --verbose
 #
 # Makes curl verbose during the operation. Useful for debugging and seeing what's going on "under the hood". A line starting with '>' means "header data" sent by curl, '<' means "header data" received by curl that is hidden in normal cases, and a line starting with '*' means additional info provided by curl.

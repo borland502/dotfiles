@@ -18,7 +18,7 @@ echo "Preparing to install software on $OSTYPE"
 # Lists of software to install
 
 ## essential foss stuff
-essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim rsync)
+essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim rsync exa ripgrep)
 
 echo "Installing minimal packages"
 for i in ${essential_brew[@]}; do  
@@ -62,7 +62,7 @@ for i in ${build_tools_homebrew[@]}; do
     brew install $i
 done
 
-cli_applications_homebrew=(nginx rsync jenv diff-so-fancy prettyping shfmt autopep8 clang-format exa jenv nvm ncdu htop nmap gdrive gcalcli todo-txt ripgrep)
+cli_applications_homebrew=(nginx jenv diff-so-fancy prettyping shfmt autopep8 clang-format jenv nvm ncdu htop nmap gdrive gcalcli todo-txt)
 
 # terminator is not in a bottle on some flavors of linux
 brew install --build-from-source terminator
