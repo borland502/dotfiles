@@ -131,6 +131,11 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     IS_WSL=true
   fi
 
+  # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
+  if ! [[ -x "$(command -v age)" ]]; then
+    wget "https://github.com/FiloSottile/age/releases/latest/download/age-${AGE_VERSION}-linux-amd64.tar.gz" -O "age.tar.gz"
+  fi
+
   ## Linuxbrew preqs & flatpak (aka our linux casks)
   if [ -x "$(command -v apt)" ]; then
     sudo apt-get update
@@ -148,6 +153,11 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   fi
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
+  if ! [[ -x "$(command -v age)" ]]; then
+    # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
+    wget "https://github.com/FiloSottile/age/releases/latest/download/age-${AGE_VERSION}-darwin-amd64.tar.gz" -O "age.tar.gz"
+  fi
+
   # macOS OSX prerequisite -- no harm if run again and it will also take care of git well enough for the initial stuff
   # -----------------------------------------------------------------------------
   # XCode -- From Slay (https://github.com/minamarkham/formation/blob/master/slay)
@@ -167,13 +177,16 @@ info "Downloading helper scripts"
 wget https://raw.githubusercontent.com/kdabir/has/master/has -P "$HOME/bin" -O "has"
 chmod +x "$HOME/bin/has"
 
-# Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
-wget "https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz" -O "age.tar.gz"
-tar xf "age.tar.gz"
-sudo mv age/age /usr/local/bin
-sudo mv age/age-keygen /usr/local/bin
-rm "age.tar.gz"
-rm "age"
+# shellcheck disable=SC2034
+export HAS_ALLOW_UNSAFE=y # switch allows has to query the version of commands it does not recognize
+
+if ! has age; then
+  tar xf "age.tar.gz"
+  sudo mv age/age /usr/local/bin
+  sudo mv age/age-keygen /usr/local/bin
+  rm "age.tar.gz"
+  rm -rf "$HOME/age"
+fi
 
 info "WSL? $IS_WSL"
 
@@ -202,17 +215,13 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     brew install chezmoi
   fi
 
-  # Check env after preliminaries -- TODO: More verification
-  command -v zsh >/dev/null 2>&1 || MISSING_PACKAGES+=("zsh")
-  command -v git >/dev/null 2>&1 || MISSING_PACKAGES+=("git")
-  command -v curl >/dev/null 2>&1 || MISSING_PACKAGES+=("curl")
-  command -v brew >/dev/null 2>&1 || MISSING_PACKAGES+=("brew")
-  command -v chezmoi >/dev/null 2>&1 || MISSING_PACKAGES+=("chezmoi")
+  if ! has gsed gdircolors; then
+    brew install coreutils
+  fi
 
-  if [ -n "${MISSING_PACKAGES}" ]; then
-    warn "The following is missing on the host and needs "
-    warn "to be installed and configured before running this script again"
-    error "missing: ${MISSING_PACKAGES[@]}"
+  # Check env after preliminaries -- TODO: More verification
+  if ! has zsh git curl brew chezmoi age; then
+    error "The prceeding packages are missing on the host and need to be installed and configured before running this script again"
   fi
 
   # some repositories don't have age -- rather
@@ -223,13 +232,22 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     chezmoi diff
   fi
 
-  if [[ -z ${ZINIT_HOME+x} ]]; then
+  if [[ -z ${ZINIT_HOME+x} ]] && ! [[ -d ${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git ]]; then
     info "changing shell now"
     sudo chsh -s /bin/zsh
 
+    # shellcheck disable=SC1091
     source "$HOME/.zprofile"
 
-    sh -c "$(wget -qO- https://git.io/zinit-install)"
+    # manual installation since we will get a chicken/egg cycle with .zshrc
+    ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+    mkdir -p "$(dirname $ZINIT_HOME)"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+
+    # shellcheck disable=SC1091
+    source "$HOME/.zshrc"
+  elif [[ -z ${ZINIT_HOME+x} ]]; then
+    error "zinit exists, but is not initialized properly"
   fi
 
   info "bootstrap complete."
