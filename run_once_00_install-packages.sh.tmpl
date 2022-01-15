@@ -64,9 +64,6 @@ done
 
 cli_applications_homebrew=(nginx jenv diff-so-fancy prettyping shfmt autopep8 clang-format jenv nvm ncdu htop nmap gdrive gcalcli todo-txt subversion)
 
-# terminator is not in a bottle on some flavors of linux
-brew install --build-from-source terminator
-
 for i in ${cli_applications_homebrew[@]}; do  
     brew install $i
 done
@@ -81,7 +78,11 @@ done
     brew install $i
   done
   {{ else if (eq .chezmoi.os "linux" ) }}
-  #linux //TODO: detect X before installing the majority of these
+  #linux //TODO: detect X before installing the any of these
+
+  # terminator is not in a bottle on some flavors of linux  TODO: might as well use flatpak
+  brew install --build-from-source terminator
+
   linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd)
 
   for i in ${linux_gui_app_cask[@]}; do
