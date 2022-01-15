@@ -172,8 +172,10 @@ fi
 
 # TODO Hash these scripts.  Those used in the bootstrap shouldn't change very often, so we don't need to trust all that much
 info "Downloading helper scripts"
-wget https://raw.githubusercontent.com/kdabir/has/master/has -P "$HOME/bin" -O "has"
+wget https://raw.githubusercontent.com/kdabir/has/master/has -O "has"
+mv has "$HOME/bin"
 chmod +x "$HOME/bin/has"
+export PATH=$PATH:$HOME/bin
 
 # shellcheck disable=SC2034
 export HAS_ALLOW_UNSAFE=y # switch allows has to query the version of commands it does not recognize
@@ -214,6 +216,7 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
   fi
 
   if ! has gsed gdircolors; then
+    brew install gsed
     brew install coreutils
   fi
 

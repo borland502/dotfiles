@@ -13,9 +13,6 @@
 export CLICOLOR=1
 export KRB5CCNAME=KCM:jeremy
 
-#iTerm2
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
-
 {{ else if (eq .chezmoi.os "linux" ) }}
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
@@ -78,14 +75,22 @@ compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-    zdharma-continuum/z-a-patch-dl \
-    zdharma-continuum/z-a-bin-gem-node \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
 
 # End of Zinit's installer chunk
 
 # generic plugins to load early and traditionally
 zi light rupa/z
 zi light MichaelAquilina/zsh-you-should-use
+
+{{ if (eq .chezmoi.os "darwin") }}
+    zinit snippet ~/.iterm2_shell_integration.zsh
+    zinit light-mode for \
+        svn OMZP::macos 
+{{ end }}
 
 # Delay after start
 zinit ice wait'1' lucid as'completion' \
@@ -116,7 +121,6 @@ zinit wait lucid for \
     OMZP::vscode \
     OMZP::python \
     OMZP::aws \
-    OMZP::docker-compose \
     OMZP::brew \
     OMZP::colorize \
     OMZP::cp \
@@ -127,46 +131,34 @@ zinit wait lucid for \
 # zsh github plugins
 
 zinit wait lucid for \
-light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions \
-light-mode blockf atpull'zinit creinstall -q .' \
-atinit"
-    zstyle ':completion:*' completer _expand _complete _ignored _approximate
-    zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-    zstyle ':completion:*' menu select=2
-    zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
-    zstyle ':completion:*:descriptions' format '-- %d --'
-    zstyle ':completion:*:processes' command 'ps -au$USER'
-    zstyle ':completion:complete:*:options' sort false
-    zstyle ':fzf-tab:complete:_zlua:*' query-string input
-    zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,user,comm,cmd -w -w'
-    zstyle ':fzf-tab:complete:kill:argument-rest' extra-opts --preview=$extract'ps --pid=$in[(w)1] -o cmd --no-headers -w -w' --preview-window=down:3:wrap
-    zstyle ':fzf-tab:complete:cd:*' extra-opts --preview=$extract'exa -1 --color=always ${~ctxt[hpre]}$in'
-" \
-    zsh-users/zsh-completions \
-bindmap"^R -> ^H" atinit"
-    zstyle :history-search-multi-word page-size 10
-    zstyle :history-search-multi-word highlight-color fg=red,bold
-    zstyle :plugin:history-search-multi-word reset-prompt-protect 1
-" \
-    zdharma-continuum/history-search-multi-word \
-reset \
-atclone"local P=${${(M)OSTYPE:#*darwin*}:+g}
-        \${P}sed -i \
-        '/DIR/c\DIR 38;5;63;1' LS_COLORS; \
-        \${P}dircolors -b LS_COLORS > c.zsh" \
-atpull'%atclone' pick"c.zsh" nocompile'!' \
-atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
-    trapd00r/LS_COLORS \
-    lukechilds/zsh-nvm \
-    paulirish/git-open \
-    wfxr/forgit 
-    
-zinit light-mode for \
-    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-        zdharma/fast-syntax-highlighting \
-    michaelaquilina/zsh-you-should-use
+    as"null" from"gh-r" sbin mv"direnv* -> direnv" \
+        atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
+        src="zhook.zsh" \
+        @direnv/direnv \
+    bindmap"^R -> ^H" atinit"
+        zstyle :history-search-multi-word page-size 10
+        zstyle :history-search-multi-word highlight-color fg=red,bold
+        zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+        " \
+        zdharma-continuum/history-search-multi-word \
+        lukechilds/zsh-nvm \
+        paulirish/git-open \
+        wfxr/forgit     
 
+# Finish up with syntax highliters    
+zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+    atclone"local P=${${(M)OSTYPE:#*darwin*}:+g}
+            \${P}sed -i \
+            '/DIR/c\DIR 38;5;63;1' LS_COLORS; \
+            \${P}dircolors -b LS_COLORS > c.zsh" \
+    atpull'%atclone' pick"c.zsh" nocompile'!' \
+    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
+        trapd00r/LS_COLORS \
+    michaelaquilina/zsh-you-should-use \
+    light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+    zdharma-continuum/fast-syntax-highlighting \
+    zsh-users/zsh-completions \
 
 export LANG=en_US.UTF-8
 
