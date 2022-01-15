@@ -87,17 +87,29 @@ zinit light-mode for \
 zi light rupa/z
 zi light MichaelAquilina/zsh-you-should-use
 
+# Delay after start
+zinit ice wait'1' lucid as'completion' \
+  id-as'docker-compose-completion' mv'docker-compose-completion -> _docker-compose'
+zinit snippet 'https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose'
+
 ## Oh My Zsh plugins, libraries, and functions
 zinit lucid for \
     atinit"HIST_STAMPS=dd.mm.yyyy" \
     OMZL::history.zsh \
+
+# git completions, only when .git present
+zinit wait'git rev-parse --git-dir > /dev/null 2>&1' atload'zicompinit; zicdreplay' lucid blockf for \
+    OMZP::git \
+    OMZP::git-extras \
+    OMZP::tig \
+    OMZP::git-flow-avh \
+    OMZP::git-auto-fetch
 
 zinit wait lucid for \
 	OMZL::clipboard.zsh \
 	OMZL::compfix.zsh \
 	OMZL::correction.zsh \
 	OMZL::termsupport.zsh \
-    OMZL::git.zsh \
     OMZP::colored-man-pages \
     OMZP::mvn \
     OMZP::npm \
@@ -117,13 +129,6 @@ zinit wait lucid for \
 zinit wait lucid for \
 light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
-light-mode atinit"
-    typeset -gA FAST_HIGHLIGHT;
-    FAST_HIGHLIGHT[git-cmsg-len]=100;
-    zpcompinit;
-    zpcdreplay;
-" \
-    zdharma-continuum/fast-syntax-highlighting \
 light-mode blockf atpull'zinit creinstall -q .' \
 atinit"
     zstyle ':completion:*' completer _expand _complete _ignored _approximate
@@ -156,11 +161,11 @@ atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
     lukechilds/zsh-nvm \
     paulirish/git-open \
     wfxr/forgit 
-
-# Delay after start
-zinit ice wait'1' lucid as'completion' \
-  id-as'docker-compose-completion' mv'docker-compose-completion -> _docker-compose'
-zinit snippet 'https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose'
+    
+zinit light-mode for \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+        zdharma/fast-syntax-highlighting \
+    michaelaquilina/zsh-you-should-use
 
 
 export LANG=en_US.UTF-8

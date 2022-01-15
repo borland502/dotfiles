@@ -3,8 +3,6 @@ set -e
 
 # Script outline and structure borrowed from https://raw.githubusercontent.com/home-assistant/supervised-installer/master/installer.sh
 
-declare -a MISSING_PACKAGES
-
 function info { echo -e "[info] $*"; }
 function warn { echo -e "[warn] $*"; }
 function error {
@@ -244,8 +242,6 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     mkdir -p "$(dirname $ZINIT_HOME)"
     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 
-    # shellcheck disable=SC1091
-    source "$HOME/.zshrc"
   elif [[ -z ${ZINIT_HOME+x} ]]; then
     error "zinit exists, but is not initialized properly"
   fi
