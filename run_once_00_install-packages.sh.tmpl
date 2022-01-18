@@ -21,8 +21,10 @@ echo "Preparing to install software on $OSTYPE"
 essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim rsync exa ripgrep)
 
 echo "Installing minimal packages"
-for i in ${essential_brew[@]}; do  
+for i in ${essential_brew[@]}; do
+  if ! [[ has $i ]]; then  
     brew install $i
+  fi  
 done
 
 echo "Installing misc plugins"
@@ -53,19 +55,25 @@ echo "Installing all homebrew apps"
 programming_languages_homebrew=(openjdk node typescript)
 
 for i in ${programming_languages_homebrew[@]}; do
+  if ! [[ has $i ]]; then
     brew install $i
+  fi
 done
 
 build_tools_homebrew=(maven gradle npm)
 
 for i in ${build_tools_homebrew[@]}; do
+  if ! [[ has $i ]]; then
     brew install $i
+  fi  
 done
 
 cli_applications_homebrew=(nginx jenv diff-so-fancy prettyping shfmt autopep8 clang-format jenv nvm ncdu htop nmap gdrive gcalcli todo-txt subversion)
 
 for i in ${cli_applications_homebrew[@]}; do  
+  if ! [[ has $i ]]; then
     brew install $i
+  fi  
 done
 
   {{ if (eq .chezmoi.os "darwin") }}
@@ -75,19 +83,23 @@ done
   gui_app_cask=(Vivaldi docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
   gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown)
   for i in ${gui_app_cask[@]}; do
-    brew install $i
+    if ! [[ has $i ]]; then
+      brew install $i
+    fi  
   done
   {{ else if (eq .chezmoi.os "linux" ) }}
-  #linux //TODO: detect X before installing the any of these
+  #linux 
 
-  # terminator is not in a bottle on some flavors of linux  TODO: might as well use flatpak
-  brew install --build-from-source terminator
+  # flatpak needs the XDG_RUNTIME_DIR and sometimes, in a container it doesn't exist
+  if [[ -d /run/user/${UID} ]]  && [[ type Xorg ]]; then
+      sudo apt install flatpak
 
-  linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd)
+      linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd com.slack.Slack com.discordapp.Discord com.visualstudio.code.desktop)
 
-  for i in ${linux_gui_app_cask[@]}; do
-    flatpak install -y --noninteractive $i
-  done
+      for i in ${linux_gui_app_cask[@]}; do
+        flatpak install -y --noninteractive $i
+      done
+  fi
 
     {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
   #WSL

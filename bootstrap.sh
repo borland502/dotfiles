@@ -137,7 +137,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   ## Linuxbrew preqs & flatpak (aka our linux casks)
   if [ -x "$(command -v apt)" ]; then
     sudo apt-get update
-    sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil flatpak vim
+    sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil vim
 
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   elif [[ -x "$(command -v yum)" ]]; then
