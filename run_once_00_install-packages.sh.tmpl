@@ -23,9 +23,9 @@ echo "Preparing to install software on $OSTYPE"
 ## essential foss stuff
 essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim rsync exa ripgrep)
 
-echo "Installing minimal packages"
+echo "Installing or updating minimal packages"
 for i in ${essential_brew[@]}; do
-  if ! has $i; then  
+  if brew ls --versions $i > /dev/null; then
     brew install $i
   fi  
 done
@@ -58,24 +58,30 @@ echo "Installing all homebrew apps"
 programming_languages_homebrew=(openjdk node typescript)
 
 for i in ${programming_languages_homebrew[@]}; do
-  if ! has $i; then
-    brew install $i
-  fi
+  if brew ls --versions $i > /dev/null; then
+    echo "$i is already installed"
+  else
+    brew install $i  
+  fi  
 done
 
 build_tools_homebrew=(maven gradle npm)
 
 for i in ${build_tools_homebrew[@]}; do
-  if ! has $i; then
-    brew install $i
+  if brew ls --versions $i > /dev/null; then
+    echo "$i is already installed"
+  else
+    brew install $i  
   fi  
 done
 
 cli_applications_homebrew=(nginx jenv diff-so-fancy prettyping shfmt autopep8 clang-format jenv nvm ncdu htop nmap gdrive gcalcli todo-txt subversion)
 
 for i in ${cli_applications_homebrew[@]}; do  
-  if ! has $i; then
-    brew install $i
+  if brew ls --versions $i > /dev/null; then
+    echo "$i is already installed"
+  else
+    brew install $i  
   fi  
 done
 
@@ -86,8 +92,10 @@ done
   gui_app_cask=(Vivaldi docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
   gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown)
   for i in ${gui_app_cask[@]}; do
-    if ! has $i; then
-      brew install $i
+    if brew ls --versions $i > /dev/null; then
+      echo "$i is already installed"
+    else
+      brew install $i  
     fi  
   done
   {{ else if (eq .chezmoi.os "linux" ) }}
