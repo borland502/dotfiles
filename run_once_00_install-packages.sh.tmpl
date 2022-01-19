@@ -18,18 +18,24 @@ brew update
 
 echo "Preparing to install software on $OSTYPE"
 
+# List of brew sw & casks already installed TODO: Replace far slower `brew ls --versions` check that doesn't work with casks
+BREWED=$(brew list -1)
+
 # Lists of software to install
 
 ## essential foss stuff
-essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim rsync exa ripgrep)
+essential_brew=(python3 golang p7zip fzf fd bat jq yq pyenv tldr starship vim rsync exa ripgrep lsof)
 
 echo "Installing or updating minimal packages"
 for i in ${essential_brew[@]}; do
   if brew ls --versions $i > /dev/null; then
-    brew install $i
+    echo "$i is already installed"
+  else
+    brew install $i  
   fi  
 done
 
+# TODO:  check these plugins as well
 echo "Installing misc plugins"
 brew install pyenv-virtualenv
 brew install pyenv-ccache
