@@ -1,4 +1,4 @@
-skip_global_compinit=1
+export skip_global_compinit=1
 
 ##  Make the defaults explicit
 ## Comments grabbed from arch wiki on the variables
@@ -17,3 +17,6 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 
 export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
+
+#evalCache
+export ZSH_EVALCACHE_DIR=$XDG_CACHE_HOME/.zsh-evalcache

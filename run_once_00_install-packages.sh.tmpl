@@ -108,7 +108,7 @@ done
   #linux 
 
   # flatpak needs the XDG_RUNTIME_DIR and sometimes, in a container it doesn't exist
-  if [[ -d /run/user/${UID} ]]  && [[ type Xorg ]]; then
+  if [[ -d /run/user/${UID} && type Xorg ]]; then
       sudo apt install flatpak
 
       linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd com.slack.Slack com.discordapp.Discord com.visualstudio.code.desktop)

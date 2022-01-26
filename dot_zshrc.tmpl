@@ -88,11 +88,10 @@ zinit light-mode for \
 # generic plugins to load early and traditionally
 zi light rupa/z
 zi light MichaelAquilina/zsh-you-should-use
+zi light mroth/evalcache
 
 {{ if (eq .chezmoi.os "darwin") }}
     zinit snippet ~/.iterm2_shell_integration.zsh
-    zinit light-mode for \
-        svn OMZP::macos 
 {{ end }}
 
 # Delay after start
@@ -106,12 +105,14 @@ zinit lucid for \
     OMZL::history.zsh \
 
 # git completions, only when .git present
-zinit wait'git rev-parse --git-dir > /dev/null 2>&1' atload'zicompinit; zicdreplay' lucid blockf for \
+zinit wait'git rev-parse --git-dir > /dev/null 2>&1' lucid blockf for \
     OMZP::git \
     OMZP::git-extras \
     OMZP::tig \
     OMZP::git-flow-avh \
-    OMZP::git-auto-fetch
+    OMZP::git-auto-fetch \
+    paulirish/git-open \
+    wfxr/forgit     
 
 zinit wait lucid for \
 	OMZL::clipboard.zsh \
@@ -143,12 +144,10 @@ zinit wait lucid for \
         zstyle :plugin:history-search-multi-word reset-prompt-protect 1
         " \
         zdharma-continuum/history-search-multi-word \
-        lukechilds/zsh-nvm \
-        paulirish/git-open \
-        wfxr/forgit     
+        lukechilds/zsh-nvm 
 
 # Finish up with syntax highliters    
-zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+zinit wait'1' lucid atload"zicompinit; zicdreplay" blockf for \
     atclone"local P=${${(M)OSTYPE:#*darwin*}:+g}
             \${P}sed -i \
             '/DIR/c\DIR 38;5;63;1' LS_COLORS; \
@@ -306,6 +305,16 @@ alias lx='exa -lbhHigUmuSa@ --git --color-scale' # all + extended list
 alias lS='exa -1'                                                              # one column, just names
 alias lt='exa --tree --level=2'                                   # tree
 
+{{ if (eq .chezmoi.os "darwin") }}
+  # Open the current directory in a Finder window
+  alias ofd='open $PWD'
+  alias off='open --reveal $PWD'
+
+  # Show/hide hidden files in the Finder
+  alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+  alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+{{ end }}
+
 ## The price of using an unusual terminal
 # alias ssh="kitty +kitten ssh"
 
@@ -319,7 +328,7 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 # starship prompt
-eval $(starship init zsh)
+eval "$(starship init zsh)"
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type file'
@@ -334,13 +343,11 @@ export FZF_DEFAULT_OPTS="--ansi"
 
 #1Password completion
 # eval "$(op completion zsh)"
-
-# end profiling
-#zprof
  
 alias rsync-copy="rsync -avz --progress -h"
 alias rsync-move="rsync -avz --progress -h --remove-source-files"
 alias rsync-update="rsync -avzu --progress -h"
 alias rsync-synchronize="rsync -avzu --delete --progress -h"
 
-compinit
+# end profiling
+#zprof
