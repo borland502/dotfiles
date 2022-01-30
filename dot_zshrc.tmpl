@@ -88,14 +88,12 @@ zinit light-mode for \
 # generic plugins to load early and traditionally
 zi light rupa/z
 zi light MichaelAquilina/zsh-you-should-use
-zi light mroth/evalcache
 
 {{ if (eq .chezmoi.os "darwin") }}
     zinit snippet ~/.iterm2_shell_integration.zsh
 {{ end }}
 
-# Delay after start
-zinit ice wait'1' lucid as'completion' \
+zinit ice lucid as'completion' \
   id-as'docker-compose-completion' mv'docker-compose-completion -> _docker-compose'
 zinit snippet 'https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose'
 
@@ -106,6 +104,7 @@ zinit lucid for \
 
 # git completions, only when .git present
 zinit wait'git rev-parse --git-dir > /dev/null 2>&1' lucid blockf for \
+    OMZL::git.zsh \
     OMZP::git \
     OMZP::git-extras \
     OMZP::tig \
@@ -146,7 +145,7 @@ zinit wait lucid for \
         zdharma-continuum/history-search-multi-word \
         lukechilds/zsh-nvm 
 
-# Finish up with syntax highliters    
+# Finish up preload with syntax highliters    
 zinit wait'1' lucid atload"zicompinit; zicdreplay" blockf for \
     atclone"local P=${${(M)OSTYPE:#*darwin*}:+g}
             \${P}sed -i \
@@ -319,11 +318,6 @@ alias lt='exa --tree --level=2'                                   # tree
 # alias ssh="kitty +kitten ssh"
 
 # virtual environments
-if command -v jenv &> /dev/null
-then
-    eval "$(jenv init -)"
-fi
-
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
@@ -348,6 +342,9 @@ alias rsync-copy="rsync -avz --progress -h"
 alias rsync-move="rsync -avz --progress -h --remove-source-files"
 alias rsync-update="rsync -avzu --progress -h"
 alias rsync-synchronize="rsync -avzu --delete --progress -h"
+
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # end profiling
 #zprof

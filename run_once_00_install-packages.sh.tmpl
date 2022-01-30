@@ -56,12 +56,9 @@ export PATH="$PATH:$HOME/bin"
 # Get installed brew packages
 INSTALLED_PACKAGES=$(brew list)
 
-echo "Adding custom taps"
-brew tap AdoptOpenJDK/openjdk
-
 echo "Installing all homebrew apps"
 
-programming_languages_homebrew=(openjdk node typescript)
+programming_languages_homebrew=(node typescript)
 
 for i in ${programming_languages_homebrew[@]}; do
   if brew ls --versions $i > /dev/null; then
@@ -71,7 +68,7 @@ for i in ${programming_languages_homebrew[@]}; do
   fi  
 done
 
-build_tools_homebrew=(maven gradle npm)
+build_tools_homebrew=(npm)
 
 for i in ${build_tools_homebrew[@]}; do
   if brew ls --versions $i > /dev/null; then
@@ -81,7 +78,7 @@ for i in ${build_tools_homebrew[@]}; do
   fi  
 done
 
-cli_applications_homebrew=(nginx jenv diff-so-fancy prettyping shfmt autopep8 clang-format jenv nvm ncdu htop nmap gdrive gcalcli todo-txt subversion)
+cli_applications_homebrew=(nginx diff-so-fancy prettyping shfmt autopep8 clang-format nvm ncdu htop nmap gdrive gcalcli todo-txt subversion)
 
 for i in ${cli_applications_homebrew[@]}; do  
   if brew ls --versions $i > /dev/null; then
@@ -95,8 +92,8 @@ done
 # darwin
   echo "Installing all non-freeware packages with brew cask"
 
-  gui_app_cask=(Vivaldi docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
-  gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown)
+  gui_app_cask=(Vivaldi docker visual-studio-code slack discord intellij-idea 1password-cli)
+  gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver)
   for i in ${gui_app_cask[@]}; do
     if brew ls --versions $i > /dev/null; then
       echo "$i is already installed"
@@ -111,7 +108,7 @@ done
   if [[ -d /run/user/${UID} && type Xorg ]]; then
       sudo apt install flatpak
 
-      linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd com.slack.Slack com.discordapp.Discord com.visualstudio.code.desktop)
+      linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate org.freedesktop.fwupd com.slack.Slack com.discordapp.Discord com.visualstudio.code.desktop)
 
       for i in ${linux_gui_app_cask[@]}; do
         flatpak install -y --noninteractive $i

@@ -18,5 +18,5 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 
-#evalCache
-export ZSH_EVALCACHE_DIR=$XDG_CACHE_HOME/.zsh-evalcache
+# GraalVM Binaries
+NATIVE_IMAGE_BIN="${NATIVE_IMAGE_BIN:-$HOME/bin}"
