@@ -183,7 +183,7 @@ export EDITOR='vi'
 export VISUAL='vim'
 
 ##Maven
-export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
+export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 
 ##IntelliJ
 export IDEA_VM_OPTIONS="
