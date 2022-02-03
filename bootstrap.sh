@@ -170,15 +170,21 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
   fi
 fi
 
-# TODO Hash these scripts.  Those used in the bootstrap shouldn't change very often, so we don't need to trust all that much
 info "Downloading helper scripts"
+info "Installing has"
 wget https://raw.githubusercontent.com/kdabir/has/master/has -O "has"
 mv has "$HOME/bin"
 chmod +x "$HOME/bin/has"
+
 export PATH=$PATH:$HOME/bin
 
 # shellcheck disable=SC2034
 export HAS_ALLOW_UNSAFE=y # switch allows has to query the version of commands it does not recognize
+
+if ! has sdk; then
+  info "Downloading SDKMan"
+  curl -s "https://get.sdkman.io?rcupdate=false" | bash
+fi
 
 if ! has age; then
   tar xf "age.tar.gz"
