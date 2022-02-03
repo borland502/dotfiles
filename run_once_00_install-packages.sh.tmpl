@@ -95,7 +95,7 @@ done
 # darwin
   echo "Installing all non-freeware packages with brew cask"
 
-  gui_app_cask=(Vivaldi docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli)
+  gui_app_cask=(Vivaldi docker visual-studio-code slack discord dropbox intellij-idea adoptopenjdk8 1password-cli barrier)
   gui_app_cask+=(iterm2 1password viscosity paw the-unarchiver macdown)
   for i in ${gui_app_cask[@]}; do
     if brew ls --versions $i > /dev/null; then
@@ -111,7 +111,7 @@ done
   if [[ -d /run/user/${UID} ]]  && [[ type Xorg ]]; then
       sudo apt install flatpak
 
-      linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd com.slack.Slack com.discordapp.Discord com.visualstudio.code.desktop)
+      linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd com.slack.Slack com.discordapp.Discord com.github.debauchee.barrier)
 
       for i in ${linux_gui_app_cask[@]}; do
         flatpak install -y --noninteractive $i

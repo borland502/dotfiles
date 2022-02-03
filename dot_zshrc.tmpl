@@ -13,7 +13,11 @@
 export CLICOLOR=1
 export KRB5CCNAME=KCM:jeremy
 
+# Barrier Config
+export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
+
 {{ else if (eq .chezmoi.os "linux" ) }}
+# Linuxbrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
   {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
