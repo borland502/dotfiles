@@ -250,7 +250,9 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     sudo chsh -s /bin/zsh
 
     # shellcheck disable=SC1091
-    source "$HOME/.zprofile"
+    if [[ -f "$HOME/.zprofile" ]]; then
+      source "$HOME/.zprofile"
+    fi
 
     # manual installation since we will get a chicken/egg cycle with .zshrc
     ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
