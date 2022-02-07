@@ -137,14 +137,20 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   ## Linuxbrew preqs & flatpak (aka our linux casks)
   if [ -x "$(command -v apt)" ]; then
     sudo apt-get update
-    sudo apt-get -y install build-essential procps curl file git gnupg2 zsh sssd heimdal-clients msktutil vim
+    sudo apt-get -y install build-essential procps curl file git gnupg2 zsh freeipa-client vim exa
 
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   elif [[ -x "$(command -v yum)" ]]; then
     sudo yum update
     sudo yum -y groupinstall 'Development Tools'
-    sudo yum -y install procps-ng curl file git gnupg2 zsh sssd heimdal-clients msktutil flatpak vim
+    sudo yum -y install procps-ng curl file git gnupg2 zsh freeipa-client vim ripgrep fd-find
     sudo yum -y install libxcrypt-compat
+  elif [[ -x "$(command -v dnf)" ]]; then
+    sudo dnf update
+    sudo dnf -y group install 'Development Tools'
+    sudo dnf -y group install 'Domain Membership'
+    sudo dnf -y group install 'C Development Tools and Libraries'
+    sudo dnf -y install vim curl wget gnupg2 libxcrypt-compat exa zsh ripgrep fd-find
   elif [ -x "$(command -v opkg)" ]; then
     sudo opkg update
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
@@ -266,16 +272,6 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
   chezmoi apply
 
 else
-
-  ## arm minimal install pending linuxbrew
-  if [ -x "$(command -v apt)" ]; then
-    sudo apt-get update
-    # python3 golang p7zip vim fzf fd bat jq yq pyenv tldr age
-  elif [[ -x "$(command -v yum)" ]]; then
-    sudo yum update
-  elif [ -x "$(command -v opkg)" ]; then
-    sudo opkg update
-  fi
 
   info "bootstrap complete on arm.  Guess we'll wait for linuxbrew to support it"
   exit 0
