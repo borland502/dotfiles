@@ -79,6 +79,7 @@ compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
 # source global shell vars
 source "${HOME}/.autoenv.zsh"
 
+
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
@@ -97,26 +98,12 @@ zi light MichaelAquilina/zsh-you-should-use
     zinit snippet ~/.iterm2_shell_integration.zsh
 {{ end }}
 
-zinit ice lucid as'completion' \
-  id-as'docker-compose-completion' mv'docker-compose-completion -> _docker-compose'
-zinit snippet 'https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose'
-
 ## Oh My Zsh plugins, libraries, and functions
 zinit lucid for \
     atinit"HIST_STAMPS=dd.mm.yyyy" \
     OMZL::history.zsh \
 
-# git completions, only when .git present
-zinit wait'git rev-parse --git-dir > /dev/null 2>&1' lucid blockf for \
-    OMZL::git.zsh \
-    OMZP::git \
-    OMZP::git-extras \
-    OMZP::tig \
-    OMZP::git-flow-avh \
-    OMZP::git-auto-fetch \
-    paulirish/git-open \
-    wfxr/forgit     
-
+# zsh github plugins
 zinit wait lucid for \
 	OMZL::clipboard.zsh \
 	OMZL::compfix.zsh \
@@ -134,23 +121,34 @@ zinit wait lucid for \
     OMZP::gcloud \
     OMZP::gpg-agent 
 
-# zsh github plugins
+# TODO: light install of what would otherwise be brew installs
+# tools
+
+# zinit wait lucid for \
+#     bindmap"^R -> ^H" atinit"
+#         zstyle :history-search-multi-word page-size 10
+#         zstyle :history-search-multi-word highlight-color fg=red,bold
+#         zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+#         " \
+#         zdharma-continuum/history-search-multi-word \
+#         lukechilds/zsh-nvm 
+
+# Finish up preload with syntax highliters
+# zi ice wait as'completion' has'rg'
+# zi snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
+
+# git completions, only when .git present
+zinit wait'git rev-parse --git-dir > /dev/null 2>&1' lucid for \
+    OMZL::git.zsh \
+    OMZP::git \
+    OMZP::git-extras \
+    OMZP::tig \
+    OMZP::git-flow-avh \
+    OMZP::git-auto-fetch \
+    paulirish/git-open \
+    wfxr/forgit     
 
 zinit wait lucid for \
-    as"null" from"gh-r" sbin mv"direnv* -> direnv" \
-        atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
-        src="zhook.zsh" \
-        @direnv/direnv \
-    bindmap"^R -> ^H" atinit"
-        zstyle :history-search-multi-word page-size 10
-        zstyle :history-search-multi-word highlight-color fg=red,bold
-        zstyle :plugin:history-search-multi-word reset-prompt-protect 1
-        " \
-        zdharma-continuum/history-search-multi-word \
-        lukechilds/zsh-nvm 
-
-# Finish up preload with syntax highliters    
-zinit wait'1' lucid atload"zicompinit; zicdreplay" blockf for \
     atclone"local P=${${(M)OSTYPE:#*darwin*}:+g}
             \${P}sed -i \
             '/DIR/c\DIR 38;5;63;1' LS_COLORS; \
@@ -158,11 +156,12 @@ zinit wait'1' lucid atload"zicompinit; zicdreplay" blockf for \
     atpull'%atclone' pick"c.zsh" nocompile'!' \
     atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
         trapd00r/LS_COLORS \
-    michaelaquilina/zsh-you-should-use \
     light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
-    zdharma-continuum/fast-syntax-highlighting \
+    BurntSushi/ripgrep \
+    dbrgn/tealdeer \
     zsh-users/zsh-completions \
+    zdharma-continuum/fast-syntax-highlighting
 
 export LANG=en_US.UTF-8
 
@@ -245,7 +244,11 @@ export IDEA_VM_OPTIONS="
 -Djavax.net.ssl.trustStorePassword=changeit
 "
 
-export SCRIPTS="$HOME/scripts"
+{{ if (eq .chezmoi.os "darwin") }}
+  export SCRIPTS="/Volumes/scripts"
+{{ else }}
+  export SCRIPTS="$HOME/scripts"  
+{{ end }}  
 
 # Functions
 # Load all files from .shell/zshrc.d directory
@@ -307,6 +310,11 @@ alias lx='exa -lbhHigUmuSa@ --git --color-scale' # all + extended list
 ## specialty views
 alias lS='exa -1'                                                              # one column, just names
 alias lt='exa --tree --level=2'                                   # tree
+
+# grep aliases
+alias cgrep='rg -uuu -tc -n -w'
+
+# ack aliases
 
 {{ if (eq .chezmoi.os "darwin") }}
   # Open the current directory in a Finder window

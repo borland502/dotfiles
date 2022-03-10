@@ -28,7 +28,13 @@
 	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
 	find = "!git ls-files | grep -i"
+
+[push]
+  default = upstream
+  rebase = true
+  followTags = true
+
 [gpg]
 	program = gpg
 [pull]
-	rebase = true
+	rebase = false
