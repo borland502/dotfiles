@@ -77,7 +77,7 @@ autoload -Uz compinit
 compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
 
 # source global shell vars
-source "${HOME}/.autoenv.zsh"
+zi snippet "${HOME}/.autoenv.zsh"
 
 
 # Load a few important annexes, without Turbo
@@ -95,7 +95,7 @@ zi light rupa/z
 zi light MichaelAquilina/zsh-you-should-use
 
 {{ if (eq .chezmoi.os "darwin") }}
-    zinit snippet ~/.iterm2_shell_integration.zsh
+    zi snippet ~/.iterm2_shell_integration.zsh
 {{ end }}
 
 ## Oh My Zsh plugins, libraries, and functions
@@ -132,10 +132,6 @@ zinit wait lucid for \
 #         " \
 #         zdharma-continuum/history-search-multi-word \
 #         lukechilds/zsh-nvm 
-
-# Finish up preload with syntax highliters
-# zi ice wait as'completion' has'rg'
-# zi snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
 
 # git completions, only when .git present
 zinit wait'git rev-parse --git-dir > /dev/null 2>&1' lucid for \
@@ -251,19 +247,11 @@ export IDEA_VM_OPTIONS="
 {{ end }}  
 
 # Functions
-# Load all files from .shell/zshrc.d directory
-if [[ -d "$SCRIPTS/shell/zshrc.d" ]]; then
-  for file in "$SCRIPTS"/shell/zshrc.d/*.zsh; do
+# Load all *.zsh files from bin directory 
+if [[ -d "$HOME/bin" ]]; then
+  for file in "$HOME"/bin/*.zsh; do
     # shellcheck source=/dev/null
-    source "$file"
-  done
-fi
-
-# Load all files from .shell/rc.d directory
-if [[ -d "$SCRIPTS"/shell/rc.d ]]; then
-  for file in "$SCRIPTS"/shell/rc.d/*.sh; do
-    # shellcheck source=/dev/null
-    source "$file"
+    zi snippet "$file"
   done
 fi
 
@@ -350,13 +338,15 @@ export FZF_DEFAULT_OPTS="--ansi"
 #1Password completion
 # eval "$(op completion zsh)"
  
-alias rsync-copy="rsync -avz --progress -h"
+alias rsync-copy="rsync -avhPi --progress"
 alias rsync-move="rsync -avz --progress -h --remove-source-files"
 alias rsync-update="rsync -avzu --progress -h"
 alias rsync-synchronize="rsync -avzu --delete --progress -h"
 
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+if [[ -x "$(command -v sdk)" ]]; then
+  export SDKMAN_DIR="$HOME/.sdkman"
+  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi  
 
 # end profiling
 #zprof
