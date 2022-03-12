@@ -29,6 +29,7 @@ unsetopt PATH_DIRS
 
 {{ end }}
 
+# TODO: move bin dir to bootstrap only
 # Universal
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/.google-drive-upload/bin:${HOME}/bin"
 
@@ -121,7 +122,6 @@ zinit wait lucid for \
     OMZP::gcloud \
     OMZP::gpg-agent 
 
-# TODO: light install of what would otherwise be brew installs
 # tools
 
 # zinit wait lucid for \
@@ -154,8 +154,6 @@ zinit wait lucid for \
         trapd00r/LS_COLORS \
     light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
-    BurntSushi/ripgrep \
-    dbrgn/tealdeer \
     zsh-users/zsh-completions \
     zdharma-continuum/fast-syntax-highlighting
 
@@ -240,10 +238,11 @@ export IDEA_VM_OPTIONS="
 -Djavax.net.ssl.trustStorePassword=changeit
 "
 
+#TODO test for autofs
 {{ if (eq .chezmoi.os "darwin") }}
-  export SCRIPTS="/Volumes/scripts"
+  export SCRIPTS="${MAC_SCRIPTS_PATH}"
 {{ else }}
-  export SCRIPTS="$HOME/scripts"  
+  export SCRIPTS="${PC_SCRIPTS_PATH}"  
 {{ end }}  
 
 # Functions
@@ -318,11 +317,15 @@ alias cgrep='rg -uuu -tc -n -w'
 # alias ssh="kitty +kitten ssh"
 
 # virtual environments
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+if [[ -x "${command -v pyenv}" ]]; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi  
 
 # starship prompt
-eval "$(starship init zsh)"
+if [[ -x "${command -v starship}" ]]; then
+  eval "$(starship init zsh)"
+fi
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type file'
@@ -338,7 +341,7 @@ export FZF_DEFAULT_OPTS="--ansi"
 #1Password completion
 # eval "$(op completion zsh)"
  
-alias rsync-copy="rsync -avhPi --progress"
+alias rsync-copy="rsync -avhi --progress"
 alias rsync-move="rsync -avz --progress -h --remove-source-files"
 alias rsync-update="rsync -avzu --progress -h"
 alias rsync-synchronize="rsync -avzu --delete --progress -h"
