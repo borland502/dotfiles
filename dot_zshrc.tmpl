@@ -317,13 +317,13 @@ alias cgrep='rg -uuu -tc -n -w'
 # alias ssh="kitty +kitten ssh"
 
 # virtual environments
-if [[ -x "${command -v pyenv}" ]]; then
+if [[ -x "$(command -v pyenv)" ]]; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi  
 
 # starship prompt
-if [[ -x "${command -v starship}" ]]; then
+if [[ -x "$(command -v starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
