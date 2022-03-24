@@ -29,15 +29,9 @@ unsetopt PATH_DIRS
 
 {{ end }}
 
-# early exports
+# TODO: move bin dir to bootstrap only
 # Universal
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/.google-drive-upload/bin:${HOME}/bin"
-
-# fzf
-export FZF_DEFAULT_COMMAND='fd --type file'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_COMMAND="fd --type file --color=always"
-export FZF_DEFAULT_OPTS="--ansi"
 
 # do not beep at me dammit
 setopt NO_BEEP
@@ -335,6 +329,15 @@ fi
 if [[ -x "$(command -v starship)" ]]; then
   eval "$(starship init zsh)"
 fi
+
+# fzf
+export FZF_DEFAULT_COMMAND='fd --type file'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND="fd --type file --color=always"
+export FZF_DEFAULT_OPTS="--ansi"
+
+# fzf & zinit have been troublesome companions for me -- clobber key bind issues
+zi snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
 
 # MOTD
 
