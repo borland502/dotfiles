@@ -29,9 +29,15 @@ unsetopt PATH_DIRS
 
 {{ end }}
 
-# TODO: move bin dir to bootstrap only
+# early exports
 # Universal
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/.google-drive-upload/bin:${HOME}/bin"
+
+# fzf
+export FZF_DEFAULT_COMMAND='fd --type file'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND="fd --type file --color=always"
+export FZF_DEFAULT_OPTS="--ansi"
 
 # do not beep at me dammit
 setopt NO_BEEP
@@ -80,7 +86,6 @@ compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
 # source global shell vars
 zi snippet "${HOME}/.autoenv.zsh"
 
-
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
@@ -89,10 +94,14 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
 
+# zinit plugins
+zi pack'bgn+keys' for fzf
+zi pack wait for ls_colors
+zi pack wait for pyenv
+
 # End of Zinit's installer chunk
 
 # generic plugins to load early and traditionally
-zi light rupa/z
 zi light MichaelAquilina/zsh-you-should-use
 
 {{ if (eq .chezmoi.os "darwin") }}
@@ -124,17 +133,17 @@ zinit wait lucid for \
 
 # tools
 
-# zinit wait lucid for \
-#     bindmap"^R -> ^H" atinit"
-#         zstyle :history-search-multi-word page-size 10
-#         zstyle :history-search-multi-word highlight-color fg=red,bold
-#         zstyle :plugin:history-search-multi-word reset-prompt-protect 1
-#         " \
-#         zdharma-continuum/history-search-multi-word \
-#         lukechilds/zsh-nvm 
+zinit wait lucid for \
+    bindmap"^R -> ^H" atinit"
+        zstyle :history-search-multi-word page-size 10
+        zstyle :history-search-multi-word highlight-color fg=red,bold
+        zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+        " \
+        zdharma-continuum/history-search-multi-word \
+        lukechilds/zsh-nvm 
 
 # git completions, only when .git present
-zinit wait'git rev-parse --git-dir > /dev/null 2>&1' lucid for \
+zinit wait lucid for \
     OMZL::git.zsh \
     OMZP::git \
     OMZP::git-extras \
@@ -145,19 +154,19 @@ zinit wait'git rev-parse --git-dir > /dev/null 2>&1' lucid for \
     wfxr/forgit     
 
 zinit wait lucid for \
-    atclone"local P=${${(M)OSTYPE:#*darwin*}:+g}
-            \${P}sed -i \
-            '/DIR/c\DIR 38;5;63;1' LS_COLORS; \
-            \${P}dircolors -b LS_COLORS > c.zsh" \
-    atpull'%atclone' pick"c.zsh" nocompile'!' \
-    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
-        trapd00r/LS_COLORS \
     light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
+    agkozak/zsh-z \
     zdharma-continuum/fast-syntax-highlighting
 
 export LANG=en_US.UTF-8
+
+# Plugin config vars
+export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
+export ZSHZ_KEEP_DIRS=(/opt/net /net)
+export ZSHZ_CASE=smart
+
 
 # Pyenv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
@@ -327,12 +336,6 @@ if [[ -x "$(command -v starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
-# fzf
-export FZF_DEFAULT_COMMAND='fd --type file'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_COMMAND="fd --type file --color=always"
-export FZF_DEFAULT_OPTS="--ansi"
-
 # MOTD
 
 #1Password signin.  Assume set up already by chezmoi
@@ -346,7 +349,7 @@ alias rsync-move="rsync -avz --progress -h --remove-source-files"
 alias rsync-update="rsync -avzu --progress -h"
 alias rsync-synchronize="rsync -avzu --delete --progress -h"
 
-if [[ -x "$(command -v sdk)" ]]; then
+if [[ -d"$HOME/.sdkman" ]]; then
   export SDKMAN_DIR="$HOME/.sdkman"
   [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi  
