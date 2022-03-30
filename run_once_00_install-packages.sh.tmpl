@@ -18,7 +18,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 soft_file_limit=$(ulimit -Sn)
 
 if [[ "$soft_file_limit" -lt 2048 ]]; then
-  info "Increasing $soft_file_limit to 2048 for a user"
+  echo "Increasing $soft_file_limit to 2048 for a user"
   ulimit -Sn 2048 
 fi
 
