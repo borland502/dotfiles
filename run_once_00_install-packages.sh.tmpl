@@ -11,7 +11,14 @@ export HAS_ALLOW_UNSAFE=y # switch allows has to query the version of commands i
   {{ if (ne .chezmoi.os "darwin") }}
 #current session -- load path set by boostrap or current linuxbrew path
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  {{ end }}
+  
+soft_file_limit=$(ulimit -Sn)
+
+# homebrew, during an initial install especially will breeze past the open file limit so up the typical limit per user
+if [[ "$soft_file_limit" -lt 2048 ]]; then
+  info "Increasing $soft_file_limit to 2048 for a user"
+  ulimit -Sn 2048 
+fi
 
 # Update any existing homebrew recipes
 brew update
