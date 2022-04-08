@@ -7,11 +7,11 @@
 # profiling
 # zmodload zsh/zprof
 
-#shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
+# shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
 {{ if (eq .chezmoi.os "darwin") }}
 
-export CLICOLOR=1
-export KRB5CCNAME=KCM:jeremy
+export CLICOLOR="1"
+export KRB5CCNAME="KCM:jeremy"
 
 # Barrier Config
 export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
