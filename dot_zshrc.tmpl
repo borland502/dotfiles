@@ -332,7 +332,7 @@ fi
 
 # kubectl
 if [[ -x "$(command -v kubectl)" ]]; then
-  eval "$(kubectl completion zsh)"
+  zi snippet <(kubectl completion zsh)
 fi
 
 # fzf
