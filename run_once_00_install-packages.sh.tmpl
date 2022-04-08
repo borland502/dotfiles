@@ -35,6 +35,11 @@ echo "Preparing to install software on $OSTYPE"
 ## essential foss stuff
 essential_brew=(python3 golang rust p7zip fzf fd bat jq yq pyenv tealdeer starship vim rsync exa ripgrep lsof)
 
+# detect and remove tldr (python) if present
+if [[ brew ls --versions tldr ]]; then
+  brew remove tldr
+fi
+
 echo "Installing or updating minimal packages"
 for i in ${essential_brew[@]}; do
   if brew ls --versions $i > /dev/null; then

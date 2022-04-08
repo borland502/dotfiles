@@ -330,6 +330,11 @@ if [[ -x "$(command -v starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
+# kubectl
+if [[ -x "$(command -v kubectl)" ]]; then
+  eval "$(kubectl completion zsh)"
+fi
+
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type file'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
