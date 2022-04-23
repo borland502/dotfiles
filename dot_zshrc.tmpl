@@ -147,20 +147,29 @@ zinit wait lucid for \
     paulirish/git-open \
     wfxr/forgit     
 
+# load some completions conditionally
+#zi wait lucid as'completion' blockf has'fd'
+#zi snippet https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd
+
 zinit wait lucid for \
     light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
     agkozak/zsh-z \
-    zdharma-continuum/fast-syntax-highlighting
+    zdharma-continuum/fast-syntax-highlighting 
 
 export LANG=en_US.UTF-8
+
+# k8s
+export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config:$XDG_CONFIG_HOME/kube/taiba/config
+
+# Docker
+export DOCKER_BUILDKIT=1 
 
 # Plugin config vars
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
 export ZSHZ_KEEP_DIRS=(/opt/net /net)
 export ZSHZ_CASE=smart
-
 
 # Pyenv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
@@ -333,6 +342,11 @@ fi
 # kubectl
 if [[ -x "$(command -v kubectl)" ]]; then
   source <(kubectl completion zsh)
+fi
+
+# homeassistant
+if [[ -x "$(command -v hass-cli)" ]]; then
+  source <(hass-cli completion zsh)
 fi
 
 # fzf
