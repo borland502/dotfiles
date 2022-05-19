@@ -5,6 +5,14 @@ set -euo pipefail
 # shellcheck disable=SC2034
 export HAS_ALLOW_UNSAFE=y # switch allows has to query the version of commands it does not recognize
 
+## essential foss stuff
+essential_brew=(python3 golang rust p7zip fzf fd bat jq yq pyenv tealdeer starship vim rsync exa ripgrep lsof)
+
+if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
+  # homebrew/linux brew not supported on arm
+  exit 0
+fi
+
 # Script can be used with {{ .chezmoi.os }}, WSL (Windows), or MacOS with linuxbrew or homebrew.
 
   #shellcheck disable=SC1009,SC1050,SC1083,SC1054,SC1072,SC1073
@@ -31,9 +39,6 @@ echo "Preparing to install software on $OSTYPE"
 #BREWED=$(brew list -1)
 
 # Lists of software to install
-
-## essential foss stuff
-essential_brew=(python3 golang rust p7zip fzf fd bat jq yq pyenv tealdeer starship vim rsync exa ripgrep lsof)
 
 echo "Installing or updating minimal packages"
 for i in ${essential_brew[@]}; do
@@ -111,7 +116,9 @@ done
 
   # flatpak needs the XDG_RUNTIME_DIR and sometimes, in a container it doesn't exist
   if [[ -d /run/user/${UID} ]]; then
-      sudo apt install flatpak
+      sudo apt install flatpak -y
+
+      flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
       linux_gui_app_cask=(com.jetbrains.IntelliJ-IDEA-Ultimate com.visualstudio.code org.freedesktop.fwupd com.slack.Slack com.discordapp.Discord com.github.debauchee.barrier)
 

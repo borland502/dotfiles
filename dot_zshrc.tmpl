@@ -205,10 +205,7 @@ export M2_HOME="$HOME/.m2"
 # Functions
 # Load all *.zsh files from bin directory 
 if [[ -d "$HOME/bin" ]]; then
-  for file in "$HOME"/bin/*.zsh; do
-    # shellcheck source=/dev/null
-    zi snippet "$file"
-  done
+  fd --extension 'zsh' --exec-batch zi snippet {}
 fi
 
 # Aliases
@@ -244,12 +241,12 @@ alias tda='tds add'
 
 #exa replacement aliases from https://github.com/DarrinTisdale/zsh-aliases-exa
 ## general use
-alias ls='exa'                                                          # ls
-alias l='exa -lbF --git'                                                # list, size, type, git
-alias ll='exa -lbGF --git'                                             # long list
-alias llm='exa -lbGd --git --sort=modified'                            # long list, modified date sort
-alias la="exa -lbhHigUmuSa --git --color-scale"  # all list
-alias lx='exa -lbhHigUmuSa@ --git --color-scale' # all + extended list
+alias ls='exa --icons'                                                          # ls
+alias l='exa -lbF --git --icons'                                                # list, size, type, git
+alias ll='exa -lbGF --git --icons'                                             # long list
+alias ltr='exa -lbGd --git --sort=modified --icons'                            # long list, modified date sort
+alias la="exa -lbhHigUmuSa --git --color-scale --icons"  # all list
+alias lx='exa -lbhHigUmuSa@ --git --color-scale --icons' # all + extended list
 
 ## specialty views
 alias lS='exa -1'                                                              # one column, just names
@@ -311,10 +308,11 @@ zi snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindi
 #1Password completion
 # eval "$(op completion zsh)"
  
-alias rsync-copy="rsync -avhi --progress"
-alias rsync-move="rsync -avz --progress -h --remove-source-files"
+alias rsync-cp="rsync -avhi --progress"
+alias rsync-mv="rsync -avz --progress -h --remove-source-files"
 alias rsync-update="rsync -avzu --progress -h"
-alias rsync-synchronize="rsync -avzu --delete --progress -h"
+alias rsync-sync="rsync -avzu --delete --progress -h"
+alias rsync-bak="rsync -avbuh --progress --backup-dir=../archive"
 
 if [[ -d"$HOME/.sdkman" ]]; then
   export SDKMAN_DIR="$HOME/.sdkman"

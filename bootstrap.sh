@@ -48,7 +48,7 @@ else
   error "This script assumes the user environment variables exist.  This branch can be erased if sudo inherits user envs"
 fi
 
-ARCH="$(uname -m)"
+export ARCH="$(uname -m)"
 case $ARCH in
 x86_64 | amd64)
   ARCH='amd64'
@@ -137,20 +137,28 @@ if [[ "$OSTYPE" == "linux"* ]]; then
   ## Linuxbrew preqs & flatpak (aka our linux casks)
   if [ -x "$(command -v apt)" ]; then
     sudo apt-get update
-    sudo apt-get -y install build-essential procps curl file git gnupg2 zsh freeipa-client vim exa
+    sudo apt-get -y install build-essential procps curl file git gnupg2 zsh vim
 
-    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-  elif [[ -x "$(command -v yum)" ]]; then
-    sudo yum update
-    sudo yum -y groupinstall 'Development Tools'
-    sudo yum -y install procps-ng curl file git gnupg2 zsh freeipa-client vim ripgrep fd-find
-    sudo yum -y install libxcrypt-compat
+    if [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
+      # install brew equivalents at the lower layer for arm
+      sudo apt -y install python3 golang p7zip-full fzf fd-find bat jq tldr exa ripgrep lsof
+
+      curl -sS https://starship.rs/install.sh | sh
+
+      curl https://sh.rustup.rs -sSf | sh
+    fi
+
   elif [[ -x "$(command -v dnf)" ]]; then
     sudo dnf update
     sudo dnf -y group install 'Development Tools'
     sudo dnf -y group install 'Domain Membership'
     sudo dnf -y group install 'C Development Tools and Libraries'
-    sudo dnf -y install vim curl wget gnupg2 libxcrypt-compat exa zsh ripgrep fd-find
+    sudo dnf -y install vim curl wget gnupg2 libxcrypt-compat zsh vim  
+  elif [[ -x "$(command -v yum)" ]]; then
+    sudo yum update
+    sudo yum -y groupinstall 'Development Tools'
+    sudo yum -y install procps-ng curl file git gnupg2 zsh freeipa-client vim
+    sudo yum -y install libxcrypt-compat
   elif [ -x "$(command -v opkg)" ]; then
     sudo opkg update
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
@@ -212,7 +220,7 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 
   # install homebrew/linuxbrew
   if ! has brew; then
-    /bin/bash -c "$(wget -qO- https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "NONINTERACTIVE=1 $(wget -qO- https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 
   if [[ "$OSTYPE" != "darwin"* ]]; then
@@ -232,50 +240,42 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     brew install coreutils
   fi
 
-  # Check env after preliminaries -- TODO: More verification
-  if ! has zsh git curl brew chezmoi age; then
-    error "The prceeding packages are missing on the host and need to be installed and configured before running this script again"
-  fi
-
-  # some repositories don't have age -- rather
-
-  if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
-    # chezmoi init --apply --verbose --dry-run git@github.com:borland502/dotfiles.git
-    chezmoi init https://github.com/borland502/dotfiles
-    chezmoi diff
-  fi
-
-  if [[ -z ${ZINIT_HOME+x} ]] && ! [[ -d ${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git ]]; then
-    info "changing shell now"
-    sudo chsh -s /bin/zsh
-
-    # shellcheck disable=SC1091
-    if [[ -f "$HOME/.zprofile" ]]; then
-      source "$HOME/.zprofile"
-    fi
-
-    # manual installation since we will get a chicken/egg cycle with .zshrc
-    ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-    mkdir -p "$(dirname $ZINIT_HOME)"
-    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-
-  elif [[ -z ${ZINIT_HOME+x} ]]; then
-    error "zinit exists, but is not initialized properly"
-  fi
-
-  info "bootstrap complete."
-  info ""
-  warn ""
-  warn "If you want to abort chezmoi download, hit ctrl+c within 10 seconds..."
-  warn ""
-
-  sleep 10
-
-  chezmoi apply
-
 else
 
   info "bootstrap complete on arm.  Guess we'll wait for linuxbrew to support it"
   exit 0
 
 fi
+
+info "bootstrap complete."
+info ""
+warn ""
+warn "If you want to abort chezmoi download, hit ctrl+c within 10 seconds..."
+warn ""
+
+sleep 10
+
+chezmoi apply
+
+if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
+  chezmoi init https://github.com/borland502/dotfiles
+  chezmoi diff
+fi
+
+if [[ -z ${ZINIT_HOME+x} ]] && ! [[ -d ${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git ]]; then
+  # shellcheck disable=SC1091
+  if [[ -f "$HOME/.zprofile" ]]; then
+    source "$HOME/.zprofile"
+  fi
+
+  # manual installation since we will get a chicken/egg cycle with .zshrc
+  ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+  mkdir -p "$(dirname $ZINIT_HOME)"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+
+elif [[ -z ${ZINIT_HOME+x} ]]; then
+  warn "zinit exists, but is not initialized properly"
+fi
+
+info "changing shell now"
+sudo chsh -s /bin/zsh
