@@ -143,9 +143,11 @@ if [[ "$OSTYPE" == "linux"* ]]; then
       # install brew equivalents at the lower layer for arm
       sudo apt -y install python3 golang p7zip-full fzf fd-find bat jq tldr exa ripgrep lsof
 
-      curl -sS https://starship.rs/install.sh | sh
+      wget https://sh.rustup.rs -O "rustup.sh"
+      sh -c rustup.sh -y
 
-      curl https://sh.rustup.rs -sSf | sh
+      # install via rust on arm
+      cargo install starship --locked
     fi
 
   elif [[ -x "$(command -v dnf)" ]]; then
@@ -153,7 +155,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo dnf -y group install 'Development Tools'
     sudo dnf -y group install 'Domain Membership'
     sudo dnf -y group install 'C Development Tools and Libraries'
-    sudo dnf -y install vim curl wget gnupg2 libxcrypt-compat zsh vim  
+    sudo dnf -y install vim curl wget gnupg2 libxcrypt-compat zsh vim
   elif [[ -x "$(command -v yum)" ]]; then
     sudo yum update
     sudo yum -y groupinstall 'Development Tools'
