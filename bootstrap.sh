@@ -144,7 +144,8 @@ if [[ "$OSTYPE" == "linux"* ]]; then
       sudo apt -y install python3 golang p7zip-full fzf fd-find bat jq tldr exa ripgrep lsof
 
       wget https://sh.rustup.rs -O "rustup.sh"
-      sh -c rustup.sh -y
+      chmod +x ./rustup.sh
+      rustup.sh -y
 
       # install via rust on arm
       cargo install starship --locked
