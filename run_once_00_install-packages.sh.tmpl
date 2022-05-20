@@ -8,6 +8,7 @@ export HAS_ALLOW_UNSAFE=y # switch allows has to query the version of commands i
 ## essential foss stuff
 essential_brew=(python3 golang rust p7zip fzf fd bat jq yq pyenv tealdeer starship vim rsync exa ripgrep lsof)
 
+ARCH="$(uname -m)"
 if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
   # homebrew/linux brew not supported on arm
   exit 0

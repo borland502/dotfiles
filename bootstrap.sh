@@ -48,7 +48,7 @@ else
   error "This script assumes the user environment variables exist.  This branch can be erased if sudo inherits user envs"
 fi
 
-export ARCH="$(uname -m)"
+ARCH="$(uname -m)"
 case $ARCH in
 x86_64 | amd64)
   ARCH='amd64'
