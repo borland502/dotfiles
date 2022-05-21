@@ -71,6 +71,8 @@ if ! [[ -f $HOME/bin/key.txt ]]; then
   error 'encryption key missing from ~/bin folder'
 fi
 
+export PATH=$HOME/bin:$PATH
+
 # os and dist detection https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
 if [ -f /etc/os-release ]; then
   # freedesktop.org and systemd
@@ -129,26 +131,23 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     IS_WSL=true
   fi
 
-  # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
-  if ! [[ -x "$(command -v age)" ]]; then
-    wget "https://github.com/FiloSottile/age/releases/latest/download/age-${AGE_VERSION}-linux-amd64.tar.gz" -O "age.tar.gz"
-  fi
-
   ## Linuxbrew preqs & flatpak (aka our linux casks)
   if [ -x "$(command -v apt)" ]; then
     sudo apt-get update
     sudo apt-get -y install build-essential procps curl file git gnupg2 zsh vim
 
+    # linuxbrew isn't supported on arm yet -- so provide a mininmum install using traditional package managers
     if [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
       # install brew equivalents at the lower layer for arm
-      sudo apt -y install python3 golang p7zip-full fzf fd-find bat jq tldr exa ripgrep lsof
+      sudo apt -y install python3 golang p7zip-full fzf fd-find bat jq tldr exa ripgrep lsof age
 
       wget https://sh.rustup.rs -O "rustup.sh"
-      chmod +x ./rustup.sh
-      rustup.sh -y
+      chmod +x "$HOME/rustup.sh"
+      "$HOME/rustup.sh" -y
 
       # install via rust on arm
       cargo install starship --locked
+
     fi
 
   elif [[ -x "$(command -v dnf)" ]]; then
@@ -167,10 +166,20 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
   fi
 
+  # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
+  # if ! [[ -f "$HOME/bin/age" ]]; then
+  #   wget "https://github.com/FiloSottile/age/releases/latest/download/age-${AGE_VERSION}-linux-amd64.tar.gz" -O "age.tar.gz"
+
+  #   tar xf "age.tar.gz"
+  #   sudo mv age/age /usr/local/bin
+  #   sudo mv age/age-keygen /usr/local/bin
+  #   rm "age.tar.gz"
+  #   rm -rf "$HOME/age"
+  # fi
+
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   if ! [[ -x "$(command -v age)" ]]; then
-    # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
-    wget "https://github.com/FiloSottile/age/releases/latest/download/age-${AGE_VERSION}-darwin-amd64.tar.gz" -O "age.tar.gz"
+    brew install age
   fi
 
   # macOS OSX prerequisite -- no harm if run again and it will also take care of git well enough for the initial stuff
@@ -193,22 +202,12 @@ wget https://raw.githubusercontent.com/kdabir/has/master/has -O "has"
 mv has "$HOME/bin"
 chmod +x "$HOME/bin/has"
 
-export PATH=$PATH:$HOME/bin
-
 # shellcheck disable=SC2034
 export HAS_ALLOW_UNSAFE=y # switch allows has to query the version of commands it does not recognize
 
-if ! has sdk; then
+if ! [[ -d "$HOME/.sdkman" ]]; then
   info "Downloading SDKMan"
   curl -s "https://get.sdkman.io?rcupdate=false" | bash
-fi
-
-if ! has age; then
-  tar xf "age.tar.gz"
-  sudo mv age/age /usr/local/bin
-  sudo mv age/age-keygen /usr/local/bin
-  rm "age.tar.gz"
-  rm -rf "$HOME/age"
 fi
 
 info "WSL? $IS_WSL"
@@ -218,7 +217,6 @@ if ! [[ -d "/etc/xdg" ]]; then
   sudo mkdir /etc/xdg
 fi
 
-# linuxbrew isn't supported on arm yet -- so provide a mininmum install using traditional package managers
 if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
 
   # install homebrew/linuxbrew
@@ -243,11 +241,17 @@ if ! [[ "$ARCH" == 'arm' || "$ARCH" == 'arm64' ]]; then
     brew install coreutils
   fi
 
-else
+fi
 
-  info "bootstrap complete on arm.  Guess we'll wait for linuxbrew to support it"
-  exit 0
+# Most packages will be installed in the 00 script, but we need the rest of the files in order to proceed
+if ! [[ -x "$(command -v chezmoi)" ]]; then
+  sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply borland502
+fi
 
+
+if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
+  chezmoi init https://github.com/borland502/dotfiles
+  chezmoi diff
 fi
 
 info "bootstrap complete."
@@ -258,12 +262,7 @@ warn ""
 
 sleep 10
 
-chezmoi apply
-
-if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
-  chezmoi init https://github.com/borland502/dotfiles
-  chezmoi diff
-fi
+chezmoi --use-builtin-age false apply
 
 if [[ -z ${ZINIT_HOME+x} ]] && ! [[ -d ${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git ]]; then
   # shellcheck disable=SC1091
@@ -282,3 +281,6 @@ fi
 
 info "changing shell now"
 sudo chsh -s /bin/zsh
+
+# Trigger final builds
+source ~/.zshrc

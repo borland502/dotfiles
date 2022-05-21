@@ -17,8 +17,12 @@ export KRB5CCNAME="KCM:jeremy"
 export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 
 {{ else if (eq .chezmoi.os "linux" ) }}
-# Linuxbrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# linuxbrew is not install on arm
+if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+  # Linuxbrew
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
   {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft")}}
   #WSL
@@ -65,7 +69,7 @@ setopt HIST_IGNORE_ALL_DUPS
 
 ## History.
 HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
-HISTSIZE=100000
+HISTSIZE=10000
 SAVEHIST=5000
 
 # partial manual installation to allow for autoomation script to take care of business
@@ -177,9 +181,6 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # Nodejs
 export NVM_AUTO_USE=true
 
-##Liquibase
-export LIQUIBASE_HOME="$HOME/Development/bitbucket/liquibase/codb/liquibase-3.2.2"
-
 ## Homebrew
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_INSECURE_REDIRECT=1
@@ -192,6 +193,7 @@ export EDITOR='vi'
 export VISUAL='vim'
 
 ##Maven
+# TODO: Memory / processor conditional
 export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 export M2_HOME="$HOME/.m2"
 
@@ -203,9 +205,9 @@ export M2_HOME="$HOME/.m2"
 {{ end }}  
 
 # Functions
-# Load all *.zsh files from bin directory 
+# Load and Cache all shell files from bin directory 
 if [[ -d "$HOME/bin" ]]; then
-  fd --extension 'zsh' --exec-batch zi snippet {}
+  zi snippet has
 fi
 
 # Aliases
