@@ -166,17 +166,6 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo opkg install curl file git git-http ca-certificates ldd zsh ruby gnupg2
   fi
 
-  # Older versions of ubuntu and debian don't have age in the repos -- for now, just do it the hard way
-  # if ! [[ -f "$HOME/bin/age" ]]; then
-  #   wget "https://github.com/FiloSottile/age/releases/latest/download/age-${AGE_VERSION}-linux-amd64.tar.gz" -O "age.tar.gz"
-
-  #   tar xf "age.tar.gz"
-  #   sudo mv age/age /usr/local/bin
-  #   sudo mv age/age-keygen /usr/local/bin
-  #   rm "age.tar.gz"
-  #   rm -rf "$HOME/age"
-  # fi
-
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   if ! [[ -x "$(command -v age)" ]]; then
     brew install age
