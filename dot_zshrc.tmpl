@@ -172,6 +172,12 @@ export DOCKER_BUILDKIT=1
 
 # Plugin config vars
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
+
+if [[ -f "$XDG_DATA_HOME/z" ]]; then
+  mkdir -p "$XDG_DATA_HOME/z"
+  touch "$ZSHZ_DATA"
+fi
+
 export ZSHZ_KEEP_DIRS=(/opt/net /net)
 export ZSHZ_CASE=smart
 
