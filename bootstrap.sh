@@ -156,6 +156,10 @@ if [[ "$OSTYPE" == "linux"* ]]; then
     sudo dnf -y group install 'Domain Membership'
     sudo dnf -y group install 'C Development Tools and Libraries'
     sudo dnf -y install vim curl wget gnupg2 libxcrypt-compat zsh vim
+
+  elif [[ -x "$(command -v pacman)" ]]; then
+    sudo pacman-mirrors --fasttrack && sudo pacman -Syyu
+    sudo pacman -S zsh --no-confirm
   elif [[ -x "$(command -v yum)" ]]; then
     sudo yum update
     sudo yum -y groupinstall 'Development Tools'
@@ -247,7 +251,6 @@ fi
 if ! [[ -x "$(command -v chezmoi)" ]]; then
   sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply borland502
 fi
-
 
 if ! [[ -d "$HOME/.local/share/chezmoi" ]]; then
   chezmoi init https://github.com/borland502/dotfiles

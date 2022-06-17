@@ -16,6 +16,10 @@ export KRB5CCNAME="KCM:jeremy"
 # Barrier Config
 export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 
+# krewe config
+export PATH="${PATH}:${HOME}/.krew/bin"
+export KUBECONFIG="$XDG_CONFIG_HOME/.kube"
+
 {{ else if (eq .chezmoi.os "linux" ) }}
 
 # linuxbrew is not install on arm
@@ -78,9 +82,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-autoload -Uz compinit
-compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
-
 # source global shell vars
 zi snippet "${HOME}/.autoenv.zsh"
 
@@ -111,7 +112,7 @@ zinit lucid for \
     atinit"HIST_STAMPS=dd.mm.yyyy" \
     OMZL::history.zsh \
 
-# zsh github plugins
+# zsh omz github plugins
 zinit wait lucid for \
 	OMZL::clipboard.zsh \
 	OMZL::compfix.zsh \
@@ -127,7 +128,9 @@ zinit wait lucid for \
     OMZP::colorize \
     OMZP::cp \
     OMZP::gcloud \
-    OMZP::gpg-agent 
+    OMZP::gpg-agent \
+    atload"zpcdreplay" wait"1" \
+    OMZP::kubectl \  
 
 # tools
 
@@ -154,13 +157,16 @@ zinit wait lucid for \
 # load some completions conditionally
 #zi wait lucid as'completion' blockf has'fd'
 #zi snippet https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd
-
+zinit ice lucid wait='1'
 zinit wait lucid for \
     light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
     agkozak/zsh-z \
-    zdharma-continuum/fast-syntax-highlighting 
+    zdharma-continuum/fast-syntax-highlighting \
+      as"completion" is-snippet \
+    https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
+    https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose
 
 export LANG=en_US.UTF-8
 
@@ -209,12 +215,6 @@ export M2_HOME="$HOME/.m2"
 {{ else }}
   export SCRIPTS="${PC_SCRIPTS_PATH}"  
 {{ end }}  
-
-# Functions
-# Load and Cache all shell files from bin directory 
-if [[ -d "$HOME/bin" ]]; then
-  zi snippet "$HOME/bin/has"
-fi
 
 # Aliases
 alias psnginx='ps -ef | grep nginx'
@@ -275,23 +275,15 @@ alias cgrep='rg -uuu -tc -n -w'
   alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 {{ end }}
 
-## The price of using an unusual terminal
-# alias ssh="kitty +kitten ssh"
-
-# # virtual environments
-# if [[ -x "$(command -v pyenv)" ]]; then
-#   eval "$(pyenv init -)"
-#   eval "$(pyenv virtualenv-init -)"
-# fi  
+# virtual environments
+if [[ -x "$(command -v pyenv)" ]]; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi  
 
 # starship prompt
 if [[ -x "$(command -v starship)" ]]; then
   eval "$(starship init zsh)"
-fi
-
-# kubectl
-if [[ -x "$(command -v kubectl)" ]]; then
-  source <(kubectl completion zsh)
 fi
 
 # homeassistant
@@ -307,6 +299,9 @@ export FZF_DEFAULT_OPTS="--ansi"
 
 # fzf & zinit have been troublesome companions for me -- clobber key bind issues
 zi snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
+
+autoload -Uz compinit
+compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
 
 # MOTD
 
