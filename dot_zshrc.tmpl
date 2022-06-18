@@ -128,9 +128,7 @@ zinit wait lucid for \
     OMZP::colorize \
     OMZP::cp \
     OMZP::gcloud \
-    OMZP::gpg-agent \
-    atload"zpcdreplay" wait"1" \
-    OMZP::kubectl \  
+    OMZP::gpg-agent 
 
 # tools
 
@@ -163,15 +161,18 @@ zinit wait lucid for \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
     agkozak/zsh-z \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
       as"completion" is-snippet \
     https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
-    https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose
+    https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose \
+    https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
+    https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
 
 export LANG=en_US.UTF-8
 
 # k8s
-export KUBECONFIG=$KUBECONFIG:$HOME/.kube/config:$XDG_CONFIG_HOME/kube/taiba/config
+export KUBECONFIG=$XDG_CONFIG_HOME/kube/config
 
 # Docker
 export DOCKER_BUILDKIT=1 
@@ -205,8 +206,9 @@ export EDITOR='vi'
 export VISUAL='vim'
 
 ##Maven
-# TODO: Memory / processor conditional
-export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
+#export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
+# jdk 8 safe options
+export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 export M2_HOME="$HOME/.m2"
 
 #TODO test for autofs
@@ -286,19 +288,11 @@ if [[ -x "$(command -v starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
-# homeassistant
-if [[ -x "$(command -v hass-cli)" ]]; then
-  source <(hass-cli completion zsh)
-fi
-
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type file'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_COMMAND="fd --type file --color=always"
 export FZF_DEFAULT_OPTS="--ansi"
-
-# fzf & zinit have been troublesome companions for me -- clobber key bind issues
-zi snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
 
 autoload -Uz compinit
 compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
