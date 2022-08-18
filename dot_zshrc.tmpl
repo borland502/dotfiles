@@ -16,10 +16,6 @@ export KRB5CCNAME="KCM:jeremy"
 # Barrier Config
 export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 
-# krewe config
-export PATH="${PATH}:${HOME}/.krew/bin"
-export KUBECONFIG="$XDG_CONFIG_HOME/.kube"
-
 {{ else if (eq .chezmoi.os "linux" ) }}
 
 # linuxbrew is not install on arm
@@ -37,7 +33,6 @@ unsetopt PATH_DIRS
 
 {{ end }}
 
-# TODO: move bin dir to bootstrap only
 # Universal
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/.google-drive-upload/bin:${HOME}/bin:${HOME}/.cargo/bin"
 
@@ -85,6 +80,10 @@ autoload -Uz _zinit
 # source global shell vars
 zi snippet "${HOME}/.autoenv.zsh"
 
+if [[ -d $HOME/bin ]]; then
+  zi snippet $HOME/bin/update_repos.zsh
+fi
+
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
@@ -131,7 +130,6 @@ zinit wait lucid for \
     OMZP::gpg-agent 
 
 # tools
-
 zinit wait lucid for \
     bindmap"^R -> ^H" atinit"
         zstyle :history-search-multi-word page-size 10
@@ -152,9 +150,6 @@ zinit wait lucid for \
     paulirish/git-open \
     wfxr/forgit     
 
-# load some completions conditionally
-#zi wait lucid as'completion' blockf has'fd'
-#zi snippet https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd
 zinit ice lucid wait='1'
 zinit wait lucid for \
     light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
@@ -170,9 +165,6 @@ zinit wait lucid for \
     https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
 
 export LANG=en_US.UTF-8
-
-# k8s
-export KUBECONFIG=$XDG_CONFIG_HOME/kube/config
 
 # Docker
 export DOCKER_BUILDKIT=1 
@@ -193,6 +185,8 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 # Nodejs
 export NVM_AUTO_USE=true
+
+SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
 
 ## Homebrew
 export HOMEBREW_CASK_OPTS=--require-sha
@@ -295,15 +289,15 @@ export FZF_DEFAULT_COMMAND="fd --type file --color=always"
 export FZF_DEFAULT_OPTS="--ansi"
 
 autoload -Uz compinit
-compinit -u -d "$XDG_CACHE_HOME/zsh/compdump"
+compinit -u 
 
 # MOTD
 
 #1Password signin.  Assume set up already by chezmoi
-# eval $(op signin my)
+eval $(op signin --account my.1password.com)
 
 #1Password completion
-# eval "$(op completion zsh)"
+eval "$(op completion zsh)"
  
 alias rsync-cp="rsync -avhi --progress"
 alias rsync-mv="rsync -avz --progress -h --remove-source-files"
