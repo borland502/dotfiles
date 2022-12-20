@@ -258,7 +258,7 @@ strategy=free
 ;transport=smart
 
 # (boolean) When True, this causes ansible templating to fail steps that reference variable names that are likely typoed.
-# Otherwise, any '{{ template_expression }}' that contains undefined variables will be rendered in a template or ansible action line exactly as written.
+# Otherwise, any ' template_expression ' that contains undefined variables will be rendered in a template or ansible action line exactly as written.
 ;error_on_undefined_vars=True
 
 # (pathspec) Colon separated paths in which Ansible will search for Vars Plugins.
@@ -345,7 +345,7 @@ localhost_warning=True
 
 # (list) List of extensions to ignore when looking for modules to load
 # This is for rejecting script and binary module fallback extensions
-;module_ignore_exts={{(REJECT_EXTS + ('.yaml', '.yml', '.ini'))}}
+;module_ignore_exts=(REJECT_EXTS + ('.yaml', '.yml', '.ini'))
 
 # (list) TODO: write it
 ;network_group_modules=eos, nxos, ios, iosxr, junos, enos, ce, vyos, sros, dellos9, dellos10, dellos6, asa, aruba, aireos, bigip, ironware, onyx, netconf, exos, voss, slxos
@@ -584,7 +584,7 @@ context=3
 ;server=https://galaxy.ansible.com
 
 # (list) A list of Galaxy servers to use when installing a collection.
-# The value corresponds to the config ini header ``[galaxy_server.{{item}}]`` which defines the server details.
+# The value corresponds to the config ini header ``[galaxy_server.item]`` which defines the server details.
 # See :ref:`galaxy_server_config` for more details on how to define a Galaxy server.
 # The order of servers in this list is used to as the order in which a collection is resolved.
 # Setting this config option will ignore the :ref:`galaxy_server` config option.
@@ -639,7 +639,7 @@ enable_plugins = host_list, script, auto, yaml, ini, toml, community.docker.dock
 export=False
 
 # (list) List of extensions to ignore when using a directory as an inventory source
-;ignore_extensions={{(REJECT_EXTS + ('.orig', '.ini', '.cfg', '.retry'))}}
+;ignore_extensions=(REJECT_EXTS + ('.orig', '.ini', '.cfg', '.retry'))
 
 # (list) List of patterns to ignore when using a directory as an inventory source
 ;ignore_patterns=
