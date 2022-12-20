@@ -71,7 +71,7 @@ fact_caching_redis_keyset_name = ansible_cache_keys
 # (pathspec) Colon separated paths in which Ansible will search for Action Plugins.
 ;action_plugins=~/.ansible/plugins/action:/usr/share/ansible/plugins/action
 
-# (boolean) When enabled, this option allows lookup plugins (whether used in variables as ``{{lookup('foo')}}`` or as a loop as with_foo) to return data that is not marked 'unsafe'.
+# (boolean) When enabled, this option allows lookup plugins (whether used in variables as ``lookup('foo')`` or as a loop as with_foo) to return data that is not marked 'unsafe'.
 # By default, such data is marked as unsafe to prevent the templating engine from evaluating any jinja2 templating language, as this could represent a security risk. This option is provided to allow for backward compatibility, however users should first consider adding allow_unsafe=True to any lookups which may be expected to contain data which may be run through the templating engine late
 ;allow_unsafe_lookups=False
 
