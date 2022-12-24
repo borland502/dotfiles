@@ -1,0 +1,62 @@
+alias rsync-cp="rsync -avhi --progress"
+alias rsync-mv="rsync -avz --progress -h --remove-source-files"
+alias rsync-update="rsync -avzu --progress -h"
+alias rsync-sync="rsync -avzu --delete --progress -h"
+alias rsync-bak="rsync -avbuh --progress --backup-dir=../archive"
+
+{{- if eq .chezmoi.os "darwin" }}
+# Open the current directory in a Finder window
+alias ofd='open $PWD'
+alias off='open --reveal $PWD'
+
+# Show/hide hidden files in the Finder
+alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+{{- end }}
+
+# Aliases
+alias psnginx='ps -ef | grep nginx'
+alias startnginx='sudo nginx'
+alias stopnginx='sudo nginx -s stop'
+alias ping='prettyping --nolegend'
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+
+# Override common commands
+alias cat="bat --pager=never"
+alias top="sudo htop"
+alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
+
+alias mvncv=mvn clean verify
+alias mvnt='mvn clean test -T1.5C'
+
+alias cdnginx='cd /usr/local/etc/nginx'
+alias cdliquibase='cd $HOME/Development/bitbucket/liquibase'
+alias cdc="chezmoi cd"
+alias cddev='cd $HOME/Development'
+alias cdbb='cd $HOME/Development/bitbucket'
+alias cda2web='cd $HOME/Development/bitbucket/assist2-web'
+alias cda2svc='cd $HOME/Development/bitbucket/assist2-services'
+alias cdgh='cd $HOME/Development/github'
+
+alias gcala='gcalcli agenda'
+alias gcah="gcalcli --calendar $HASSIO_CAL_NAME quick $1"
+
+# todo.txt
+alias tdl='td list'
+alias tda='tds add'
+
+#exa replacement aliases from https://github.com/DarrinTisdale/zsh-aliases-exa
+## general use
+alias ls='exa --icons'                                   # ls
+alias l='exa -lbF --git --icons'                         # list, size, type, git
+alias ll='exa -lbGF --git --icons'                       # long list
+alias ltr='exa -lbGd --git --sort=modified --icons'      # long list, modified date sort
+alias la="exa -lbhHigUmuSa --git --color-scale --icons"  # all list
+alias lx='exa -lbhHigUmuSa@ --git --color-scale --icons' # all + extended list
+
+## specialty views
+alias lS='exa -1'               # one column, just names
+alias lt='exa --tree --level=2' # tree
+
+# grep aliases
+alias cgrep='rg -uuu -tc -n -w'

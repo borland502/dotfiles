@@ -1,0 +1,189 @@
+# shellcheck shell=bash
+# @author Jeremy Hettenhouser
+#
+# Sources
+# https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
+
+# profiling
+# zmodload zsh/zprof
+
+# shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
+
+# shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
+{{- if eq .chezmoi.os "darwin" }}
+
+export CLICOLOR="1"
+export KRB5CCNAME="KCM:jeremy"
+
+# Barrier Config
+export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
+
+{{- else if eq .chezmoi.os "linux" }}
+
+  # linuxbrew is not installed on arm
+  if [[ "$(command -v brew)" ]]; then
+    if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+      # Linuxbrew
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    elif [[ -d "$HOME/.linuxbrew" ]]; then
+      eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
+    fi
+  fi
+  
+  {{- if eq .chezmoi.os "microsoft" }}
+  # WSL
+  # Hack: Solve slow FZF issue
+  unsetopt PATH_DIRS
+  {{ end }}
+
+{{ else }}
+
+{{ end }}
+
+
+# Barrier Config
+export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
+
+
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/bin"
+
+
+export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
+
+export LANG=en_US.UTF-8
+
+# Docker
+export DOCKER_BUILDKIT=1 
+
+# Kubernetes
+export PATH="${PATH}:${HOME}/.krew/bin"
+
+# Plugin config vars
+export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
+
+if ! [[ -f "$XDG_DATA_HOME/z" ]]; then
+  mkdir -p "$XDG_DATA_HOME/z"
+  touch "$ZSHZ_DATA"
+fi
+
+export ZSHZ_KEEP_DIRS=(/opt/net /net)
+export ZSHZ_CASE=smart
+
+# Pyenv
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+# Nodejs
+export NVM_AUTO_USE=true
+
+SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
+
+## Homebrew
+export HOMEBREW_CASK_OPTS=--require-sha
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+
+#GPG config
+export GPG_TTY=$TTY
+
+#Death to Emacs and a thousand hells upon nano
+export EDITOR='vi'
+export VISUAL='vim'
+
+##Maven
+#export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
+# jdk 8 safe options
+export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
+export M2_HOME="$HOME/.m2"
+
+# do not beep at me dammit
+setopt NO_BEEP
+# no c-s/c-q output freezing
+setopt NO_FLOW_CONTROL
+# allow expansion in prompts
+setopt PROMPT_SUBST
+# display PID when suspending processes as well
+setopt LONG_LIST_JOBS
+# try to avoid the 'zsh: no matches found...'
+setopt NONOMATCH
+# report the status of backgrounds jobs immediately
+setopt NOTIFY
+# whenever a command completion is attempted, make sure the entire command path
+# is hashed first.
+setopt HASH_LIST_ALL
+# not just at the end
+setopt COMPLETE_IN_WORD
+# use zsh style word splitting
+setopt NO_SH_WORD_SPLIT
+# allow use of comments in interactive code
+setopt INTERACTIVE_COMMENTS
+# this is default, but set for share_history
+setopt APPEND_HISTORY
+# If the internal history needs to be trimmed to add the current command line, setting this option will cause the oldest history event that has a duplicate to be lost before losing a unique event from the list. You should be sure to set the value of HISTSIZE to a larger number than SAVEHIST in order to give you some room for the duplicated events, otherwise this option will behave just like HIST_IGNORE_ALL_DUPS once the history fills up with unique events.
+setopt HIST_EXPIRE_DUPS_FIRST
+# When searching for history entries in the line editor, do not display duplicates of a line previously found, even if the duplicates are not contiguous.
+setopt HIST_FIND_NO_DUPS
+# If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
+setopt HIST_IGNORE_ALL_DUPS
+
+## History.
+HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
+HISTSIZE=10000
+SAVEHIST=5000
+
+### You down with XDG?  Yeah, you know me
+# just in case the directory does not exist yet
+[[ -d "$XDG_CONFIG_HOME" ]] || mkdir -p "$XDG_CONFIG_HOME"
+[[ -d "$XDG_CACHE_HOME" ]] || mkdir -p "$XDG_CACHE_HOME"
+[[ -d "$XDG_DATA_HOME" ]] || mkdir -p "$XDG_DATA_HOME"
+[[ -d "$XDG_STATE_HOME" ]] || mkdir -p "$XDG_STATE_HOME"
+
+# partial manual installation to allow for automation script to take care of business
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[[ -d "$(dirname $ZINIT_HOME)" ]] || mkdir -p "$(dirname $ZINIT_HOME)"
+source "${ZINIT_HOME}/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# for some bash adaptations
+autoload -U bashcompinit
+
+# source global shell vars
+zi snippet "${HOME}/.autoenv.zsh"
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+  # generic plugins to load early and traditionally
+  zi light MichaelAquilina/zsh-you-should-use    
+
+# just in case the directory does not exist yet
+[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
+
+zinit wait lucid for \
+	OMZL::clipboard.zsh \
+	OMZL::compfix.zsh \
+	OMZL::correction.zsh \
+	OMZL::termsupport.zsh \
+    OMZP::colored-man-pages \
+    OMZP::mvn \
+    OMZP::npm \
+    OMZP::vscode \
+    OMZP::python \
+    OMZP::aws \
+    OMZP::brew \
+    OMZP::colorize \
+    OMZP::cp \
+    OMZP::gcloud \
+    OMZP::gpg-agent \
+    OMZP::ansible 
+
+zi source "${XDG_CONFIG_HOME}/zshrc/autocomplete.zsh"
+
+autoload -Uz compinit
+compinit -u 
+
+zi source "${XDG_CONFIG_HOME}/zshrc/aliases.zsh"
