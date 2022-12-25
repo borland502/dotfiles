@@ -181,7 +181,64 @@ zinit wait lucid for \
     OMZP::gpg-agent \
     OMZP::ansible 
 
-zi source "${XDG_CONFIG_HOME}/zshrc/autocomplete.zsh"
+# tools
+zinit wait lucid for \
+  bindmap"^R -> ^H" atinit"
+        zstyle :history-search-multi-word page-size 10
+        zstyle :history-search-multi-word highlight-color fg=red,bold
+        zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+        " \
+  zdharma-continuum/history-search-multi-word \
+  lukechilds/zsh-nvm
+
+# git completions, only when .git present
+zinit wait lucid for \
+  OMZL::git.zsh \
+  OMZP::git \
+  OMZP::git-extras \
+  OMZP::tig \
+  OMZP::git-flow-avh \
+  OMZP::git-auto-fetch \
+  paulirish/git-open \
+  wfxr/forgit
+
+autoload -U +X bashcompinit && bashcompinit
+
+zinit ice lucid wait='1'
+zinit wait lucid for \
+  light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
+  zsh-users/zsh-autosuggestions \
+  zsh-users/zsh-completions \
+  agkozak/zsh-z \
+  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+  zdharma-continuum/fast-syntax-highlighting \
+  as"completion" is-snippet \
+  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
+  https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose \
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
+
+if [[ "$(command -v pyenv)" ]]; then
+  # virtual environments
+  export PYENV_ROOT="$HOME/.pyenv"
+  command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+fi
+
+if [[ "$(command -v starship)" ]]; then
+  # starship prompt
+  eval "$(starship init zsh)"
+fi
+
+if [[ "$(command -v sdk)" ]]; then
+  export SDKMAN_DIR="$HOME/.sdkman"
+  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
+
+if [[ "$(command -v podman)" ]]; then
+  zi snippet <(podman completion zsh)
+fi
+
 
 autoload -Uz compinit
 compinit -u 
