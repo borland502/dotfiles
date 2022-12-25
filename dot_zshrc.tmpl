@@ -236,12 +236,8 @@ if [[ "$(command -v sdk)" ]]; then
 fi
 
 if [[ "$(command -v podman)" ]]; then
-  zi snippet <(podman completion zsh)
+  source <(podman completion zsh)
 fi
-
-
-autoload -Uz compinit
-compinit -u 
 
 alias rsync-cp="rsync -avhi --progress"
 alias rsync-mv="rsync -avz --progress -h --remove-source-files"
@@ -306,3 +302,5 @@ alias lt='exa --tree --level=2' # tree
 # grep aliases
 alias cgrep='rg -uuu -tc -n -w'
 
+autoload -Uz compinit
+compinit -u 
