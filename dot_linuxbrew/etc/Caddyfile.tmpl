@@ -1,0 +1,48 @@
+{
+	debug
+	default_bind 127.0.0.1
+	http_port 7080
+	https_port 7443
+	email "{{ onepasswordRead "op://ansible/admin_user0/email" }}"
+	acme_ca https://acme.zerossl.com/v2/DV90
+	acme_dns cloudflare "{{ onepasswordRead "op://ansible/cloudflare/cf-technohouser-zone-key" }}"
+	acme_eab {
+		key_id "{{ onepasswordRead "op://ansible/ZeroSSL/zero-ssl-eab-kid" }}"
+		mac_key "{{ onepasswordRead "op://ansible/ZeroSSL/zero-ssl-hmac-key" }}"
+	}
+	cert_issuer zerossl "{{ "onepasswordRead op://ansible/ZeroSSL/ssl-key" }}"
+	default_sni local.technohouser.com
+
+	log {
+		output stdout
+		output stderr
+		format json
+		level debug
+	}
+}
+
+(access_logs) {
+	log {
+		output stdout
+		output stderr
+		format console
+		level debug
+	}
+}
+
+(proxy_http_transport_opts) {
+	transport http {
+		read_buffer 4096k
+		write_buffer 4096k
+		dial_timeout 10s
+		response_header_timeout 30s
+	}
+}
+
+{{- if eq .chezmoi.hostname "ansible" }}
+	ansible.local.technohouser.com, local.technohouser.com {
+		reverse_proxy /jenkins http://127.0.0.1:8080 {
+			import proxy_http_transport_opts
+		}
+	}	
+{{- end }}
