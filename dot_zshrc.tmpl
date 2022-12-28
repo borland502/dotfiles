@@ -173,14 +173,12 @@ zinit wait lucid for \
 	OMZL::compfix.zsh \
 	OMZL::correction.zsh \
 	OMZL::termsupport.zsh \
-    OMZP::colored-man-pages \
     OMZP::mvn \
     OMZP::npm \
     OMZP::vscode \
     OMZP::python \
     OMZP::aws \
     OMZP::brew \
-    OMZP::colorize \
     OMZP::cp \
     OMZP::gcloud \
     OMZP::gpg-agent \
@@ -214,6 +212,7 @@ zinit wait lucid for \
   light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
   zsh-users/zsh-autosuggestions \
   zsh-users/zsh-completions \
+  RobSis/zsh-completion-generator \
   agkozak/zsh-z \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
   zdharma-continuum/fast-syntax-highlighting \
@@ -221,28 +220,7 @@ zinit wait lucid for \
   https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
   https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose \
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
-
-if [[ "$(command -v pyenv)" ]]; then
-  # virtual environments
-  export PYENV_ROOT="$HOME/.pyenv"
-  command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-fi
-
-if [[ "$(command -v starship)" ]]; then
-  # starship prompt
-  eval "$(starship init zsh)"
-fi
-
-if [[ "$(command -v sdk)" ]]; then
-  export SDKMAN_DIR="$HOME/.sdkman"
-  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
-
-if [[ "$(command -v podman)" ]]; then
-  source <(podman completion zsh)
-fi
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh 
 
 alias rsync-cp="rsync -avhi --progress"
 alias rsync-mv="rsync -avz --progress -h --remove-source-files"
@@ -309,3 +287,24 @@ alias cgrep='rg -uuu -tc -n -w'
 
 autoload -Uz compinit
 compinit -u 
+
+if [[ "$(command -v pyenv)" ]]; then
+  # virtual environments
+  export PYENV_ROOT="$HOME/.pyenv"
+  command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+fi
+
+if [[ "$(command -v starship)" ]]; then
+  # starship prompt
+  eval "$(starship init zsh)"
+fi
+
+if [[ "$(command -v sdk)" ]]; then
+  export SDKMAN_DIR="$HOME/.sdkman"
+  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
+
+if [[ "$(command -v podman)" ]]; then
+  source <(podman completion zsh)
+fi
