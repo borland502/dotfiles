@@ -41,6 +41,11 @@ export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 {{ end }}
 
 
+# web terminal hack -- neither zprofile nor zshenv are loaded properly in cockpit
+if [[ -z "$XDG_DATA_HOME" ]]; then
+  source "${HOME}/.zshenv"
+fi
+
 # Barrier Config
 export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 
