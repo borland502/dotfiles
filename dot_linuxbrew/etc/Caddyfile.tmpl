@@ -40,9 +40,11 @@
 }
 
 {{- if eq .chezmoi.hostname "ansible" }}
-	ansible.local.technohouser.com, local.technohouser.com {
-		reverse_proxy /jenkins http://127.0.0.1:8080 {
-			import proxy_http_transport_opts
-		}
-	}	
+
+ansible.local.technohouser.com, local.technohouser.com {
+	reverse_proxy /jenkins http://127.0.0.1:8080 {
+		import proxy_http_transport_opts
+	}
+}
+	
 {{- end }}

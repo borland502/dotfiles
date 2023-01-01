@@ -50,7 +50,7 @@ fi
 export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 
 
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/bin"
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH:${HOME}/bin:${XDG_DATA_HOME}/bin"
 
 
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
@@ -148,9 +148,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# for some bash adaptations
-autoload -U bashcompinit
-
 # source global shell vars
 zi snippet "${HOME}/.autoenv.zsh"
 
@@ -176,7 +173,6 @@ zinit wait lucid for \
     OMZP::mvn \
     OMZP::npm \
     OMZP::vscode \
-    OMZP::python \
     OMZP::aws \
     OMZP::brew \
     OMZP::cp \
@@ -205,14 +201,11 @@ zinit wait lucid for \
   paulirish/git-open \
   wfxr/forgit
 
-autoload -U +X bashcompinit && bashcompinit
-
 zinit ice lucid wait='1'
 zinit wait lucid for \
   light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
   zsh-users/zsh-autosuggestions \
   zsh-users/zsh-completions \
-  RobSis/zsh-completion-generator \
   agkozak/zsh-z \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
   zdharma-continuum/fast-syntax-highlighting \
@@ -285,15 +278,10 @@ alias lt='exa --tree --level=2' # tree
 # grep aliases
 alias cgrep='rg -uuu -tc -n -w'
 
-autoload -Uz compinit
-compinit -u 
-
-if [[ "$(command -v pyenv)" ]]; then
-  # virtual environments
-  export PYENV_ROOT="$HOME/.pyenv"
-  command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-fi
+# If python2 doesn't exist, then create an alias to python3 (if it exists)
+{{- if ne .chezmoi.os "darwin" }}
+  alias python=python3
+{{ end }}
 
 if [[ "$(command -v starship)" ]]; then
   # starship prompt
@@ -308,3 +296,6 @@ fi
 if [[ "$(command -v podman)" ]]; then
   source <(podman completion zsh)
 fi
+
+autoload -Uz compinit
+compinit -u 
