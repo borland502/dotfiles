@@ -18,6 +18,9 @@ export KRB5CCNAME="KCM:jeremy"
 # Barrier Config
 export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 
+# Huber prereqs
+export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
+
 {{- else if eq .chezmoi.os "linux" }}
 
   # linuxbrew is not installed on arm
@@ -288,14 +291,12 @@ if [[ "$(command -v starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
-if [[ "$(command -v sdk)" ]]; then
-  export SDKMAN_DIR="$HOME/.sdkman"
-  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
 
-if [[ "$(command -v podman)" ]]; then
-  source <(podman completion zsh)
-fi
+source <(podman completion zsh)
+
+eval "$(op completion zsh)"; compdef _op op
 
 autoload -Uz compinit
 compinit -u 
