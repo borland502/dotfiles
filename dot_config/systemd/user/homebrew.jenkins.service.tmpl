@@ -1,0 +1,12 @@
+[Unit]
+Description=Homebrew generated unit for jenkins
+
+[Install]
+WantedBy=default.target
+
+[Service]
+Type=simple
+ExecStart=/home/linuxbrew/.linuxbrew/opt/jenkins/bin/jenkins --httpListenAddress=0.0.0.0 --httpPort=8080
+Restart=always
+StandardOutput=append:/home/linuxbrew/.linuxbrew/var/log/jenkins/output.log
+StandardError=append:/home/linuxbrew/.linuxbrew/var/log/jenkins/error.log

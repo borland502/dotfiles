@@ -1,0 +1,48 @@
+# global section
+{
+	debug
+	default_bind 0.0.0.0
+	http_port 7080
+	email "jhettenh@gmail.com"
+
+	log {
+		output stdout
+		output stderr
+		format console
+		level debug
+	}
+
+	admin localhost:2019 {
+		origins 127.0.0.1 192.168.2.0/24
+		enforce_origin
+	}
+
+	# use wildcards, then do on demand
+	auto_https disable_certs
+}
+
+# templates
+(access_logs) {
+	log {
+		output stdout
+		output stderr
+		format console
+		level debug
+	}
+}
+
+(proxy_http_transport_opts) {
+	transport http {
+		read_buffer 4096k
+		write_buffer 4096k
+		dial_timeout 10s
+		response_header_timeout 30s
+	}
+}
+
+# hosts
+ansible.local.technohouser.com:7080 {
+	import access_logs
+
+	reverse_proxy /jenkins http://localhost:8080
+}
