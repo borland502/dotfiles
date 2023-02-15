@@ -60,6 +60,9 @@ export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
 
 export LANG=en_US.UTF-8
 
+# Wayland
+export GDK_BACKEND=wayland
+
 # Docker
 export DOCKER_BUILDKIT=1 
 
@@ -297,6 +300,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 source <(podman completion zsh)
 
 eval "$(op completion zsh)"
+eval "$(op signin)"
 
 autoload -Uz compinit
 compinit -u 
