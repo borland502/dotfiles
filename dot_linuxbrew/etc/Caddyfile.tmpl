@@ -3,14 +3,15 @@
 	default_bind 127.0.0.1
 	http_port 7080
 	https_port 7443
-	email "{{ onepasswordRead "op://ansible/admin_user0/email" }}"
+	{{ (index (bitwarden "item" "Redis").login.uris 0).uri }}
+	email "{{ (bitwarden "item" "admin_user0").identity.email }}"
 	acme_ca https://acme.zerossl.com/v2/DV90
-	acme_dns cloudflare "{{ onepasswordRead "op://ansible/cloudflare/cf-technohouser-zone-key" }}"
+	acme_dns cloudflare "{{ (bitwardenFields "item" "cloudflare").cf_technohouser_zone_key }}"
 	acme_eab {
-		key_id "{{ onepasswordRead "op://ansible/ZeroSSL/zero-ssl-eab-kid" }}"
-		mac_key "{{ onepasswordRead "op://ansible/ZeroSSL/zero-ssl-hmac-key" }}"
+		key_id "{{ (bitwardenFields "item" "ZeroSSL").zero_ssl_eab_kid }}"
+		mac_key "{{ (bitwardenFields "item" "ZeroSSL").zero_ssl_hmac_key }}"
 	}
-	cert_issuer zerossl "{{ "onepasswordRead op://ansible/ZeroSSL/ssl-key" }}"
+	cert_issuer zerossl "{{ (bitwardenFields "item" "ZeroSSL").ssl_key }}"
 	default_sni local.technohouser.com
 
 	log {
@@ -33,7 +34,7 @@
 (proxy_http_transport_opts) {
 	transport http {
 		read_buffer 4096k
-		write_buffer 4096k
+		write_buffer 4096k84d671157f2687c4f625e36f32c9e14c
 		dial_timeout 10s
 		response_header_timeout 30s
 	}

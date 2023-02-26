@@ -105,6 +105,11 @@ export VISUAL='vim'
 export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 export M2_HOME="$HOME/.m2"
 
+# Bitwarden
+if [[ "$(command -v bw)" ]];then
+  export BW_SESSION="$(bw {login,unlock} --raw)"
+fi
+
 # do not beep at me dammit
 setopt NO_BEEP
 # no c-s/c-q output freezing
