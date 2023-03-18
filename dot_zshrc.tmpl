@@ -86,8 +86,6 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # Nodejs
 export NVM_AUTO_USE=true
 
-SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
-
 ## Homebrew
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_INSECURE_REDIRECT=1
@@ -303,9 +301,6 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
 
 source <(podman completion zsh)
-
-eval "$(op completion zsh)"
-eval "$(op signin)"
 
 autoload -Uz compinit
 compinit -u 
