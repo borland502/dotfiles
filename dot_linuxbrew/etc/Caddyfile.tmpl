@@ -3,8 +3,8 @@
 	default_bind 127.0.0.1
 	http_port 7080
 	https_port 7443
-	{{ (index (bitwarden "item" "Redis").login.uris 0).uri }}
-	email "{{ (bitwarden "item" "admin_user0").identity.email }}"
+	{{ (index (bitwarden "item" "b2745c23-1162-4fe3-9c36-06b17c2e1d80").login.uris 0).uri }}
+	email "{{ (bitwarden "item" "Jeremy Hettenhouser").identity.email }}"
 	acme_ca https://acme.zerossl.com/v2/DV90
 	acme_dns cloudflare "{{ (bitwardenFields "item" "cloudflare").cf_technohouser_zone_key }}"
 	acme_eab {

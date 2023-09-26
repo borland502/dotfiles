@@ -35,7 +35,7 @@
 fact_caching=redis
 
 # (string) Defines connection or path information for the cache plugin
-fact_caching_connection={{ (index (bitwarden "item" "Redis").login.uris 0).uri }}
+fact_caching_connection={{ (index (bitwarden "item" "b2745c23-1162-4fe3-9c36-06b17c2e1d80").login.uris 0).uri }}
 
 # (string) Prefix to use for cache plugin files/tables
 fact_caching_prefix=ansible_facts

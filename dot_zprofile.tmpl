@@ -22,8 +22,13 @@ export XDG_CONFIG_DIRS="/etc/xdg"
 # signal to OMZP to load these environment vars automagically
 export ZSH_DOTENV_FILE="${HOME}/.autoenv.zsh"
 
+# GraalVM Binaries
+export NATIVE_IMAGE_BIN="${NATIVE_IMAGE_BIN:-$HOME/bin}"
+
+# Enable build kit
+export DOCKER_BUILDKIT=1
+
 {{- if ne .chezmoi.os "darwin" }}
-  # Set PATH, MANPATH, etc., for Homebrew linux.
+# Set PATH, MANPATH, etc., for Homebrew linux.
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{ end }}
-

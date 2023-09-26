@@ -1,5 +1,0 @@
-# GraalVM Binaries
-export NATIVE_IMAGE_BIN="${NATIVE_IMAGE_BIN:-$HOME/bin}"
-
-# Enable build kit
-export DOCKER_BUILDKIT=1
