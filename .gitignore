@@ -11,3 +11,5 @@ private_key.txt
 .env
 .autoenv*
 1password-credentials.json
+
+.idea

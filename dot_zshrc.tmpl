@@ -295,10 +295,5 @@ if [[ "$(command -v podman)" ]]; then
   source <(podman completion zsh)
 fi
 
-# assume login before zsh init
-if [[ "$(command -v bw)" ]]; then
-  export BW_SESSION=$(bw unlock --raw)
-fi
-
 autoload -Uz compinit
 compinit -u 
