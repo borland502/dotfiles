@@ -93,6 +93,10 @@ export GPG_TTY=$TTY
 export EDITOR='vi'
 export VISUAL='vim'
 
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
 ##Maven
 #export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 # jdk 8 safe options
@@ -210,8 +214,6 @@ zinit wait lucid for \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
   zdharma-continuum/fast-syntax-highlighting \
   as"completion" is-snippet \
-  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
-  https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose \
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh 
 
