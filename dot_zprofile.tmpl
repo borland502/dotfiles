@@ -19,9 +19,6 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_DATA_DIRS="/usr/local/share:/usr/share:/var/lib/flatpak/exports/share:${XDG_DATA_HOME}/flatpak/exports/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 
-# signal to OMZP to load these environment vars automagically
-export ZSH_DOTENV_FILE="${HOME}/.autoenv.zsh"
-
 # GraalVM Binaries
 export NATIVE_IMAGE_BIN="${NATIVE_IMAGE_BIN:-$HOME/bin}"
 

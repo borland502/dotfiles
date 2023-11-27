@@ -7,16 +7,18 @@
 # profiling
 # zmodload zsh/zprof
 
-# shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
+# Adapted from [superbrothers dotfiles](https://github.com/superbrothers/dotfiles/blob/master/zshrc)
+if [[ ! -d "$XDG_DATA_HOME/zinit" ]]; then
+  mkdir -p "$XDG_DATA_HOME/zinit"
+  git clone https://github.com/zdharma/zinit.git $XDG_DATA_HOME/zinit/zinit.git
+fi
+
+source "$XDG_DATA_HOME/zinit/zinit.git/zinit.zsh"
 
 # shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
 {{- if eq .chezmoi.os "darwin" }}
 
 export CLICOLOR="1"
-export KRB5CCNAME="KCM:jeremy"
-
-# Barrier Config
-export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
 
 # Huber prereqs
 export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
@@ -49,21 +51,13 @@ if [[ -z "$XDG_DATA_HOME" ]]; then
   source "${HOME}/.zshenv"
 fi
 
-# Barrier Config
-export PATH="$PATH:/Applications/Barrier.app/Contents/MacOS"
-
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
-
-export LANG=en_US.UTF-8
 
 # Wayland
 export GDK_BACKEND=wayland
 
 # Docker
 export DOCKER_BUILDKIT=1 
-
-# Kubernetes
-export PATH="${PATH}:${HOME}/.krew/bin"
 
 # Plugin config vars
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
@@ -89,7 +83,6 @@ export HOMEBREW_NO_INSECURE_REDIRECT=1
 #GPG config
 export GPG_TTY=$TTY
 
-#Death to Emacs and a thousand hells upon nano
 export EDITOR='vi'
 export VISUAL='vim'
 
@@ -98,9 +91,7 @@ export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
 ##Maven
-#export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
-# jdk 8 safe options
-export MAVEN_OPTS="-Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
+export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 export M2_HOME="$HOME/.m2"
 
 # do not beep at me dammit
@@ -133,27 +124,13 @@ setopt HIST_FIND_NO_DUPS
 # If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
 setopt HIST_IGNORE_ALL_DUPS
 
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+
 ## History.
 HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
-HISTSIZE=10000
-SAVEHIST=5000
-
-### You down with XDG?  Yeah, you know me
-# just in case the directory does not exist yet
-[[ -d "$XDG_CONFIG_HOME" ]] || mkdir -p "$XDG_CONFIG_HOME"
-[[ -d "$XDG_CACHE_HOME" ]] || mkdir -p "$XDG_CACHE_HOME"
-[[ -d "$XDG_DATA_HOME" ]] || mkdir -p "$XDG_DATA_HOME"
-[[ -d "$XDG_STATE_HOME" ]] || mkdir -p "$XDG_STATE_HOME"
-
-# partial manual installation to allow for automation script to take care of business
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[[ -d "$(dirname $ZINIT_HOME)" ]] || mkdir -p "$(dirname $ZINIT_HOME)"
-source "${ZINIT_HOME}/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# source global shell vars
-zi snippet "${HOME}/.autoenv.zsh"
+HISTSIZE=90000
+SAVEHIST=90000
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
@@ -163,17 +140,13 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
 
-  # generic plugins to load early and traditionally
-  zi light MichaelAquilina/zsh-you-should-use    
+# generic plugins to load early and traditionally
+zi light MichaelAquilina/zsh-you-should-use    
 
 # just in case the directory does not exist yet
 [[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
 
 zinit wait lucid for \
-	OMZL::clipboard.zsh \
-	OMZL::compfix.zsh \
-	OMZL::correction.zsh \
-	OMZL::termsupport.zsh \
     OMZP::mvn \
     OMZP::npm \
     OMZP::vscode \
@@ -215,7 +188,12 @@ zinit wait lucid for \
   zdharma-continuum/fast-syntax-highlighting \
   as"completion" is-snippet \
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh 
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
+  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+
+zinit light-mode for \
+pick"zsh-lazyload.zsh" \
+  qoomon/zsh-lazyload
 
 alias rsync-cp="rsync -avhi --progress"
 alias rsync-mv="rsync -avz --progress -h --remove-source-files"
@@ -285,6 +263,24 @@ alias cgrep='rg -uuu -tc -n -w'
   alias python=python3
 {{ end }}
 
+if [[ "$(command -v kubectl)" ]]; then
+  lazyload kubectl -- '<(kubectl completion zsh)'
+fi
+
+if [[ "$(command -v helm)" ]]; then
+  lazyload helm -- '<(helm completion zsh)'
+fi
+
+if [[ "$(command -v podman)" ]]; then
+  lazyload podman -- 'source <(podman completion zsh)'
+fi
+
+if [[ "$(command -v op)" ]] && [[ -f "${XDG_CONFIG}/op/op.env" ]]; then
+  zi snippet "${XDG_CONFIG}/op/op.env"
+  lazyload op -- 'source <(op completion zsh)'
+  eval "$(op signin)"
+fi
+
 if [[ "$(command -v starship)" ]]; then
   # starship prompt
   eval "$(starship init zsh)"
@@ -292,10 +288,3 @@ fi
 
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
-
-if [[ "$(command -v podman)" ]]; then
-  source <(podman completion zsh)
-fi
-
-autoload -Uz compinit
-compinit -u 
