@@ -45,8 +45,6 @@ export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
 
 {{ end }}
 
-
-# web terminal hack -- neither zprofile nor zshenv are loaded properly in cockpit
 if [[ -z "$XDG_DATA_HOME" ]]; then
   source "${HOME}/.zshenv"
 fi
@@ -55,9 +53,6 @@ export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
 
 # Wayland
 export GDK_BACKEND=wayland
-
-# Docker
-export DOCKER_BUILDKIT=1 
 
 # Plugin config vars
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
@@ -83,7 +78,7 @@ export HOMEBREW_NO_INSECURE_REDIRECT=1
 #GPG config
 export GPG_TTY=$TTY
 
-export EDITOR='vi'
+export EDITOR='vim'
 export VISUAL='vim'
 
 export LC_ALL=en_US.UTF-8
@@ -244,6 +239,7 @@ alias tda='tds add'
 
 #eza replacement aliases from https://github.com/DarrinTisdale/zsh-aliases-eza
 ## general use
+
 alias ls='eza --icons'                                   # ls
 alias l='eza -lbF --git --icons'                         # list, size, type, git
 alias ll='eza -lbGF --git --icons'                       # long list

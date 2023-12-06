@@ -5,7 +5,6 @@
 {{ if stdinIsATTY }}
 {{- $name = promptString "name" -}}
 {{- $email = promptString "email" -}}
-{{ $minimal = promptBool "minimal" }}
 
 encryption: "age"
 age:
@@ -17,8 +16,13 @@ age:
 {{-  $email = "jhettenh@gmail.com" -}}
 {{ end }}
 
+hooks.read-source-state.pre:
+  command: "declare"
+
+scriptEnv:
+
+
 data:
   home: "{{ $home }}"
   name: "{{ $name }}"
   email: "{{ $email }}"
-  minimal: "{{ $minimal }}" 
