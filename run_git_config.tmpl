@@ -1,7 +1,0 @@
-{{ if eq .chezmoi.os "darwin" -}}
-git config --global core.autocrlf input
-{{ else if eq .chezmoi.os "linux" -}}
-git config --global core.autocrlf input
-{{ else }}
-git config --global core.autocrlf false
-{{ end -}}
