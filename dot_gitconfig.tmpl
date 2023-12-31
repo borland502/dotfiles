@@ -1,0 +1,13 @@
+[user]
+  email = jhettenh@gmail.com 
+  name = "Jeremy Hettenhouser"
+  signingKey = {{ .chezmoi.homeDir }}/.ssh/id_ed25519.pub
+[commit]
+  template = {{ .chezmoi.homeDir }}/.gitcommit-message
+  gpgSign = true
+[gpg]
+  format = ssh
+{{- if (eq .chezmoi.hostname "automation") }}
+[status]
+  submodulesummary = true
+{{- end }}

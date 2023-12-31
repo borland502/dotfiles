@@ -1,0 +1,27 @@
+{{ if (and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "debian" "ubuntu")) -}}
+#!/bin/bash
+
+# https://github.com/budimanjojo/dotfiles/blob/main/.chezmoiscripts/run_once_before_20-install-packages-ubuntu.sh.tmpl
+
+set -eufo pipefail
+
+# List of packages to install
+packages=(
+  zsh
+  curl
+  git
+  nala
+)
+
+for package in ${packages[@]}; do
+  if ! $(dpkg-query -W -f='installed' $package &> /dev/null); then
+    echo "installing $package"
+{{ if ne .chezmoi.username "root" -}}
+    sudo apt install -y $package
+{{ else -}}
+    apt install -y ${packages[@]}
+{{ end -}}
+  fi
+done
+
+{{ end -}}

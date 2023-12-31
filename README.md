@@ -3,4 +3,3 @@ ZSH Dotfiles
 
 ## Install
 
-                                                                                                                                                                                                                                                                

@@ -89,6 +89,9 @@ export LANGUAGE=en_US.UTF-8
 export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=10"
 export M2_HOME="$HOME/.m2"
 
+# XDG script path
+export PATH=$PATH:$HOME/.local/bin
+
 # do not beep at me dammit
 setopt NO_BEEP
 # no c-s/c-q output freezing
@@ -275,6 +278,10 @@ if [[ "$(command -v op)" ]] && [[ -f "${XDG_CONFIG}/op/op.env" ]]; then
   zi snippet "${XDG_CONFIG}/op/op.env"
   lazyload op -- 'source <(op completion zsh)'
   eval "$(op signin)"
+fi
+
+if [[ "$(command -v poetry)" ]]; then
+  lazyload poetry -- 'source <(poetry completions zsh)'
 fi
 
 if [[ "$(command -v starship)" ]]; then
