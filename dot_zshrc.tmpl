@@ -7,13 +7,12 @@
 # profiling
 # zmodload zsh/zprof
 
-# Adapted from [superbrothers dotfiles](https://github.com/superbrothers/dotfiles/blob/master/zshrc)
-if [[ ! -d "$XDG_DATA_HOME/zinit" ]]; then
-  mkdir -p "$XDG_DATA_HOME/zinit"
-  git clone https://github.com/zdharma/zinit.git $XDG_DATA_HOME/zinit/zinit.git
+# Zinit initialization from homebrew, or traditional install
+if [[ -f /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh ]]; then
+  source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+else
+  source "$XDG_DATA_HOME/zinit/zinit.git/zinit.zsh"
 fi
-
-source "$XDG_DATA_HOME/zinit/zinit.git/zinit.zsh"
 
 # shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
 {{- if eq .chezmoi.os "darwin" }}
