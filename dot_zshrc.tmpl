@@ -138,7 +138,8 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 
 # generic plugins to load early and traditionally
-zi light MichaelAquilina/zsh-you-should-use    
+zi light MichaelAquilina/zsh-you-should-use \
+  lukechilds/zsh-nvm
 
 # just in case the directory does not exist yet
 [[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
@@ -161,8 +162,7 @@ zinit wait lucid for \
         zstyle :history-search-multi-word highlight-color fg=red,bold
         zstyle :plugin:history-search-multi-word reset-prompt-protect 1
         " \
-  zdharma-continuum/history-search-multi-word \
-  lukechilds/zsh-nvm
+  zdharma-continuum/history-search-multi-word
 
 # git completions, only when .git present
 zinit wait lucid for \
