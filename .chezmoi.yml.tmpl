@@ -3,6 +3,9 @@
 {{- $name := "Jeremy Hettenhouser" -}}
 {{- $email := "jhettenh@gmail.com" -}}
 
+keepassxc:
+  database: "~/.ansible/Passwords.kdbx"
+
 encryption: "age"
 age:
   identity: "{{ $home }}/bin/key.txt"

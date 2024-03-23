@@ -1,0 +1,4 @@
+[".local/lib/logging.sh"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/jeliasson/zsh-logging/main/includes/logging.sh"
+  checksum.sha256 = "0329091571678415461727a350834b13ec6b8148325ceb34b1044b42cabdfa60"
