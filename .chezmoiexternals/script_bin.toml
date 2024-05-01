@@ -1,0 +1,8 @@
+[".local/bin/dbs"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/bin/dasbootstrap.sh"
+  executable = true
+[".local/bin/start.sh"]
+  type = "file"
+  url = "https://gitlab.com/megabyte-labs/common/shared/-/raw/master/start.sh?ref_type=heads"
+  executable = true
