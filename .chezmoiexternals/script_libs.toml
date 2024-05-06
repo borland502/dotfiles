@@ -1,4 +1,15 @@
-[".local/lib/logging.sh"]
+[".local/lib/logger.sh"]
   type = "file"
-  url = "https://raw.githubusercontent.com/jeliasson/zsh-logging/main/includes/logging.sh"
-  checksum.sha256 = "0329091571678415461727a350834b13ec6b8148325ceb34b1044b42cabdfa60"
+  url = "https://gitlab.com/megabyte-labs/common/shared/-/raw/master/common/lib/log"
+[".local/lib/constants.sh"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/constants.sh"
+[".local/lib/functions.sh"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/functions.sh"
+[".local/lib/install_doctor_functions.sh"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/install_doctor_functions.sh"
+[".local/lib/util_functions.sh"]
+  type = "file"
+  url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/util_functions.sh"

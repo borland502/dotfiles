@@ -1,6 +1,12 @@
-[".local/share/dasbootstrap"]
+[".local/share/automation/dasbootstrap"]
   type = "git-repo"
   url = "https://github.com/borland502/dasbootstrap.git"
-[".local/share/install.doctor"]
+[".local/share/automation/install.doctor"]
   type = "git-repo"
   url = "https://github.com/borland502/install.doctor.git"
+[".local/share/automation/chezmoi"]
+  type = "git-repo"
+  url = "https://github.com/borland502/dotfiles.git"
+[".ansible"]
+  type = "git-repo"
+  url = "https://gitea.npm.technohouser.com/jhettenh/secrets"

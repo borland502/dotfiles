@@ -13,3 +13,7 @@ private_key.txt
 1password-credentials.json
 
 .idea
+
+# Sensitive config directories
+.config/gphotos-sync
+.config/gh/hosts.yml

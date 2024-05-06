@@ -4,5 +4,10 @@
   executable = true
 [".local/bin/start.sh"]
   type = "file"
-  url = "https://gitlab.com/megabyte-labs/common/shared/-/raw/master/start.sh?ref_type=heads"
+  url = "https://gitlab.com/megabyte-labs/common/shared/-/raw/master/start.sh"
   executable = true
+[".local/bin/has"]
+  type = "file"
+  url = "https://git.io/_has"
+  executable = true
+  

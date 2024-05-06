@@ -1,0 +1,14 @@
+version: "3"
+
+vars:
+  CHEZMOI: chezmoi
+tasks:
+  chez:install:
+    cmds:
+      - 'sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply borland502'
+
+  chez:apply:
+    deps:
+      - chez:install
+    cmds:
+      - chezmoi apply
