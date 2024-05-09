@@ -7,6 +7,12 @@
 [".local/share/automation/chezmoi"]
   type = "git-repo"
   url = "https://github.com/borland502/dotfiles.git"
+[".local/share/automation/acme.sh"]
+  type = "git-repo"
+  url = "https://github.com/borland502/acme.sh.git"
+[".local/share/automation/Proxmox"]
+  type = "git-repo"
+  url = "https://github.com/borland502/Proxmox"
 [".ansible"]
   type = "git-repo"
   url = "https://gitea.npm.technohouser.com/jhettenh/secrets"

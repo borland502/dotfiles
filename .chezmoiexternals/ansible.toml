@@ -1,0 +1,4 @@
+[".ansible/inventory/"]
+  executable = true
+  type = "file"
+  url = "https://raw.githubusercontent.com/willtome/ansible-inventory/master/inventory_plugins/sqlite.py"
