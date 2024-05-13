@@ -44,4 +44,8 @@ if [ -x "$HOMEBREW_PREFIX/bin/pyenv" ]; then
     eval "$(pyenv init -)"
 fi
 
+set -o allexport
+source "${HOME}/.env"
+set +o allexport
+
 source "${XDG_LIB_HOME}/functions.sh"

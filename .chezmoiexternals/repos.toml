@@ -16,3 +16,9 @@
 [".ansible"]
   type = "git-repo"
   url = "https://gitea.npm.technohouser.com/jhettenh/secrets"
+
+
+  # [".ansible/plugins/inventory/sqlite.py"]
+  #   executable = true
+  #   type = "file"
+  #   url = "https://raw.githubusercontent.com/willtome/ansible-inventory/master/inventory_plugins/sqlite.py"
