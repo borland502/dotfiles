@@ -13,9 +13,9 @@
 [".local/share/automation/Proxmox"]
   type = "git-repo"
   url = "https://github.com/borland502/Proxmox"
-[".ansible"]
-  type = "git-repo"
-  url = "https://gitea.npm.technohouser.com/jhettenh/secrets"
+# [".ansible"]
+#   type = "git-repo"
+#   url = "https://gitea.npm.technohouser.com/jhettenh/secrets"
 
 
   # [".ansible/plugins/inventory/sqlite.py"]
