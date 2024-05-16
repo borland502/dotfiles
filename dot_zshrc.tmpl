@@ -22,12 +22,12 @@ export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
 
 # linuxbrew is not installed on arm
 if [[ "$(command -v brew)" ]]; then
-  if [[ -d /home/linuxbrew/.linuxbrew ]]; then
-    # Linuxbrew
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  elif [[ -d "$HOME/.linuxbrew" ]]; then
-    eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
-  fi
+    if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+        # Linuxbrew
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        elif [[ -d "$HOME/.linuxbrew" ]]; then
+        eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
+    fi
 fi
 
 {{- if eq .chezmoi.os "microsoft" }}
@@ -41,7 +41,7 @@ unsetopt PATH_DIRS
 {{ end }}
 
 if [[ -z "$XDG_DATA_HOME" ]]; then
-  source "${HOME}/.zshenv"
+    source "${HOME}/.zshenv"
 fi
 
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
@@ -53,8 +53,8 @@ export GDK_BACKEND=wayland
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
 
 if ! [[ -f "$XDG_DATA_HOME/z" ]]; then
-  mkdir -p "$XDG_DATA_HOME/z"
-  touch "$ZSHZ_DATA"
+    mkdir -p "$XDG_DATA_HOME/z"
+    touch "$ZSHZ_DATA"
 fi
 
 export ZSHZ_KEEP_DIRS=(/opt/net /net)
@@ -129,32 +129,32 @@ SAVEHIST=90000
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-  zdharma-continuum/zinit-annex-as-monitor \
-  zdharma-continuum/zinit-annex-bin-gem-node \
-  zdharma-continuum/zinit-annex-patch-dl \
-  zdharma-continuum/zinit-annex-rust
+zdharma-continuum/zinit-annex-as-monitor \
+zdharma-continuum/zinit-annex-bin-gem-node \
+zdharma-continuum/zinit-annex-patch-dl \
+zdharma-continuum/zinit-annex-rust
 
 # generic plugins to load early and traditionally
 zi light MichaelAquilina/zsh-you-should-use
 
 zinit wait lucid for \
-  OMZP::mvn \
-  OMZP::npm \
-  OMZP::vscode \
-  OMZP::aws \
-  OMZP::brew \
-  OMZP::cp \
-  OMZP::gcloud \
-  OMZP::gpg-agent \
-  OMZP::ansible
+OMZP::mvn \
+OMZP::npm \
+OMZP::vscode \
+OMZP::aws \
+OMZP::brew \
+OMZP::cp \
+OMZP::gcloud \
+OMZP::gpg-agent \
+OMZP::ansible
 
 # tools
 zinit wait lucid for \
-  bindmap"^R -> ^H" atinit"
-        zstyle :history-search-multi-word page-size 10
-        zstyle :history-search-multi-word highlight-color fg=red,bold
-        zstyle :plugin:history-search-multi-word reset-prompt-protect 1
-        " \
+bindmap"^R -> ^H" atinit"
+zstyle :history-search-multi-word page-size 10
+zstyle :history-search-multi-word highlight-color fg=red,bold
+zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+" \
   zdharma-continuum/history-search-multi-word
 
 # git completions, only when .git present
@@ -165,7 +165,7 @@ zinit wait lucid for \
   OMZP::tig \
   OMZP::git-flow-avh \
   OMZP::git-auto-fetch \
-  paulirish/git-open \
+  unixorn/git-extra-commands \
   wfxr/forgit
 
 zinit ice lucid wait='1'

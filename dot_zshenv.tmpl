@@ -1,32 +1,14 @@
 ##  Make the defaults explicit
 ## Comments grabbed from arch wiki on the variables
 
-# Where user-specific configurations should be written (analogous to /etc).
-export XDG_CONFIG_HOME="${HOME}/.config"
-
-# Where user-specific non-essential (cached) data should be written (analogous to /var/cache).
-export XDG_CACHE_HOME="${HOME}/.cache"
-
-# Where user-specific data files should be written (analogous to /usr/share).
-export XDG_DATA_HOME="${HOME}/.local/share"
-
-# Non-official, but my OCD compels me to give it a name
-export XDG_BIN_HOME="${HOME}/.local/bin"
-
-# Extra non-official -- libraries to source
-export XDG_LIB_HOME="${HOME}/.local/lib"
-
-# Where user-specific state files should be written (analogous to /var/lib).
-export XDG_STATE_HOME="${HOME}/.local/state"
-
-export XDG_DATA_DIRS="/usr/local/share:/usr/share:${XDG_DATA_HOME}/var/lib/flatpak/exports/share:${XDG_DATA_HOME}/flatpak/exports/share"
-export XDG_CONFIG_DIRS="/etc/xdg:${XDG_CONFIG_HOME}"
-
-# GraalVM Binaries
-export NATIVE_IMAGE_BIN="${NATIVE_IMAGE_BIN:-$HOME/bin}"
-
-# Enable build kit
-export DOCKER_BUILDKIT=1
+set -o allexport
+{{range .xdg.vars -}}
+{{.}}
+{{end -}}
+{{range .xdg.unofficial.vars -}}
+{{.}}
+{{end -}}
+set +o allexport
 
 {{- if ne .chezmoi.os "darwin" }}
 # Set PATH, MANPATH, etc., for Homebrew linux.
@@ -35,17 +17,14 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Setup pyenv ( python version manager )
 if [ -x "$HOMEBREW_PREFIX/bin/pyenv" ]; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto'
-    export PYTHON_CFLAGS='-march=native -mtune=native'
-    export LDFLAGS="-L$HOMEBREW_PREFIX/opt/zlib/lib"
-    export CPPFLAGS="-I$$HOMEBREW_PREFIX/opt/zlib/include"
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
+    set -o allexport
+    {{range .pyenv.vars -}}
+    {{.}}
+    {{end}}
+    {{range .pyenv.cmds -}}
+    {{.}}
+    {{end -}}
+    set +o allexport
 fi
-
-set -o allexport
-source "${HOME}/.env"
-set +o allexport
 
 source "${XDG_LIB_HOME}/functions.sh"

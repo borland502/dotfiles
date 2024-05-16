@@ -1,0 +1,37 @@
+version: "3"
+
+dotenv: [".env"]
+
+vars:
+  CHEZMOI: chezmoi
+
+includes:
+  ansible:
+    taskfile: "{{.chezmoi.homeDir}}/.ansible/Taskfile.yaml"
+    dir: "{{.chezmoi.homeDir}}/.ansible"
+  dbs:
+    taskfile: '{{env "XDG_DATA_HOME"}}/automation/dasbootstrap/Taskfile.yml'
+    dir: '{{env "XDG_DATA_HOME"}}/automation/dasbootstrap'
+
+tasks:
+  default:
+    cmds:
+      - |
+        command -v brew >/dev/null || { echo "brew is mandatory for this to work, please install it"; exit 1; }
+        command -v gum >/dev/null|| brew install gum
+
+        selected=$(task --list-all | grep -v "task: Available" | grep -v "default:" | gum filter --indicator="->" --placeholder="Type to search for a task...")
+        echo "$selected" | awk '{sub(/:$/, "", $2); print $2}' | xargs task
+  chez:install:
+    desc: "Install dotfiles from https://github.com/borland502"
+    cmds:
+      - 'sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply borland502'
+    sources:
+      - '{{env "XDG_DATA_HOME"/chezmoi}}'
+
+  chez:apply:
+    desc: "Apply changes from downloaded dotfiles"
+    deps:
+      - chez:install
+    cmds:
+      - chezmoi apply
