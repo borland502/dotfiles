@@ -622,7 +622,7 @@ name = "dasbootstrap"
 version = "0.2.1"
 description = "System installer for an ansible control node"
 optional = false
-python-versions = "^3.11"
+python-versions = ">=3.11,<4.0"
 files = []
 develop = true
 
@@ -3171,5 +3171,5 @@ files = [
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.11"
-content-hash = "5b7deb4a5ce7d3633841ef713e3d30f7077feba4ab985cbc2e78dfab068ff270"
+python-versions = ">=3.11,<4.0"
+content-hash = "2ea2d1b12262087b74c0d62bd5b0451d36251ec1bdf2bd93829dcb517b48300b"

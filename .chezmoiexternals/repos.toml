@@ -14,6 +14,9 @@
 [".local/share/automation/acme.sh"]
   type = "git-repo"
   url = "https://github.com/borland502/acme.sh.git"
+[".local/share/automation/trapper_keeper"]
+  type = "git-repo"
+  url = "https://github.com/borland502/trapper-keeper"
 [".local/share/automation/Proxmox"]
   type = "git-repo"
   url = "https://github.com/borland502/Proxmox"

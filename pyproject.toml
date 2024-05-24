@@ -9,7 +9,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<4.0"
 dasbootstrap = {path = "/home/ansible/.local/share/dasbootstrap", develop = true}
 pykeepass = "^4.0.7.post1"
 boltdb = "^0.0.2"

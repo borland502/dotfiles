@@ -190,6 +190,9 @@ source "${XDG_CONFIG_HOME}/zshrc/aliases.zsh"
 
 source "${XDG_CONFIG_HOME}/zshrc/completions.zsh"
 
+eval "$(ssh-agent)"
+ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
+
 if [[ "$(command -v starship)" ]]; then
   # starship prompt
   eval "$(starship init zsh)"

@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+source "${XDG_LIB_HOME}/functions.sh"
+
+# relocate the age key if in legacy dir
+if [[ -f ~/bin/key.txt ]]; then
+  mkdir -p "${XDG_CONFIG_HOME}/keepass"
+  mv ~/bin/key.txt "${XDG_CONFIG_HOME}/keepass/key.txt"
+fi
+
+# remedial software installs
+if ! [[ $(command -v brew) ]]; then
+  /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+if ! [[ $(command -v has) ]]; then
+  brew install has
+fi
+
+# https://github.com/borland502/dasbootstrap/blob/dce7e0875d04c48fd0708354d12444ce2c39b5f7/lib/constants.sh
+if [[ ${BREW_LIST+x} ]]; then
+  for item in BREW_LIST[@]; do
+    if ! has "$item"; then
+      brew install "$item"
+    fi
+  done
+fi
+
+# Make sure we're in position to run python scripts as well
+cd "{{.chezmoi.sourceDir}}" || (echo "Could not cd into {{.chezmoi.sourceDir}}"; exit 2)
+poetry install

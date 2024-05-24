@@ -1,1 +1,28 @@
+##  Make the defaults explicit
+## Comments grabbed from arch wiki on the variables
 
+set -o allexport
+{{range .xdg.vars -}}
+{{.}}
+{{end -}}
+{{range .xdg.unofficial.vars -}}
+{{.}}
+{{end -}}
+set +o allexport
+
+{{- if ne .chezmoi.os "darwin" }}
+# Set PATH, MANPATH, etc., for Homebrew linux.
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end }}
+
+# Setup pyenv ( python version manager )
+if [ -x "$HOMEBREW_PREFIX/bin/pyenv" ]; then
+    set -o allexport
+    {{range .pyenv.vars -}}
+    {{.}}
+    {{end}}
+    {{range .pyenv.cmds -}}
+    {{.}}
+    {{end -}}
+    set +o allexport
+fi
