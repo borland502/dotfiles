@@ -2,6 +2,9 @@
 
 source "${XDG_LIB_HOME}/functions.sh"
 
+# .env is not present on initial load
+export HAS_ALLOW_UNSAFE=y
+
 # relocate the age key if in legacy dir
 if [[ -f ~/bin/key.txt ]]; then
   mkdir -p "${XDG_CONFIG_HOME}/keepass"
