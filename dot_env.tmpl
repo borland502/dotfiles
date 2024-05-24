@@ -1,3 +1,11 @@
+{{range .xdg.vars}}
+{{.}}
+{{ end }}
+
+{{range .xdg.unofficial.vars}}
+{{.}}
+{{ end }}
+
 {{range .env.vars}}
 {{.}}
 {{ end }}

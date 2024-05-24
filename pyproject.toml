@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "chezmoi"
+version = "0.1.0"
+description = "Personal dotfiles management"
+authors = ["Jeremy Hettenhouser <jhettenh@gmail.com>"]
+readme = "README.md"
+packages = [
+  { include = ".chezmoiscripts/*.py" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+dasbootstrap = {path = "/home/ansible/.local/share/dasbootstrap", develop = true}
+pykeepass = "^4.0.7.post1"
+boltdb = "^0.0.2"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

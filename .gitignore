@@ -17,3 +17,4 @@ private_key.txt
 # Sensitive config directories
 .config/gphotos-sync
 .config/gh/hosts.yml
+.venv

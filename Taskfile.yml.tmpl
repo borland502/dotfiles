@@ -3,15 +3,22 @@ version: "3"
 dotenv: [".env"]
 
 vars:
-  CHEZMOI: chezmoi
+  POETRY: poetry
+  PYTHON: python
+  PYTEST: pytest
+  PIP: pip
+  GH: gh
+  RUN_PREFIX: "{{.POETRY}} run"
 
 includes:
   ansible:
     taskfile: "{{.chezmoi.homeDir}}/.ansible/Taskfile.yaml"
     dir: "{{.chezmoi.homeDir}}/.ansible"
   dbs:
-    taskfile: '{{env "XDG_DATA_HOME"}}/automation/dasbootstrap/Taskfile.yml'
-    dir: '{{env "XDG_DATA_HOME"}}/automation/dasbootstrap'
+    optional: true
+    internal: true
+    taskfile: '{{env "XDG_DATA_HOME"}}/dasbootstrap/Taskfile.yml'
+    dir: '{{env "XDG_DATA_HOME"}}/dasbootstrap'
 
 tasks:
   default:
@@ -26,12 +33,10 @@ tasks:
     desc: "Install dotfiles from https://github.com/borland502"
     cmds:
       - 'sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply borland502'
-    sources:
-      - '{{env "XDG_DATA_HOME"/chezmoi}}'
 
   chez:apply:
     desc: "Apply changes from downloaded dotfiles"
     deps:
-      - chez:install
+      - task: chez:install
     cmds:
-      - chezmoi apply
+      - "{{.RUN_PREFIX}} chezmoi apply"

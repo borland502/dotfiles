@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+export HAS_ALLOW_UNSAFE=y
+
+if [[ $(command -v has) ]]; then
+  has curl
+  has git
+  has java
+  has jq
+  has python
+  has poetry
+  has pipx
+  has pyenv
+  has rsync
+  has vim
+fi
+
+cd "{{.chezmoi.sourceDir}}" || (echo "Could not cd into {{.chezmoi.sourceDir}}"; exit 2)
+poetry install

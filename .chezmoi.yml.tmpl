@@ -4,11 +4,11 @@
 {{- $email := "jhettenh@gmail.com" -}}
 
 keepassxc:
-  database: "~/.ansible/Passwords.kdbx"
+  database: "{{ $home }}/.local/share/keypass/secrets.kdbx"
 
 encryption: "age"
 age:
-  identity: "{{ $home }}/bin/key.txt"
+  identity: "{{ $home }}/.config/keepass/key.txt"
   recipient: "age1lcu6z9m9ukm9d0c4m90v790rvujlkr5ftzhdmyt866cqzlwhe39sla86hm"
 
 hooks.read-source-state.pre:
@@ -16,8 +16,17 @@ hooks.read-source-state.pre:
 
 scriptEnv:
 
+interpreters:
+  py:
+    command: poetry run
 
 data:
   home: "{{ $home }}"
   name: "{{ $name }}"
   email: "{{ $email }}"
+  POETRY: poetry
+  PYTHON: python
+  PYTEST: pytest
+  PIP: pip
+  GH: gh
+  RUN_PREFIX: "{{.POETRY}} run"
