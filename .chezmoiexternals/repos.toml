@@ -1,7 +1,3 @@
-# working dir
-[".local/share/dasbootstrap"]
-  type = "git-repo"
-  url = "https://github.com/borland502/dasbootstrap.git"
 [".local/share/automation/dasbootstrap"]
   type = "git-repo"
   url = "https://github.com/borland502/dasbootstrap.git"
@@ -16,7 +12,7 @@
   url = "https://github.com/borland502/acme.sh.git"
 [".local/share/automation/trapper_keeper"]
   type = "git-repo"
-  url = "https://github.com/borland502/trapper-keeper"
+  url = "https://github.com/borland502/trapper_keeper"
 [".local/share/automation/Proxmox"]
   type = "git-repo"
   url = "https://github.com/borland502/Proxmox"

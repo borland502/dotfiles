@@ -18,7 +18,7 @@ fi
 
 # https://github.com/borland502/dasbootstrap/blob/dce7e0875d04c48fd0708354d12444ce2c39b5f7/lib/constants.sh
 if [[ ${BREW_LIST+x} ]]; then
-  for item in BREW_LIST[@]; do
+  for item in "$BREW_LIST[@]"; do
     if ! has "$item"; then
       brew install "$item"
     fi

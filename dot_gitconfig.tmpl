@@ -1,5 +1,5 @@
 [user]
-  email = jhettenh@gmail.com 
+  email = jhettenh@gmail.com
   name = "Jeremy Hettenhouser"
   signingKey = {{ .chezmoi.homeDir }}/.ssh/id_ed25519.pub
 [commit]
@@ -10,4 +10,12 @@
 {{- if (eq .chezmoi.hostname "automation") }}
 [status]
   submodulesummary = true
+{{- end }}
+{{ if or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin") -}}
+[credential "https://github.com"]
+    helper =
+    helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+    helper =
+    helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
 {{- end }}

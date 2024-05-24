@@ -9,12 +9,10 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.11,<4.0"
-dasbootstrap = {path = "/home/ansible/.local/share/dasbootstrap", develop = true}
+python = ">3.12,<4.0"
 pykeepass = "^4.0.7.post1"
 boltdb = "^0.0.2"
 python-dotenv = "^1.0.1"
-
 
 [build-system]
 requires = ["poetry-core"]
