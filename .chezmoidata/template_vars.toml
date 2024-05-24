@@ -1,2 +1,3 @@
 [ansible]
   ansibleHome = "{{.home}}/.ansible"
+POETRY = "poetry"

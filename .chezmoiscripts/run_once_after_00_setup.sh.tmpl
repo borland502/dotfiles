@@ -2,6 +2,12 @@
 
 export HAS_ALLOW_UNSAFE=y
 
+# relocate the age key if in legacy dir
+if [[ -f ~/bin/key.txt ]]; then
+  mkdir -p ~/.config/keepass
+  mv ~/bin/key.txt ~/.config/keepass/key.txt
+fi
+
 # remedial software installs
 if ! [[ $(command -v brew) ]]; then
   /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

@@ -1,3 +1,7 @@
+# working dir
+[".local/share/dasbootstrap"]
+  type = "git-repo"
+  url = "https://github.com/borland502/dasbootstrap.git"
 [".local/share/automation/dasbootstrap"]
   type = "git-repo"
   url = "https://github.com/borland502/dasbootstrap.git"
