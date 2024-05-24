@@ -29,6 +29,10 @@ if [[ ${BREW_LIST+x} ]]; then
 fi
 
 # Make sure we're in position to run python scripts as well
-pyenv install 3.12
+pyenv install 3.12 2&>1 /dev/null
+pyenv global 3.12 2&>1 /dev/null
 cd "{{.chezmoi.sourceDir}}" || (echo "Could not cd into {{.chezmoi.sourceDir}}"; exit 2)
+poetry install
+
+cd "{{.chezmoi.homeDir}}/.local/automation/dasbootstrap" || (echo "could not cd into dasbootstrap dir"; exit 2)
 poetry install
