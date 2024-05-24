@@ -29,5 +29,6 @@ if [[ ${BREW_LIST+x} ]]; then
 fi
 
 # Make sure we're in position to run python scripts as well
+pyenv install 3.12
 cd "{{.chezmoi.sourceDir}}" || (echo "Could not cd into {{.chezmoi.sourceDir}}"; exit 2)
 poetry install
