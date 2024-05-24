@@ -2,18 +2,35 @@
 
 export HAS_ALLOW_UNSAFE=y
 
-if [[ $(command -v has) ]]; then
-  has curl
-  has git
-  has java
-  has jq
-  has python
-  has poetry
-  has pipx
-  has pyenv
-  has rsync
-  has vim
+# remedial software installs
+if ! [[ $(command -v brew) ]]; then
+  /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
+if ! [[ $(command -v has) ]]; then
+  brew install has
+fi
+if ! has curl; then
+  brew install curl
+fi
+if ! has git; then
+  brew install git
+fi
+if ! has java; then
+  brew install java
+fi
+if ! has jq; then
+  brew install jq
+fi
+if ! has rsync; then
+  brew install rsync
+fi
+if ! has task; then
+  brew install task
+fi
+if ! has vim; then
+  brew install vim
+fi
+
 
 cd "{{.chezmoi.sourceDir}}" || (echo "Could not cd into {{.chezmoi.sourceDir}}"; exit 2)
 poetry install

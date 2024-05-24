@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chezmoi"
-version = "0.1.0"
+version = "0.1.1"
 description = "Personal dotfiles management"
 authors = ["Jeremy Hettenhouser <jhettenh@gmail.com>"]
 readme = "README.md"
