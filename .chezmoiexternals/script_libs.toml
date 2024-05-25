@@ -1,15 +1,20 @@
 [".local/lib/logger.sh"]
+  refreshPeriod = "5m"
   type = "file"
   url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/logger.sh"
 [".local/lib/constants.sh"]
+  refreshPeriod = "5m"
   type = "file"
   url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/constants.sh"
 [".local/lib/functions.sh"]
+  refreshPeriod = "5m"
   type = "file"
   url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/functions.sh"
 [".local/lib/install_doctor_functions.sh"]
+  refreshPeriod = "5m"
   type = "file"
   url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/install_doctor_functions.sh"
 [".local/lib/util_functions.sh"]
+  refreshPeriod = "5m"
   type = "file"
   url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/lib/util_functions.sh"
