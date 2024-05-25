@@ -5,6 +5,8 @@ from pathlib import Path
 import xdg_base_dirs
 from dotenv import load_dotenv
 from pykeepass import create_database, PyKeePass
+from pykeepass.group import Group
+from trapper_keeper.main import TrapperKeeper
 
 KEEPASS_DB_PATH: str = f"{Path.home()}/.local/share/keepass/secrets.kdbx"
 KEEPASS_DB_KEY: str = f"{Path.home()}/.config/keepass/key.txt"
@@ -13,14 +15,6 @@ KEEPASS_DB_TOKEN: str = f"{Path.home()}/.local/state/keepass/keepass_token"
 # adjust python shell path as by default the commands will be run non-interactively.  This is important for shell cmds
 os.environ["PATH"] = ":".join([f"{Path.home()}/.local/bin", f"{os.environ['PATH']}"])
 load_dotenv(dotenv_path=Path.home().joinpath(".env"), interpolate=True, override=True, encoding="utf-8")
-
-
-# from plumbum.cmd import has, chezmoi, zsh
-
-# Validate expected executables
-# print(f"{has('pipx')}{has('fzf')}")
-# def initialize_poetry() -> None:
-
 
 # Initialize secrets database if not already present
 def create_kp_database() -> None | PyKeePass:
@@ -47,7 +41,7 @@ def create_kp_database() -> None | PyKeePass:
     kp_key.parent.mkdir(mode=0o700, exist_ok=True, parents=True)
     raise FileNotFoundError(f"Key file not found in path {kp_key}")
 
-  return create_database(KEEPASS_DB_PATH, KEEPASS_DB_TOKEN, KEEPASS_DB_KEY)
+  return create_database(kp_path, password=kp_token.read_text('utf-8').strip('\n'), keyfile=kp_key)
 
 
 # Validate XDG variables and correct if necessary
@@ -70,6 +64,5 @@ def validate_xdg_folders():
 # Validate path
 
 # Validate taskfiles
-
-create_kp_database()
+kp: PyKeePass = create_kp_database()
 validate_xdg_folders()

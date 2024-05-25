@@ -1,21 +1,26 @@
 [".local/share/automation/dasbootstrap"]
   type = "git-repo"
   url = "https://github.com/borland502/dasbootstrap.git"
+  refreshPeriod = "5m"
 [".local/share/automation/install.doctor"]
   type = "git-repo"
   url = "https://github.com/borland502/install.doctor.git"
+  refreshPeriod = "24h"
 [".local/share/automation/chezmoi"]
   type = "git-repo"
   url = "https://github.com/borland502/dotfiles.git"
+  refreshPeriod = "5m"
 [".local/share/automation/acme.sh"]
   type = "git-repo"
   url = "https://github.com/borland502/acme.sh.git"
+  refreshPeriod = "24h"
 [".local/share/automation/trapper_keeper"]
   type = "git-repo"
   url = "https://github.com/borland502/trapper_keeper"
 [".local/share/automation/Proxmox"]
   type = "git-repo"
   url = "https://github.com/borland502/Proxmox"
+  refreshPeriod = "24h"
 # [".ansible"]
 #   type = "git-repo"
 #   url = "https://gitea.npm.technohouser.com/jhettenh/secrets"

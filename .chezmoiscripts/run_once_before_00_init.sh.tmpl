@@ -8,8 +8,3 @@ if ! [[ -d "{{.chezmoi.homeDir}}/.local/share/automation" ]]; then
     echo "Dasbootstrap is not on your system" && exit 2
   fi
 fi
-
-# assume that this is a dev node and copy from the working proj to the automation folder
-if [[ -d "{{.chezmoi.homeDir}}/.local/share/dasbootstrap" ]]; then
-  rsync -avzPh "{{.chezmoi.homeDir}}/.local/share/dasbootstrap" "{{.chezmoi.homeDir}}/.local/share/automation"
-fi
