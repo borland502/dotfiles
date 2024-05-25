@@ -3,8 +3,13 @@
 echo "{{.chezmoi.homeDir}}/.local/share/automation"
 
 if ! [[ -d "{{.chezmoi.homeDir}}/.local/share/automation" ]]; then
-  echo "No automation directory detected" && exit 2
-  if ! [[ -d "{{.chezmoi.homeDir}}/.local/share/automation/dasbootstrap" ]]; then
-    echo "Dasbootstrap is not on your system" && exit 2
-  fi
+  mkdir -p "{{.chezmoi.homeDir}}/.local/share/automation"
 fi
+
+# relocate the age key if in legacy dir
+if [[ -f ~/bin/key.txt ]]; then
+  mkdir -p "{{ .chezmoi.homeDir }}/.config/keepass"
+  mv ~/bin/key.txt "{{ .chezmoi.homeDir }}/.config/keepass/key.txt"
+fi
+
+

@@ -5,12 +5,6 @@ source "${XDG_LIB_HOME}/functions.sh"
 # .env is not present on initial load
 export HAS_ALLOW_UNSAFE=y
 
-# relocate the age key if in legacy dir
-if [[ -f ~/bin/key.txt ]]; then
-  mkdir -p "${XDG_CONFIG_HOME}/keepass"
-  mv ~/bin/key.txt "${XDG_CONFIG_HOME}/keepass/key.txt"
-fi
-
 # remedial software installs
 if ! [[ $(command -v brew) ]]; then
   /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
