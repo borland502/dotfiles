@@ -4,6 +4,11 @@
 # -u: exit on unset variables
 set -eu
 
+curl -L https://raw.githubusercontent.com/borland502/dasbootstrap/main/bin/dasbootstrap.sh \
+  -o dasbootstrap.sh
+
+chmod +x ./dasbootstrap.sh && ./dasbootstrap.sh
+
 if ! chezmoi="$(command -v chezmoi)"; then
 	bin_dir="${HOME}/.local/bin"
 	chezmoi="${bin_dir}/chezmoi"

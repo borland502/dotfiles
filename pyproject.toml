@@ -9,7 +9,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">3.12,<4.0"
+python = "^3.12"
 pykeepass = "^4.0.7.post1"
 boltdb = "^0.0.2"
 python-dotenv = "^1.0.1"
