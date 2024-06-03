@@ -5,6 +5,7 @@ dotenv: [".env"]
 vars:
   POETRY: poetry
   PYTHON: python
+  STREAMLIT: streamlit
   PYTEST: pytest
   PIP: pip
   GH: gh
@@ -14,6 +15,9 @@ includes:
   ansible:
     taskfile: "{{.chezmoi.homeDir}}/.ansible/Taskfile.yaml"
     dir: "{{.chezmoi.homeDir}}/.ansible"
+  automation_station:
+    taskfile: '{{env "XDG_DATA_HOME"}}/automation_station/Taskfile.yml'
+    dir: '{{env "XDG_DATA_HOME"}}/automation_station'
   dbs:
     optional: true
     internal: true

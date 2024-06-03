@@ -16,34 +16,6 @@ KEEPASS_DB_TOKEN: str = f"{Path.home()}/.local/state/keepass/keepass_token"
 os.environ["PATH"] = ":".join([f"{Path.home()}/.local/bin", f"{os.environ['PATH']}"])
 load_dotenv(dotenv_path=Path.home().joinpath(".env"), interpolate=True, override=True, encoding="utf-8")
 
-# Initialize secrets database if not already present
-def create_kp_database() -> None | PyKeePass:
-  """Create a new keepass vault in the KEEPASS_DB_PATH, with the KEEPASS_DB_KEY, and KEEPASS_DB_TOKEN."""
-
-  kp_path: Path = Path(KEEPASS_DB_PATH)
-  if not kp_path.is_file():
-    # make the directory at least if the database does not exist
-    kp_path.parent.mkdir(mode=0o700, exist_ok=True, parents=True)
-  else:
-    # database exists
-    return None
-
-  # Token and key must exist in the target destinations ahead of time
-  kp_token: Path = Path(KEEPASS_DB_TOKEN)
-  if not kp_token.is_file():
-    # make the directory at least if the database does not exist
-    kp_token.parent.mkdir(mode=0o700, exist_ok=True, parents=True)
-    raise FileNotFoundError(f"Token file not found in path {kp_token}")
-
-  kp_key: Path = Path(KEEPASS_DB_KEY)
-  if not kp_key.is_file():
-    # make the directory at least if the database does not exist
-    kp_key.parent.mkdir(mode=0o700, exist_ok=True, parents=True)
-    raise FileNotFoundError(f"Key file not found in path {kp_key}")
-
-  return create_database(kp_path, password=kp_token.read_text('utf-8').strip('\n'), keyfile=kp_key)
-
-
 # Validate XDG variables and correct if necessary
 def validate_xdg_folders():
   # TODO: Learn formatting
