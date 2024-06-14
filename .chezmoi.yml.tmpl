@@ -4,11 +4,11 @@
 {{- $email := "jhettenh@gmail.com" -}}
 
 keepassxc:
-  database: "{{ $home }}/.local/share/keypass/secrets.kdbx"
+  database: "{{ $home }}/.local/share/trapper_keeper/secrets.kdbx"
 
 encryption: "age"
 age:
-  identity: "{{ $home }}/.config/keepass/key.txt"
+  identity: "{{ $home }}/.config/trapper_keeper/key.txt"
   recipient: "age1lcu6z9m9ukm9d0c4m90v790rvujlkr5ftzhdmyt866cqzlwhe39sla86hm"
 
 hooks.read-source-state.pre:

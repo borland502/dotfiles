@@ -3,44 +3,45 @@ version: "3"
 dotenv: [".env"]
 
 vars:
-  POETRY: poetry
-  PYTHON: python
-  STREAMLIT: streamlit
-  PYTEST: pytest
-  PIP: pip
-  GH: gh
-  RUN_PREFIX: "{{.POETRY}} run"
+POETRY: poetry
+PYTHON: python
+STREAMLIT: streamlit
+PYTEST: pytest
+PIP: pip
+GH: gh
+RUN_PREFIX: "{{.POETRY}} run"
 
 includes:
-  ansible:
-    taskfile: "{{.chezmoi.homeDir}}/.ansible/Taskfile.yaml"
-    dir: "{{.chezmoi.homeDir}}/.ansible"
-  automation_station:
-    taskfile: '{{env "XDG_DATA_HOME"}}/automation_station/Taskfile.yml'
-    dir: '{{env "XDG_DATA_HOME"}}/automation_station'
-  dbs:
-    optional: true
-    internal: true
-    taskfile: '{{env "XDG_DATA_HOME"}}/dasbootstrap/Taskfile.yml'
-    dir: '{{env "XDG_DATA_HOME"}}/dasbootstrap'
+ansible:
+taskfile: "{{.chezmoi.homeDir}}/.ansible/Taskfile.yaml"
+dir: "{{.chezmoi.homeDir}}/.ansible"
+automation_station:
+taskfile: '{{env "XDG_DATA_HOME"}}/automation_station/Taskfile.yml'
+dir: '{{env "XDG_DATA_HOME"}}/automation_station'
+dbs:
+optional: true
+internal: true
+taskfile: '{{env "XDG_DATA_HOME"}}/dasbootstrap/Taskfile.yml'
+dir: '{{env "XDG_DATA_HOME"}}/dasbootstrap'
 
 tasks:
-  default:
-    cmds:
-      - |
-        command -v brew >/dev/null || { echo "brew is mandatory for this to work, please install it"; exit 1; }
-        command -v gum >/dev/null|| brew install gum
+default:
+cmds:
+- |
+command -v brew >/dev/null || { echo "brew is mandatory for this to work, please install it"; exit 1; }
+command -v gum >/dev/null|| brew install gum
 
-        selected=$(task --list-all | grep -v "task: Available" | grep -v "default:" | gum filter --indicator="->" --placeholder="Type to search for a task...")
-        echo "$selected" | awk '{sub(/:$/, "", $2); print $2}' | xargs task
-  chez:install:
-    desc: "Install dotfiles from https://github.com/borland502"
-    cmds:
-      - 'sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply borland502'
+selected=$(task --list-all | grep -v "task: Available" | grep -v "default:" | gum filter --indicator="->" --placeholder="Type to search for a task...")
+echo "$selected" | awk '{sub(/:$/, "", $2); print $2}' | xargs task
+chez:install:
+desc: "Install dotfiles from https://github.com/borland502"
+cmds:
+- 'sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply borland502'
 
-  chez:apply:
-    desc: "Apply changes from downloaded dotfiles"
-    deps:
-      - task: chez:install
-    cmds:
-      - "{{.RUN_PREFIX}} chezmoi apply"
+chez:apply:
+desc: "Apply changes from downloaded dotfiles"
+deps:
+- task: chez:install
+cmds:
+- "{{.RUN_PREFIX}} chezmoi apply"
+

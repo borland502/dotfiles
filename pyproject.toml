@@ -16,7 +16,7 @@ python-dotenv = "^1.0.1"
 plumbum = "^1.8.3"
 xdg-base-dirs = "^6.0.1"
 setuptools = "^70.0.0"
-trapper-keeper = {git = "https://github.com/borland502/trapper_keeper", develop = true}
+trapper-keeper = {git = "https://github.com/borland502/trapper_keeper", develop = true, branch="dev"}
 
 [build-system]
 requires = ["poetry-core"]

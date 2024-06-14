@@ -4,17 +4,15 @@ from pathlib import Path
 
 import xdg_base_dirs
 from dotenv import load_dotenv
-from pykeepass import create_database, PyKeePass
-from pykeepass.group import Group
-from trapper_keeper.main import TrapperKeeper
-
-KEEPASS_DB_PATH: str = f"{Path.home()}/.local/share/trapper_keeper/secrets.kdbx"
-KEEPASS_DB_KEY: str = f"{Path.home()}/.config/trapper_keeper/key.txt"
-KEEPASS_DB_TOKEN: str = f"{Path.home()}/.local/state/trapper_keeper/keepass_token"
 
 # adjust python shell path as by default the commands will be run non-interactively.  This is important for shell cmds
 os.environ["PATH"] = ":".join([f"{Path.home()}/.local/bin", f"{os.environ['PATH']}"])
-load_dotenv(dotenv_path=Path.home().joinpath(".env"), interpolate=True, override=True, encoding="utf-8")
+load_dotenv(
+    dotenv_path=Path.home().joinpath(".env"),
+    interpolate=True,
+    override=True,
+    encoding="utf-8",
+)
 
 
 # Validate XDG variables and correct if necessary
@@ -25,11 +23,15 @@ def validate_xdg_folders():
 
         # some xdg vars are lists of paths
         if isinstance(path, Path):
-            print(f"XDG variable {xdg_func.upper()} at {path} exists? {str(path.is_dir()).lower()}")
+            print(
+                f"XDG variable {xdg_func.upper()} at {path} exists? {str(path.is_dir()).lower()}"
+            )
         else:
             print(f"XDG variable {xdg_func.upper()} with")
             for resolved_path in [s_path for s_path in path]:
-                print(f"{resolved_path!s:<60} path exists? {str(resolved_path.is_dir()).lower()}")
+                print(
+                    f"{resolved_path!s:<60} path exists? {str(resolved_path.is_dir()).lower()}"
+                )
                 if not resolved_path.is_dir():
                     resolved_path.mkdir(mode=0o700, parents=True)
 
@@ -37,5 +39,4 @@ def validate_xdg_folders():
 # Validate path
 
 # Validate taskfiles
-kp: PyKeePass = create_kp_database()
 validate_xdg_folders()
