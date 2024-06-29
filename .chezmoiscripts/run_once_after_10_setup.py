@@ -24,16 +24,8 @@ def validate_xdg_folders():
         # some xdg vars are lists of paths
         if isinstance(path, Path):
             print(
-                f"XDG variable {xdg_func.upper()} at {path} exists? {str(path.is_dir()).lower()}"
+                f"XDG variable {xdg_func.upper()} at {path.name} exists? {str(path.exists()).lower()}"
             )
-        else:
-            print(f"XDG variable {xdg_func.upper()} with")
-            for resolved_path in [s_path for s_path in path]:
-                print(
-                    f"{resolved_path!s:<60} path exists? {str(resolved_path.is_dir()).lower()}"
-                )
-                if not resolved_path.is_dir():
-                    resolved_path.mkdir(mode=0o700, parents=True)
 
 
 # Validate path

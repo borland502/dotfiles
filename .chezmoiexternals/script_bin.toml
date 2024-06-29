@@ -1,7 +1,3 @@
-[".local/bin/start.sh"]
-  executable = true
-  type = "file"
-  url = "https://gitlab.com/megabyte-labs/common/shared/-/raw/master/start.sh"
 [".local/bin/has"]
   executable = true
   refreshPeriod = "5m"
