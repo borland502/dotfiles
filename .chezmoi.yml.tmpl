@@ -8,11 +8,11 @@ keepassxc:
 
 encryption: "age"
 age:
-  identity: "{{ $home }}/.config/trapper_keeper/key.txt"
+  identity: "{{ $home }}/.config/age/key.txt"
   recipient: "age1lcu6z9m9ukm9d0c4m90v790rvujlkr5ftzhdmyt866cqzlwhe39sla86hm"
 
 hooks.read-source-state.pre:
-  command: "declare"
+command: "declare"
 
 scriptEnv:
 
@@ -20,9 +20,20 @@ data:
   home: "{{ $home }}"
   name: "{{ $name }}"
   email: "{{ $email }}"
-  POETRY: poetry
-  PYTHON: python
-  PYTEST: pytest
-  PIP: pip
-  GH: gh
-  RUN_PREFIX: "poetry run"
+  taskfile: [
+    'STREAMLIT: streamlit',
+    'PYTEST: pytest',
+    'PIP: pip',
+    'GH: gh',
+    'POETRY: poetry',
+    'PYTHON: python',
+    'ANSIBLE: ansible',
+    'ANSIBLE_INVENTORY: ansible-inventory',
+    'ANSIBLE_PLAYBOOK: ansible-playbook',
+    'ANSIBLE_GALAXY: ansible-galaxy',
+    'ANSIBLE_VAULT: ansible-vault',
+    'ANSIBLE_DOCS: ansible-docs',
+    'ANSIBLE_RUNNER: ansible-runner',
+    'ANSIBLE_PULL: ansible-pull',
+  ]
+
