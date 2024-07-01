@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/usr/bin/env zsh
 # @author Jeremy Hettenhouser
 #
 # Sources
@@ -7,8 +7,6 @@
 # profiling
 # zmodload zsh/zprof
 
-# Zinit initialization -- assume prior install
-source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
 
 # shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
 {{- if eq .chezmoi.os "darwin" }}
@@ -21,14 +19,17 @@ export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
 {{- else if eq .chezmoi.os "linux" }}
 
 # linuxbrew is not installed on arm
-if [[ "$(command -v brew)" ]]; then
-    if [[ -d /home/linuxbrew/.linuxbrew ]]; then
-        # Linuxbrew
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        elif [[ -d "$HOME/.linuxbrew" ]]; then
-        eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
-    fi
+{{if findOneExecutable (list "brew") (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH")) }}
+if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+    # Linuxbrew
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    # Zinit initialization -- assume prior install
+    source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+elif [[ -d "$HOME/.linuxbrew" ]]; then
+    eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
+    source "${HOME}/.linuxbrew/opt/zinit/zinit.zsh"
 fi
+{{end}}
 
 {{- if eq .chezmoi.os "microsoft" }}
 # WSL
@@ -87,7 +88,7 @@ export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms204
 export M2_HOME="$HOME/.m2"
 
 # XDG script path
-export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:${XDG_BIN_HOME}
 
 # do not beep at me dammit
 setopt NO_BEEP
@@ -148,7 +149,8 @@ OMZP::brew \
 OMZP::cp \
 OMZP::gcloud \
 OMZP::gpg-agent \
-OMZP::ansible
+OMZP::ansible \
+OMZP::direnv
 
 # tools
 zinit wait lucid for \
@@ -191,13 +193,21 @@ source "${XDG_CONFIG_HOME}/zshrc/aliases.zsh"
 
 source "${XDG_CONFIG_HOME}/zshrc/completions.zsh"
 
+{{ if (joinPath .chezmoi.homeDir "/.ssh/id_ed25519" | lstat) -}}
 eval "$(ssh-agent)"
 ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
+{{end -}}
 
-if [[ "$(command -v starship)" ]]; then
-  # starship prompt
-  eval "$(starship init zsh)"
-fi
+{{if (and (ne .chezmoi.homeDir "") (lookPath "starship")) -}}
+eval "$(starship init zsh)"
+{{end}}
 
+{{if (joinPath .chezmoi.homeDir "$HOME/.sdkman/bin/sdkman-init.sh" | lstat) -}}
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
+zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
+{{end}}
+
+{{if (joinPath .xdg_data_home "/automation/dasbootstrap/.venv/bin/activate" | lstat )}}
+# default to dasbootstrap venv
+source ${XDG_DATA_HOME}/automation/dasbootstrap/.venv/bin/activate
+{{end}}
