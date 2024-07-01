@@ -1,10 +1,11 @@
 # chezmoi:template:left-delimiter="[[" right-delimiter=]]
 version: "3"
 
-dotenv: [".env"]
-
 vars:
-  [[range .chezmoi.config.data.taskfile -]]
+  [[range .xdg -]]
+  [[.]]
+  [[end -]]
+  [[range .taskfile -]]
   [[.]]
   [[end -]]
   RUN_PREFIX: "{{.POETRY}} run"
@@ -15,15 +16,16 @@ vars:
 includes:
   ansible:
     optional: true
-    taskfile: "[[.chezmoi.homeDir]]/.ansible/Taskfile.yml"
-    dir: "[[.chezmoi.homeDir]]/.ansible"
+    taskfile: "{{.HOME}}/.ansible/Taskfile.yml"
+    dir: "{{.HOME}}/.ansible"
   bin:
     optional: true
-    taskfile: "[[.chezmoi.homeDir]]/.local/bin/Taskfile.yml"
-    dir: "[[.chezmoi.homeDir]]/.local/bin"
+    taskfile: "{{.HOME}}/.local/bin/Taskfile.yml"
+    dir: "{{.XDG_BIN_HOME}}"
   dbs:
     optional: true
-    taskfile: "[[.chezmoi.homeDir]]/.local/share/automation/dasbootstrap/Taskfile.yml"
+    taskfile: "{{.XDG_DATA_HOME}}/dasbootstrap/Taskfile.yml"
+    dir: "{{.XDG_DATA_HOME}}/dasbootstrap"
 
 tasks:
   default:

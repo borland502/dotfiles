@@ -2,11 +2,11 @@
 ## Comments grabbed from arch wiki on the variables
 
 set -o allexport
-{{range .xdg.vars -}}
-{{.}}
+{{range .xdg -}}
+{{ . | replace ": " "=" }}
 {{end -}}
-{{range .xdg.unofficial.vars -}}
-{{.}}
+{{range .xdg -}}
+{{ . | replace ": " "=" }}
 {{end -}}
 set +o allexport
 

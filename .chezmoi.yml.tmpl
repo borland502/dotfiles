@@ -21,6 +21,7 @@ data:
   name: "{{ $name }}"
   email: "{{ $email }}"
   taskfile: [
+    'HOME: "{{ $home }}"',
     'STREAMLIT: streamlit',
     'PYTEST: pytest',
     'PIP: pip',
@@ -36,4 +37,13 @@ data:
     'ANSIBLE_RUNNER: ansible-runner',
     'ANSIBLE_PULL: ansible-pull',
   ]
-
+  xdg: [
+    'XDG_CACHE_HOME: {{$home}}/.cache',
+    'XDG_CONFIG_DIRS: /etc/xdg:{{$home}}/.config',
+    'XDG_CONFIG_HOME: {{$home}}/.config',
+    'XDG_DATA_DIRS: /usr/local/share:/usr/share:{{$home}}/.local/share/var/lib/flatpak/exports/share:{{$home}}/.local/share/flatpak/exports/share',
+    'XDG_DATA_HOME: {{$home}}/.local/share',
+    'XDG_STATE_HOME: {{$home}}/.local/state',
+    'XDG_BIN_HOME: {{$home}}/.local/bin',
+    'XDG_LIB_HOME: {{$home}}/.local/lib',
+  ]

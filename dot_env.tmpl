@@ -1,11 +1,7 @@
-{{range .xdg.vars -}}
-{{.}}
-{{ end -}}
-
-{{range .xdg.unofficial.vars -}}
-{{.}}
+{{range .xdg -}}
+{{ . | replace ": " "=" }}
 {{ end -}}
 
 {{range .env.vars -}}
-{{.}}
+{{ . | replace ": " "=" }}
 {{ end -}}

@@ -1,7 +1,11 @@
 mkdir -p "${XDG_CACHE_HOME}/completions"
 
 if [[ ! -f "${XDG_DATA_HOME}/zinit/completions/_gopass" && "$(command -v gopass)" ]]; then
-  gopass completion zsh >"${XDG_CACHE_HOME}/completions/_gopass"
-  zi snippet "${XDG_CACHE_HOME}/completions/_gopass"
+    gopass completion zsh >"${XDG_CACHE_HOME}/completions/_gopass"
+    zi snippet "${XDG_CACHE_HOME}/completions/_gopass"
 fi
 
+if [[ ! -f "${XDG_DATA_HOME}/zinit/completions/_chezmoi" && "$(command -v chezmoi)" ]]; then
+    chezmoi completion zsh >"${XDG_CACHE_HOME}/completions/_chezmoi"
+    zi snippet "${XDG_CACHE_HOME}/completions/_chezmoi"
+fi
