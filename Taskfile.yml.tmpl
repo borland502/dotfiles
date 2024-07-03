@@ -11,21 +11,21 @@ vars:
   RUN_PREFIX: "{{.POETRY}} run"
   VENV_PYTHON: "{{.RUN_PREFIX}} python"
   RUN_MODULE_PREFIX: "{{.RUN_PREFIX}} {{.PYTHON}} -m"
-  DASBOOTSTRAP_PREFIX: "{{.RUN_MODULE_PREFIX}} dasbootstrap"  
+  DASBOOTSTRAP_PREFIX: "{{.RUN_MODULE_PREFIX}} dasbootstrap"
 
 includes:
   ansible:
     optional: true
     taskfile: "{{.HOME}}/.ansible/Taskfile.yml"
-    dir: "{{.HOME}}/.ansible"
+  # global & bin represent the "production" project commands while others like chezmoi and dbs point to the development folders
   bin:
-    optional: true
     taskfile: "{{.HOME}}/.local/bin/Taskfile.yml"
-    dir: "{{.XDG_BIN_HOME}}"
+  chezmoi:
+    optional: true
+    taskfile: "{{.XDG_DATA_HOME}}/chezmoi/Taskfile.yaml"
   dbs:
     optional: true
     taskfile: "{{.XDG_DATA_HOME}}/dasbootstrap/Taskfile.yml"
-    dir: "{{.XDG_DATA_HOME}}/dasbootstrap"
 
 tasks:
   default:
@@ -35,11 +35,4 @@ tasks:
         command -v gum >/dev/null|| brew install gum
         selected=$(task --list-all | grep -v "task: Available" | grep -v "default:" | gum filter --indicator="->" --placeholder="Type to search for a task...")
         echo "$selected" | awk '{sub(/:$/, "", $2); print $2}' | xargs task
-
-  chez:apply:
-    desc: "Apply changes from downloaded dotfiles"
-    deps:
-      - task: chez:install
-    cmds:
-      - "{{.RUN_PREFIX}} chezmoi apply"
 

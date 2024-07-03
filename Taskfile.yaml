@@ -1,0 +1,38 @@
+version: "3"
+
+vars:
+  POETRY: "poetry"
+  PYTHON: "python"
+  RUN_PREFIX: "{{.POETRY}} run"
+  CHEZMOI_PREFIX: "{{.RUN_PREFIX}} chezmoi"
+  VENV_PYTHON: "{{.RUN_PREFIX}} python"
+
+tasks:
+  default:
+    cmds:
+      - task -l
+
+  build:
+    desc: "Build chezmoi and local dependencies"
+    cmds:
+      - "{{.CHEZMOI_PREFIX}} init"
+
+  commit:
+    desc: "Commit changes to chezmoi with a message containing files changed"
+
+  apply:
+    desc: "Apply changes from downloaded dotfiles"
+    deps:
+      - task: build
+    cmds:
+      - "{{.CHEZMOI_PREFIX}} apply"
+
+  predeploy:
+    desc: "Deploy chezmoi"
+    interactive: true
+    deps:
+      - task: apply
+    cmds:
+      - "{{.CHEZMOI_PREFIX}} update"
+      - "{{.CHEZMOI_PREFIX}} diff"
+      - "{{.CHEZMOI_PREFIX}} git status"

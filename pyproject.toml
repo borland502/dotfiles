@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "chezmoi"
+version = "0.1.0"
+description = ""
+authors = ["Jeremy Hettenhouser <jhettenh@gmail.com>"]
+readme = "README.md"
+packages = [
+  { from = ".chezmoiscripts", include = "*.py" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+dasbootstrap = {path = "/home/ansible/.local/share/dasbootstrap", develop = true}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

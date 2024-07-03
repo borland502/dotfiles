@@ -9,6 +9,10 @@
 {{- $xdg_bin_home := expandenv ("$HOME/.local/bin") -}}
 {{- $xdg_lib_home := expandenv ("$HOME/.local/lib") -}}
 {{- $ansible_home := expandenv ("$HOME/.ansible") -}}
+{{- $dasbootstrap_home := joinPath $xdg_data_home "/automation/dasbootstrap" -}}
+{{- $homebrew_home := "/home/linuxbrew/.linuxbrew" -}}
+{{- $pipx_home := expandenv ("$HOME/.local/pipx") -}}
+{{- $python_ver := "3.12" }}
 
 keepassxc:
   database: "{{ $home }}/.local/share/trapper_keeper/secrets.kdbx"
@@ -30,7 +34,9 @@ scriptEnv:
   XDG_STATE_HOME: {{$xdg_state_home}}
   XDG_BIN_HOME: {{$xdg_bin_home}}
   XDG_LIB_HOME: {{$xdg_lib_home}}
-  PATH: '{{env "PATH"}}'
+  HOMEBREW_PREFIX: {{$homebrew_home}}
+  PIPX_HOME: {{$pipx_home}}
+  PATH: '{{(nospace (cat (env "PATH") ":" $pipx_home))}}'
 
 # all variables avoid shell interpolation so that conversion to .env, export var, etc is easier
 data:
@@ -49,6 +55,7 @@ data:
     'GH: gh',
     'POETRY: poetry',
     'PYTHON: python',
+    'PYTHON_VER: {{$python_ver}}',
     'ANSIBLE: ansible',
     'ANSIBLE_INVENTORY: ansible-inventory',
     'ANSIBLE_PLAYBOOK: ansible-playbook',
@@ -57,6 +64,11 @@ data:
     'ANSIBLE_DOCS: ansible-docs',
     'ANSIBLE_RUNNER: ansible-runner',
     'ANSIBLE_PULL: ansible-pull',
+    'DASBOOTSTRAP_HOME: "{{$dasbootstrap_home}}"',
+    'DBS_VENV_POETRY: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}}"',
+    'DBS_RUN_PREFIX: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run"',
+    'DBS_VENV_PYTHON: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/python"}}"',
+    'DBS_VENV_PACKAGES: "{{joinPath $dasbootstrap_home (nospace (cat "/.venv/lib/python" $python_ver)) "/site-packages/dasbootstrap"}}"',
   ]
   # redefine all xdg vars for easier access in go templates
   xdg_data_home: "{{$xdg_data_home}}"

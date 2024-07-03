@@ -25,7 +25,7 @@ if [[ -d /home/linuxbrew/.linuxbrew ]]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     # Zinit initialization -- assume prior install
     source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
-elif [[ -d "$HOME/.linuxbrew" ]]; then
+    elif [[ -d "$HOME/.linuxbrew" ]]; then
     eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
     source "${HOME}/.linuxbrew/opt/zinit/zinit.zsh"
 fi
@@ -140,6 +140,7 @@ zdharma-continuum/zinit-annex-rust
 zi load atuinsh/atuin
 zi light MichaelAquilina/zsh-you-should-use
 
+
 zinit wait lucid for \
 OMZP::mvn \
 OMZP::npm \
@@ -183,7 +184,8 @@ zinit wait lucid for \
   as"completion" is-snippet \
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
+  https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
 
 zinit light-mode for \
   pick"zsh-lazyload.zsh" \

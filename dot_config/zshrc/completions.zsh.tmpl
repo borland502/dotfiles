@@ -1,58 +1,22 @@
 mkdir -p "${XDG_CACHE_HOME}/completions"
 
-{{if not ("${XDG_DATA_HOME}/zinit/completions/_gopass" | lstat )}}
+{{if and (not ("${XDG_DATA_HOME}/zinit/completions/_gopass" | lstat )) (findOneExecutable (list "gopass") (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH")))}}
 gopass completion zsh >"${XDG_CACHE_HOME}/completions/_gopass"
 zi snippet "${XDG_CACHE_HOME}/completions/_gopass"
 {{end}}
 
-{{if not ("${XDG_DATA_HOME}/zinit/completions/_chezmoi" | lstat )}}
-chezmoi completion zsh >"${XDG_CACHE_HOME}/completions/_chezmoi"
-zi snippet "${XDG_CACHE_HOME}/completions/_chezmoi"
-{{end}}
+# if [[ $(command -v brew) && $(command -v zinit) ]];then
+#     for file_name in $(find $($(brew --prefix)/share/zsh/share/site-functions) -name "_*")
+#     do
+#         echo $file_name
+#         break
+#     done
 
-{{if ("/home/linuxbrew/.linuxbrew/share/zsh/site-functions" | lstat )}}
-rsync -avL --chmod="0755" '/home/linuxbrew/.linuxbrew/share/zsh/site-functions/' "${XDG_CACHE_HOME}/completions/"
-{{end}}
+#     for file in $(find $($(brew --prefix)/share/zsh/share/functions) -name "_*")
+#     do
+#         echo $file_name
+#         break
+#     done
+# fi
 
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_bat" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_bat"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_brew" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_brew"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_curl" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_curl"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_eza" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_eza"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_fd" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_fd"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_git" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_git"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_gh" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_gh"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_gum" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_gum"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_pipx" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_pipx"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_rg" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_rg"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_sd" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_sd"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_starship" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_starship"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_tldr" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_tldr"
-# {{end}}
-# {{if not ("${XDG_DATA_HOME}/zinit/completions/_yq" | lstat )}}
-# zi snippet "${XDG_CACHE_HOME}/completions/_yq"
-# {{end}}
+

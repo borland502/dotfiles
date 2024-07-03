@@ -5,3 +5,7 @@
 {{range .env.vars -}}
 {{ . | replace ": " "=" }}
 {{ end -}}
+
+{{range .directories -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
