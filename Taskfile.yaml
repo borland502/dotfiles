@@ -12,19 +12,23 @@ tasks:
     cmds:
       - task -l
 
+  update:
+    desc: "Update chezmoi from github dotfiles"
+    cmds:
+      - "{{.CHEZMOI_PREFIX}} update"
+
   build:
     desc: "Build chezmoi and local dependencies"
     cmds:
       - "{{.CHEZMOI_PREFIX}} init"
 
-  commit:
-    desc: "Commit changes to chezmoi with a message containing files changed"
-
   apply:
     desc: "Apply changes from downloaded dotfiles"
     deps:
-      - task: build
+      - task: update
     cmds:
+      - task: build
+      - "{{.CHEZMOI_PREFIX}} diff"
       - "{{.CHEZMOI_PREFIX}} apply"
 
   predeploy:
@@ -33,6 +37,4 @@ tasks:
     deps:
       - task: apply
     cmds:
-      - "{{.CHEZMOI_PREFIX}} update"
-      - "{{.CHEZMOI_PREFIX}} diff"
       - "{{.CHEZMOI_PREFIX}} git status"

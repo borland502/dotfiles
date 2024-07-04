@@ -18,6 +18,9 @@
   type = "git-repo"
   url = "https://github.com/borland502/Proxmox"
   refreshPeriod = "24h"
-
+[".ansible/ansible_collections/technohouser"]
+  type = "git-repo"
+  url = "https://github.com/borland502/technohouser"
+  refreshPeriond = "5m"
 
 

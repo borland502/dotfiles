@@ -25,7 +25,8 @@ includes:
     taskfile: "{{.XDG_DATA_HOME}}/chezmoi/Taskfile.yaml"
   dbs:
     optional: true
-    taskfile: "{{.XDG_DATA_HOME}}/dasbootstrap/Taskfile.yml"
+    taskfile: "{{.XDG_DATA_HOME}}/automation/dasbootstrap/Taskfile.yml"
+    dir: "{{.XDG_DATA_HOME}}/automation/dasbootstrap"
 
 tasks:
   default:
@@ -36,3 +37,7 @@ tasks:
         selected=$(task --list-all | grep -v "task: Available" | grep -v "default:" | gum filter --indicator="->" --placeholder="Type to search for a task...")
         echo "$selected" | awk '{sub(/:$/, "", $2); print $2}' | xargs task
 
+  tests:
+    desc: "Run all unit, integration, and functional tests we have on various projects"
+    cmds:
+      - task: dbs:destroy:lxc
