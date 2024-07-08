@@ -151,7 +151,8 @@ OMZP::cp \
 OMZP::gcloud \
 OMZP::gpg-agent \
 OMZP::ansible \
-OMZP::direnv
+OMZP::direnv 
+# TODO: Install gomplate
 
 # tools
 zinit wait lucid for \
@@ -207,9 +208,4 @@ eval "$(starship init zsh)"
 {{if (joinPath .chezmoi.homeDir "$HOME/.sdkman/bin/sdkman-init.sh" | lstat) -}}
 export SDKMAN_DIR="$HOME/.sdkman"
 zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
-{{end}}
-
-{{if (joinPath .xdg_data_home "/automation/dasbootstrap/.venv/bin/activate" | lstat )}}
-# default to dasbootstrap venv
-source ${XDG_DATA_HOME}/automation/dasbootstrap/.venv/bin/activate
 {{end}}

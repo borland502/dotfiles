@@ -1,6 +1,6 @@
 [".local/bin/has"]
   executable = true
-  refreshPeriod = "5m"
+  refreshPeriod = "1h"
   type = "file"
   url = "https://git.io/_has"
 ["./local/bin/sqlite_backup.sh"]

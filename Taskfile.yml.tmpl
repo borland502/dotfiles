@@ -8,25 +8,32 @@ vars:
   [[range .taskfile -]]
   [[.]]
   [[end -]]
+  [[range .taskfile_ansible -]]
+  [[.]]
+  [[end -]]
   RUN_PREFIX: "{{.POETRY}} run"
   VENV_PYTHON: "{{.RUN_PREFIX}} python"
   RUN_MODULE_PREFIX: "{{.RUN_PREFIX}} {{.PYTHON}} -m"
   DASBOOTSTRAP_PREFIX: "{{.RUN_MODULE_PREFIX}} dasbootstrap"
 
 includes:
-  ansible:
-    optional: true
-    taskfile: "{{.HOME}}/.ansible/Taskfile.yml"
-  # global & bin represent the "production" project commands while others like chezmoi and dbs point to the development folders
+  ans:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-ansible.yaml"
+    dir: "{{.ANSIBLE_HOME}}"
   bin:
-    taskfile: "{{.HOME}}/.local/bin/Taskfile.yml"
-  chezmoi:
-    optional: true
-    taskfile: "{{.XDG_DATA_HOME}}/chezmoi/Taskfile.yaml"
-  dbs:
-    optional: true
-    taskfile: "{{.XDG_DATA_HOME}}/automation/dasbootstrap/Taskfile.yml"
-    dir: "{{.XDG_DATA_HOME}}/automation/dasbootstrap"
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-scripts.yaml"
+    dir: "{{.XDG_BIN_HOME}}"
+  chez:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-chezmoi.yaml"
+    dir: "{{.CHEZMOI_HOME}}"
+  install:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-install.yaml"
+  inv:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-inventory.yaml"
+    dir: "{{.ANSIBLE_HOME}}"    
+  py:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-pyprojects.yaml"
+    dir: "{{.DASBOOTSTRAP_HOME}}"
 
 tasks:
   default:
@@ -36,8 +43,3 @@ tasks:
         command -v gum >/dev/null|| brew install gum
         selected=$(task --list-all | grep -v "task: Available" | grep -v "default:" | gum filter --indicator="->" --placeholder="Type to search for a task...")
         echo "$selected" | awk '{sub(/:$/, "", $2); print $2}' | xargs task
-
-  tests:
-    desc: "Run all unit, integration, and functional tests we have on various projects"
-    cmds:
-      - task: dbs:destroy:lxc

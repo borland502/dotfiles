@@ -1,0 +1,49 @@
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+version: "3"
+
+vars:
+  ##range .taskfile -##
+  ##.##
+  ##end##
+  ##range .xdg -##
+  ##.##
+  ##end##
+  CHEZMOI_PREFIX: "{{.RUN_PREFIX}} chezmoi"
+  VENV_PYTHON: "{{.RUN_PREFIX}} python"
+
+tasks:
+  default:
+    cmds:
+      - task -l
+
+  update:
+    desc: "Update chezmoi from github dotfiles"
+    cmds:
+      - "{{.CHEZMOI_PREFIX}} update"
+
+  build:
+    desc: "Build chezmoi and local dependencies"
+    cmds:
+      - "{{.CHEZMOI_PREFIX}} init"
+
+  apply:
+    desc: "Apply changes from downloaded dotfiles"
+    cmds:
+      - task: update
+      - task: build
+      - "{{.CHEZMOI_PREFIX}} diff"
+      - "{{.CHEZMOI_PREFIX}} apply"
+
+  predeploy:
+    desc: "Deploy chezmoi"
+    interactive: true
+    deps:
+      - task: apply
+    cmds:
+      - "{{.CHEZMOI_PREFIX}} git status"
+
+  lint:
+    desc: "Lint templates, shell, and python code"
+    cmds:
+      - shellcheck
+      - shfmt

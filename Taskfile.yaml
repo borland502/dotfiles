@@ -1,40 +1,6 @@
 version: "3"
 
-vars:
-  POETRY: "poetry"
-  PYTHON: "python"
-  RUN_PREFIX: "{{.POETRY}} run"
-  CHEZMOI_PREFIX: "{{.RUN_PREFIX}} chezmoi"
-  VENV_PYTHON: "{{.RUN_PREFIX}} python"
-
-tasks:
-  default:
-    cmds:
-      - task -l
-
-  update:
-    desc: "Update chezmoi from github dotfiles"
-    cmds:
-      - "{{.CHEZMOI_PREFIX}} update"
-
-  build:
-    desc: "Build chezmoi and local dependencies"
-    cmds:
-      - "{{.CHEZMOI_PREFIX}} init"
-
-  apply:
-    desc: "Apply changes from downloaded dotfiles"
-    deps:
-      - task: update
-    cmds:
-      - task: build
-      - "{{.CHEZMOI_PREFIX}} diff"
-      - "{{.CHEZMOI_PREFIX}} apply"
-
-  predeploy:
-    desc: "Deploy chezmoi"
-    interactive: true
-    deps:
-      - task: apply
-    cmds:
-      - "{{.CHEZMOI_PREFIX}} git status"
+includes:
+  chez:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-chezmoi.yaml"
+    dir: "{{.CHEZMOI_HOME}}"

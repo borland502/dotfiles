@@ -9,3 +9,11 @@
 {{range .directories -}}
 {{ . | replace ": " "=" }}
 {{ end -}}
+
+{{range .taskfile -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
+
+{{range .taskfile_ansible -}}
+{{ . | replace ": " "=" }}
+{{ end -}}

@@ -1,0 +1,130 @@
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+version: "3"
+
+vars:
+  ##range .taskfile -##
+  ##.##
+  ##end##
+  PYTEST_PREFIX: "{{.RUN_PREFIX}} {{.PYTEST}}"
+  PIP_PREFIX: "{{.RUN_PREFIX}} {{.PIP}}"
+  BUILD_ALL_PREFIX: "{{.POETRY}} build-project --with-top-namespace=dasbootstrap"
+  PYTHON_PROJ_SRC: "{{.DASBOOTSTRAP_HOME}}/pyprojects/**/*.py"
+  PYTHON_SHARED_SRC: "{{.DASBOOTSTRAP_HOME}}/shared/**/*.py"
+  PYTHON_ST_SRC: "{{.DASBOOTSTRAP_HOME}}/pages/*.py"
+  PYTHON_DASH_SRC: "{{.DASBOOTSTRAP_HOME}}/Home.py"
+  PYTHON_TMP_FOLDER: "{{.DASBOOTSTRAP_HOME}}/.prepare_dasbootstrap"
+  PYTHON_DIST: "{{.DASBOOTSTRAP_HOME}}/dist"
+  PYPROJECTS_VENV: "{{.DASBOOTSTRAP_HOME}}/.venv/**/dasbootstrap/*"
+  RUN_MODULE_PREFIX: "{{.VENV_PYTHON}} -m"
+  DASBOOTSTRAP_PREFIX: "{{.RUN_MODULE_PREFIX}} dasbootstrap"
+  TK_PREFIX: "{{.RUN_MODULE_PREFIX}} trapper_keeper"
+  RUN_UNITTEST_PREFIX: "{{.RUN_MODULE_PREFIX}} unittest discover ."
+
+tasks:
+  poetry:venv:
+    desc: Create virtual environment for project
+    cmds:
+      - "{{.RUN_MODULE_PREFIX}} venv .venv"
+    generates:
+      - .venv
+
+  poetry:shell:
+      desc: Switch to venv shell
+      cmds:
+          - "source $(pyenv virtualenv-init -) && pyenv activate .venv/bin/activate"
+
+  poetry:init:
+      desc: Initialize new poetry project
+      cmds:
+          - "{{.POETRY}} init --no-interaction"
+      vars:
+          PROJECT_DIR:
+              sh: get_confirmed_path
+
+  update:containers:
+      deps:
+          - task: poetry:shell
+          - task: install
+      desc: Update lxc and kvm containers
+      cmds:
+          - "{{.DASBOOTSTRAP_PREFIX}} update-containers --user ansible"
+  create:kvm:
+      desc: Create a KVM by hostname
+      cmds:
+          - |
+            {{.DASBOOTSTRAP_PREFIX}} create-kvm --app-name {{.KVM_HOST}}
+      vars:
+          KVM_HOST:
+              sh: |
+                  echo $(gum input --prompt="What is the hostname for the KVM template? " --placeholder "kvm")
+  create:lxc:
+      desc: Create an LXC by hostname
+      deps:
+          - task: install
+      cmds:
+          - |
+              {{.DASBOOTSTRAP_PREFIX}} create-lxc --app-name "{{ .LXC_HOST }}"
+      vars:
+          LXC_HOST:
+              sh: |
+                  echo "$(find ~/.ansible/inventory/host_vars -name "*.yaml" -exec sh -c 'basename {} .yaml' \; | gum choose)"
+  destroy:lxc:
+      desc: Destroy an LXC by hostname
+      cmds:
+          - |
+              {{.DASBOOTSTRAP_PREFIX}} destroy --app-name {{.LXC_HOST}}
+      vars:
+          LXC_HOST:
+              sh: |
+                  echo $(gum input --prompt="What is the hostname for the LXC template? " --placeholder "lxc")
+  dump-inventory:
+      desc: Dump the available ansible dynamic sources to a static hosts.yaml
+      cmds:
+          - |
+              {{.DASBOOTSTRAP_PREFIX}} dump-inventory
+  update-collections:
+      internal: true
+      desc: Update the available ansible collections using ~/.ansible/collections/requirements.yml
+      cmds:
+          - |
+              {{.DASBOOTSTRAP_PREFIX}} update-collections
+  update-roles:
+      internal: true
+      desc: Update the available ansible roles using ~/.ansible/roles/requirements.yml
+      cmds:
+          - |
+              {{.DASBOOTSTRAP_PREFIX}} update-roles
+  update-facts:
+      internal: true
+      desc: Update ansible facts
+      cmds:
+          - |
+              {{.DASBOOTSTRAP_PREFIX}} update-facts
+  galaxy:collection:install:
+    desc: "Install collections"
+    cmds:
+      - "{{.ANSIBLE_COLLECTIONS_INSTALL_PREFIX}}"
+    dir: "{{.ANSIBLE_WORKING_DIR}}"
+
+  galaxy:role:install:
+    desc: "Install roles"
+    cmds:
+      - "{{.ANSIBLE_ROLES_INSTALL_PREFIX}}"
+    dir: "{{.ANSIBLE_WORKING_DIR}}"
+
+  update:
+      desc: Update dasbootstrap and ansible dependencies
+      sources:
+          - "{{.HOME}}/.ansible/collections/requirements.yml"
+          - "{{.HOME}}/.ansible/roles/requirements.yml"
+      generates:
+          - "{{.HOME}}/.ansible/collections/**/*.yml"
+          - "{{.HOME}}/.ansible/collections/**/*.yaml"
+          - "{{.HOME}}/.ansible/roles/**/*.yaml"
+          - "{{.HOME}}/.anbile/roles/**/*.yml"
+      deps:
+          - task: update-roles
+          - task: update-facts
+          - task: update-collections
+      cmds:
+          - task: dump-inventory

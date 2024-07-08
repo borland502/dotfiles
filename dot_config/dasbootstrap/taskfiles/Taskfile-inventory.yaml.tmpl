@@ -1,0 +1,41 @@
+# chezmoi:template:left-delimiter="[[" right-delimiter=]]
+version: "3"
+
+vars:
+  [[range .taskfile -]]
+  [[.]]
+  [[end -]]
+  [[range .taskfile_ansible -]]
+  [[.]]
+  [[end]]
+tasks:
+  inv:clean:
+    desc: Purge inventory cache
+    cmds:
+      - "rm -rf {{.ANSIBLE_INV_CACHE}}"
+
+  adhoc:inv:
+    desc: Use an ad-hoc ansible command to manually prime additional inventory variables
+    cmds:
+      - "{{.ANSIBLE}} all -m ansible.builtin.setup {{.ANSIBLE_ALL_INV_SUFFIX}}"
+    ignore_error: true
+
+  inv:all:toml:
+    desc: Dump all available hosts in the Inventory to TOML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.TOML_SUFFIX}} {{.CLI_ARGS}}"
+
+  inv:nmap:toml:
+    desc: Use nmap to scan for all hosts with an open ssh port (22 or 2222) to TOML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_NMAP_INV_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.TOML_SUFFIX}}"
+
+  inv:proxmox:toml:
+    desc: Use proxmox dynamic inventory module to dump all hosts to TOML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_PROXMOX_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.TOML_SUFFIX}}"
+
+  inv:all:yaml:
+    desc: Dump all available hosts in the Inventory to YAML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.YAML_SUFFIX}}"

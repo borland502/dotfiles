@@ -11,8 +11,13 @@
 {{- $ansible_home := expandenv ("$HOME/.ansible") -}}
 {{- $dasbootstrap_home := joinPath $xdg_data_home "/automation/dasbootstrap" -}}
 {{- $homebrew_home := "/home/linuxbrew/.linuxbrew" -}}
+{{- $poetry := "poetry" -}}
 {{- $pipx_home := expandenv ("$HOME/.local/pipx") -}}
 {{- $python_ver := "3.12" }}
+{{- $ansible_home := joinPath $home "/.ansible" -}}
+{{- $ansible_inv_home := joinPath $ansible_home "/inventory" -}}
+{{- $ansible_grp_vars_home := joinPath $ansible_inv_home "/group_vars" -}}
+{{- $runPrefix := "poetry run" -}}
 
 keepassxc:
   database: "{{ $home }}/.local/share/trapper_keeper/secrets.kdbx"
@@ -44,18 +49,31 @@ data:
   name: "{{ $name }}"
   email: "{{ $email }}"
   directories: [
-    'AHOME: "{{ $ansible_home }}',
     'ANSIBLE_HOME: "{{$ansible_home}}',
   ]
   taskfile: [
+    'BREW: brew',
     'HOME: "{{ $home }}"',
-    'STREAMLIT: streamlit',
+    'POETRY: poetry',
+    'PYTHON: python',
     'PYTEST: pytest',
     'PIP: pip',
     'GH: gh',
-    'POETRY: poetry',
-    'PYTHON: python',
+    'STREAMLIT: streamlit',
+    'RUN_PREFIX: "poetry run"',
+    'TOML_SUFFIX: "--toml"',
+    'YAML_SUFFIX: "--yaml"',
+    'JSON_SUFFIX: "--json"',
     'PYTHON_VER: {{$python_ver}}',
+    'DASBOOTSTRAP_HOME: "{{$dasbootstrap_home}}"',
+    'ANSIBLE_HOME: "{{$home}}/.ansible"',
+    'CHEZMOI_HOME: "{{.chezmoi.sourceDir}}"',
+    'DBS_VENV_POETRY: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}}"',
+    'DBS_RUN_PREFIX: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run"',
+    'DBS_VENV_PYTHON: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/python"}}"',
+    'DBS_VENV_PACKAGES: "{{joinPath $dasbootstrap_home (nospace (cat "/.venv/lib/python" $python_ver)) "/site-packages/dasbootstrap"}}"',
+  ]
+  taskfile_ansible: [
     'ANSIBLE: ansible',
     'ANSIBLE_INVENTORY: ansible-inventory',
     'ANSIBLE_PLAYBOOK: ansible-playbook',
@@ -64,11 +82,26 @@ data:
     'ANSIBLE_DOCS: ansible-docs',
     'ANSIBLE_RUNNER: ansible-runner',
     'ANSIBLE_PULL: ansible-pull',
-    'DASBOOTSTRAP_HOME: "{{$dasbootstrap_home}}"',
-    'DBS_VENV_POETRY: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}}"',
-    'DBS_RUN_PREFIX: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run"',
-    'DBS_VENV_PYTHON: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/python"}}"',
-    'DBS_VENV_PACKAGES: "{{joinPath $dasbootstrap_home (nospace (cat "/.venv/lib/python" $python_ver)) "/site-packages/dasbootstrap"}}"',
+    'ANSIBLE_PB_PREFIX: "{{$runPrefix}} ansible-playbook"',
+    'ANSIBLE_INV_HOME: "{{$ansible_home}}/inventory"',
+    'ANSIBLE_INV_CACHE: "{{$xdg_cache_home}}/ansible"',
+    'ANSIBLE_ALL_INV_SUFFIX: "-i {{$ansible_inv_home}}/"',
+    'ANSIBLE_STATIC_INV_SUFFIX: "-i {{$ansible_inv_home}}/hosts.yaml"',
+    'ANSIBLE_NMAP_INV_SUFFIX: "-i {{$ansible_inv_home}}/nmap.yaml"',
+    'ANSIBLE_PROXMOX_INV_SUFFIX: "-i {{$ansible_inv_home}}/proxmox.yaml"',
+    'ANSIBLE_INV_EXPORT_SUFFIX: " --list"',
+    'ALL_KVM_VARS: "{{$ansible_grp_vars_home}}/proxmox_all_kvm.yaml"',
+    'ALL_VARS: "{{$ansible_grp_vars_home}}/all.yaml"',
+    'ALL_LXC_VARS: "{{$ansible_grp_vars_home}}/proxmox_all_lxc.yaml"',
+    'ANSIBLE_ALL_VARS_SUFFIX: "-e @{{$ansible_grp_vars_home}}/all.yaml"',
+    'ANSIBLE_LXC_VARS_SUFFIX: "-e @{{$ansible_grp_vars_home}}/proxmox_all_kvm.yaml"',
+    'ANSIBLE_KVM_VARS_SUFFIX: "-e @{{$ansible_grp_vars_home}}/proxmox_all_lxc.yaml"',
+    'ANSIBLE_VARS_SUFFIX: "-e @{{$ansible_grp_vars_home}}/all.yaml -e @{{$ansible_grp_vars_home}}/proxmox_all_kvm.yaml -e@{{$ansible_grp_vars_home}}/proxmox_all_lxc.yaml"',
+    'ANSIBLE_SVC_USER: ansible',
+    'ANSIBLE_SYS_USER: root',
+  ]
+  taskfile_dasbootstrap: [
+
   ]
   # redefine all xdg vars for easier access in go templates
   xdg_data_home: "{{$xdg_data_home}}"
