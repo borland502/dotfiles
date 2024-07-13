@@ -8,110 +8,131 @@ vars:
   ##.##
   ##end##
   PYTEST_PREFIX: pytest
+  POLY_BASES: "{{.DASBOOTSTRAP_HOME}}/bases/**/*"
+  POLY_COMPONENTS: "{{.DASBOOTSTRAP_HOME}}/components/**/*"
+  PYTHON_SRC:
+    sh: fd --glob "*.py" | tr '\n' ' '
+  SCRIPTS:
+    sh: fd --no-ignore --glob '*.sh' | tr '\n' ' '
 tasks:
-  venv:destroy:
-    desc: Destroy the venv associated with this taskfile
+
+  poly:cr:base:
+    desc: Initialize a polylith base in dasbootstrap
+    status:
+      - test -d {{.DASBOOTSTRAP_HOME}}/bases/dasbootstrap/{{.CLI_ARGS}}
     cmds:
-      - "{{.POETRY}} env remove --all"
-  poetry:dbsshell:
-    internal: true
-    silent: true
-    desc: Switch to Dasbootstrap shell
+      - "{{.POETRY}} poly create base --name={{.CLI_ARGS}}"
+
+  poly:cr:comp:
+    desc: Initialize a polylith component in dasbootstrap
+    status:
+      - test -d {{.DASBOOTSTRAP_HOME}}/components/dasbootstrap/{{.CLI_ARGS}}
     cmds:
-      - "{{.VENV_ACTIVATE}}"
+      - "{{.POETRY}} poly create component --name={{.CLI_ARGS}}"
+
+  poly:cr:proj:
+    desc: Initialize a polylith project in dasbootstrap
+    status:
+      - test -d {{.DASBOOTSTRAP_HOME}}/projects/{{.CLI_ARGS}}
+    cmds:
+      - "{{.POETRY}} poly create project --name={{.CLI_ARGS}}"
+
   poetry:init:
-    desc: Intitialize a new poetry project
+      desc: Initialize new poetry project
+      status:
+        - test -f pyproject.toml
+      cmds:
+          - "{{.POETRY}} init --no-interaction"
+
+  venv:init:
+    desc: Initialize the virtual environment for this project
+    status:
+      - test -d .venv
+    cmds:
+      - "{{.PYTHON}} -m venv .venv"
+
+  poetry:install:
+    desc: Install the poetry packages if missing
     deps:
-      - task: poetry:dbsshell
+      - task: venv:init
+      - task: poetry:init
     cmds:
-      - "{{.POETRY}} init --no-interaction"
-  build:clean:
-    desc: Clean build directories
-    cmds:
-      - "{{.PIP_PREFIX}} uninstall {{.PYTHON_DIST}}/*.whl -y"
-      - "rm -rf {{.PYTHON_DIST}}"
-  build:
-    deps:
-      - task: poetry:dbsshell
-    desc: Build all pyprojects and the shared libraries for them
-    cmds:
-      - "{{.BUILD_ALL_PREFIX}}"
+      - "{{.POETRY}} lock"
+      - "{{.POETRY}} install"
     sources:
-      - "{{.PYTHON_PROJ_SRC}}"
-      - "{{.PYTHON_SHARED_SRC}}"
-      - "{{.PYTHON_ST_SRC}}"
-      - "{{.PYTHON_DASH_SRC}}"
-      - "bin/*.py"
-  tests:integration:
-    internal: true
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages"
+      - ".venv/lib64/python{{.PYTHON_VER}}/site-packages"
+      - "pyproject.toml"
+
+  poetry:shell:
+    silent: true
+    desc: Activate the poetry shell for Dasbootstrap
     deps:
-      - task: lint
-    desc: Runs molecule integration and pytest unit/integration tests
+      - task: poetry:install
+    preconditions:
+      - sh: test "{{.DASBOOTSTRAP_HOME}}/.venv/bin/poetry" = "$(pwd)/.venv/bin/poetry"
+        msg: "Cannot activate poetry venv for dasbootstrap"
     cmds:
-      - "{{.PYTEST_PREFIX}}"
-  tests:functional:
-    internal: true
-    desc: Runs all actions against a live proxmox server
-    deps:
-      - task: install
-    cmds:
-      - task: tests:integration
-      - task: update
-      - "{{.DASBOOTSTRAP_PREFIX}} destroy --app-name lxc"
-      - "{{.DASBOOTSTRAP_PREFIX}} create-lxc --app-name lxc"
-      - "{{.DASBOOTSTRAP_PREFIX}} destroy --app-name lxc"
+      - poetry shell
+
   ruff:check:
+    silent: true
     desc: Run ruff
     cmds:
-      - "{{.RUN_PREFIX}} ruff check {{.PYTHON_PROJ_SRC}} {{.PYTHON_SHARED_SRC}} {{.PYTHON_ST_SRC}} {{.PYTHON_DASH_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --fix"
-  ruff:format:
-    desc: Format code
-    cmds:
-      - "{{.RUN_PREFIX}} ruff format {{.PYTHON_PROJ_SRC}} {{.PYTHON_SHARED_SRC}} {{.PYTHON_ST_SRC}} {{.PYTHON_DASH_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --line-length 128 --target-version py312"
+      - "{{.RUN_PREFIX}} ruff check {{.PYTHON_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --line-length 128 --target-version py312"
+
   bandit:
-    internal: true
     desc: Run bandit
     cmds:
-      - "{{.RUN_PREFIX}} bandit -c {{.DASBOOTSTRAP_HOME}}/pyproject.toml -r {{.PYTHON_PROJ_SRC}} {{.PYTHON_SHARED_SRC}} {{.PYTHON_ST_SRC}} {{.PYTHON_DASH_SRC}}"
+      - "{{.RUN_PREFIX}} bandit -c {{.DASBOOTSTRAP_HOME}}/pyproject.toml -r {{.PYTHON_SRC}}"
+
   lint:
-    desc: Runs linters for dasbootstrap project
-    deps:
-      - task: poetry:dbsshell
+    desc: Lint Dasbootstrap
     cmds:
-      - task: bandit
       - task: ruff:check
-      - task: ruff:format
-  install:
-    desc: Install all pyprojects to local .venv
-    sources:
-      - "{{.PYTHON_PROJ_SRC}}"
-      - "{{.PYTHON_SHARED_SOURCE}}"
-      - "{{.PYTHON_ST_SRC}}"
-      - "{{.PYTHON_DASH_SRC}}"
+      - task: bandit
+
+  ruff:format:
+    silent: true
+    desc: Format python code in Dasbootstrap
     cmds:
-      - task: build
-      - "{{.PIP_PREFIX}} install {{.PYTHON_DIST}}/*.whl --force-reinstall --no-deps"
-    dir: "{{.DASBOOTSTRAP_HOME}}"
+      - "{{.RUN_PREFIX}} ruff format {{.PYTHON_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --line-length 128 --target-version py312"
+    sources:
+      - "{{.PYTHON_SRC}}"
+
+  format:
+    desc: Format all code with formatters available
+    cmds:
+      ##/* - task: sh:format */##
+      - task: ruff:format
+
+  build:
+    desc: Build all projects
+    deps:
+      - task: poetry:shell
+    cmds:
+      - "{{.POETRY}} build-project"
+    sources:
+      - "{{.POLY_BASES}}"
+      - "{{.POLY_COMPONENTS}}"
+
   test:
     desc: Run unit tests
     deps:
       - task: build
       - task: ruff:format
+    sources:
+      - "{{.TEST_FILES}}"
+    vars:
+      TEST_FILES:
+        sh: fd --glob "test*.py" | tr '\n' ' '
     cmds:
-      - "{{.RUN_UNITTEST_PREFIX}}"
-  test:all:
-    desc: Run unit, integration, and functional tests
-    deps:
-      - task: build
-      - task: ruff:format
-    cmds:
-      - task: test
-      - task: tests:integration
-      - task: tests:functional
+      - "{{.RUN_PREFIX}} pytest"
+
   run_app:
     deps:
-      - install
-      - task: poetry:dbsshell
+      - task: build
+      - task: poetry:install
     desc: Run Automation Station
     cmds:
-      - "{{.ST_RUN_PREFIX}} Home.py"
+      - "{{.ST_RUN_PREFIX}} {{.DASBOOTSTRAP_HOME}}/bases/dasbootstrap/automation_station/Home.py"

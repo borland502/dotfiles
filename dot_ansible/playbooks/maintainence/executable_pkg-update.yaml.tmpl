@@ -1,0 +1,17 @@
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+- name: Update all packages and set proxies where available except proxmox nodes
+  hosts: proxmox_all_running
+  gather_facts: true
+  remote_user: root
+  tasks:
+      - name: Rerun bootstrap role
+        ansible.builtin.include_role:
+            name: technohouser.dasbootstrap.bootstrap
+- name: Update all packages and set proxies where available except proxmox nodes
+  hosts: proxmox_all_running
+  gather_facts: true
+  remote_user: ansible
+  tasks:
+      - name: Rerun ansible role
+        ansible.builtin.include_role:
+            name: technohouser.dasbootstrap.ansible

@@ -9,15 +9,19 @@
 {{- $xdg_bin_home := expandenv ("$HOME/.local/bin") -}}
 {{- $xdg_lib_home := expandenv ("$HOME/.local/lib") -}}
 {{- $ansible_home := expandenv ("$HOME/.ansible") -}}
+{{- $ansible_venv := joinPath $ansible_home ".venv" -}}
+{{- $chezmoi_venv := joinPath .chezmoi.homeDir ".venv" -}}
 {{- $dasbootstrap_home := joinPath $xdg_data_home "/automation/dasbootstrap" -}}
+{{- $dasbootstrap_venv := joinPath $dasbootstrap_home ".venv" -}}
 {{- $homebrew_home := "/home/linuxbrew/.linuxbrew" -}}
 {{- $poetry := "poetry" -}}
 {{- $pipx_home := expandenv ("$HOME/.local/pipx") -}}
-{{- $python_ver := "3.12" }}
+{{- $python_ver := "3.12" | toString -}}
 {{- $ansible_home := joinPath $home "/.ansible" -}}
 {{- $ansible_inv_home := joinPath $ansible_home "/inventory" -}}
 {{- $ansible_grp_vars_home := joinPath $ansible_inv_home "/group_vars" -}}
 {{- $runPrefix := "poetry run" -}}
+{{- $venvPrefix := "pyenv virtualenv" -}}
 
 keepassxc:
   database: "{{ $home }}/.local/share/trapper_keeper/secrets.kdbx"
@@ -39,9 +43,9 @@ scriptEnv:
   XDG_STATE_HOME: {{$xdg_state_home}}
   XDG_BIN_HOME: {{$xdg_bin_home}}
   XDG_LIB_HOME: {{$xdg_lib_home}}
+  PYENV_VERSION: system
   HOMEBREW_PREFIX: {{$homebrew_home}}
   PIPX_HOME: {{$pipx_home}}
-  PATH: '{{(nospace (cat (env "PATH") ":" $pipx_home))}}'
 
 # all variables avoid shell interpolation so that conversion to .env, export var, etc is easier
 data:
@@ -55,12 +59,12 @@ data:
     'BREW: brew',
     'HOME: "{{ $home }}"',
     'POETRY: poetry',
-    'PYTHON: python',
+    'PYTHON: python3',
     'PYTEST: pytest',
-    'PIP: pip',
+    'PIP: pip3',
     'GH: gh',
     'STREAMLIT: streamlit',
-    'RUN_PREFIX: "poetry run"',
+    'RUN_PREFIX: "{{ $runPrefix }}"',
     'TOML_SUFFIX: "--toml"',
     'YAML_SUFFIX: "--yaml"',
     'JSON_SUFFIX: "--json"',
@@ -68,10 +72,13 @@ data:
     'DASBOOTSTRAP_HOME: "{{$dasbootstrap_home}}"',
     'ANSIBLE_HOME: "{{$home}}/.ansible"',
     'CHEZMOI_HOME: "{{.chezmoi.sourceDir}}"',
+    'VENV_PREFIX: "{{$venvPrefix}}"',
     'DBS_VENV_POETRY: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}}"',
     'DBS_RUN_PREFIX: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run"',
     'DBS_VENV_PYTHON: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/python"}}"',
     'DBS_VENV_PACKAGES: "{{joinPath $dasbootstrap_home (nospace (cat "/.venv/lib/python" $python_ver)) "/site-packages/dasbootstrap"}}"',
+    'ST_RUN_PREFIX: "{{$runPrefix}} streamlit run"',
+    'RUN_UNITTEST_PREFIX: "{{$runPrefix}} python -m unittest"',
   ]
   taskfile_ansible: [
     'ANSIBLE: ansible',

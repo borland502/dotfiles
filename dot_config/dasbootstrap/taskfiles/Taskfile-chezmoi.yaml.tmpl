@@ -21,8 +21,8 @@ tasks:
     cmds:
       - "{{.CHEZMOI_PREFIX}} update"
 
-  build:
-    desc: "Build chezmoi and local dependencies"
+  init:
+    desc: "(re)Intialize chezmoi state from templates"
     cmds:
       - "{{.CHEZMOI_PREFIX}} init"
 
@@ -30,7 +30,7 @@ tasks:
     desc: "Apply changes from downloaded dotfiles"
     cmds:
       - task: update
-      - task: build
+      - task: init
       - "{{.CHEZMOI_PREFIX}} diff"
       - "{{.CHEZMOI_PREFIX}} apply"
 
@@ -41,9 +41,3 @@ tasks:
       - task: apply
     cmds:
       - "{{.CHEZMOI_PREFIX}} git status"
-
-  lint:
-    desc: "Lint templates, shell, and python code"
-    cmds:
-      - shellcheck
-      - shfmt

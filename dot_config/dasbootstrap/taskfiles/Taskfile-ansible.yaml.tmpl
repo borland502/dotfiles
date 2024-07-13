@@ -19,35 +19,44 @@ vars:
   DASBOOTSTRAP_PREFIX: "{{.RUN_MODULE_PREFIX}} dasbootstrap"
   TK_PREFIX: "{{.RUN_MODULE_PREFIX}} trapper_keeper"
   RUN_UNITTEST_PREFIX: "{{.RUN_MODULE_PREFIX}} unittest discover ."
+  VENV_PYTHON: ".venv/bin/{{.PYTHON}}"
 
 tasks:
-  poetry:venv:
-    desc: Create virtual environment for project
-    cmds:
-      - "{{.RUN_MODULE_PREFIX}} venv .venv"
-    generates:
-      - .venv
-
-  poetry:shell:
-      desc: Switch to venv shell
-      cmds:
-          - "source $(pyenv virtualenv-init -) && pyenv activate .venv/bin/activate"
 
   poetry:init:
       desc: Initialize new poetry project
+      status:
+        - test -f pyproject.toml
       cmds:
           - "{{.POETRY}} init --no-interaction"
-      vars:
-          PROJECT_DIR:
-              sh: get_confirmed_path
+
+  venv:init:
+    desc: Initialize the virtual environment for this project
+    status:
+      - test -d .venv
+    cmds:
+      - "{{.PYTHON}} -m venv .venv"
+
+  poetry:install:
+    desc: Install the poetry packages if missing
+    deps:
+      - task: venv:init
+      - task: poetry:init
+    cmds:
+      - "{{.POETRY}} lock"
+      - "{{.POETRY}} install --no-root"
+    sources:
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages"
+      - ".venv/lib64/python{{.PYTHON_VER}}/site-packages"
+      - "pyproject.toml"
 
   update:containers:
       deps:
           - task: poetry:shell
-          - task: install
       desc: Update lxc and kvm containers
       cmds:
           - "{{.DASBOOTSTRAP_PREFIX}} update-containers --user ansible"
+
   create:kvm:
       desc: Create a KVM by hostname
       cmds:
@@ -60,7 +69,7 @@ tasks:
   create:lxc:
       desc: Create an LXC by hostname
       deps:
-          - task: install
+        - task: poetry:install
       cmds:
           - |
               {{.DASBOOTSTRAP_PREFIX}} create-lxc --app-name "{{ .LXC_HOST }}"

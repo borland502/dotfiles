@@ -1,0 +1,5 @@
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+- name: Install the Caddy Server
+  hosts: caddy
+  roles:
+    - caddy_ansible.caddy_ansible
