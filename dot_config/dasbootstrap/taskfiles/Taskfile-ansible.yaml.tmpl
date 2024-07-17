@@ -5,63 +5,87 @@ vars:
   ##range .taskfile -##
   ##.##
   ##end##
-  PYTEST_PREFIX: "{{.RUN_PREFIX}} {{.PYTEST}}"
-  PIP_PREFIX: "{{.RUN_PREFIX}} {{.PIP}}"
-  BUILD_ALL_PREFIX: "{{.POETRY}} build-project --with-top-namespace=dasbootstrap"
-  PYTHON_PROJ_SRC: "{{.DASBOOTSTRAP_HOME}}/pyprojects/**/*.py"
-  PYTHON_SHARED_SRC: "{{.DASBOOTSTRAP_HOME}}/shared/**/*.py"
-  PYTHON_ST_SRC: "{{.DASBOOTSTRAP_HOME}}/pages/*.py"
-  PYTHON_DASH_SRC: "{{.DASBOOTSTRAP_HOME}}/Home.py"
-  PYTHON_TMP_FOLDER: "{{.DASBOOTSTRAP_HOME}}/.prepare_dasbootstrap"
-  PYTHON_DIST: "{{.DASBOOTSTRAP_HOME}}/dist"
-  PYPROJECTS_VENV: "{{.DASBOOTSTRAP_HOME}}/.venv/**/dasbootstrap/*"
-  RUN_MODULE_PREFIX: "{{.VENV_PYTHON}} -m"
-  DASBOOTSTRAP_PREFIX: "{{.RUN_MODULE_PREFIX}} dasbootstrap"
-  TK_PREFIX: "{{.RUN_MODULE_PREFIX}} trapper_keeper"
-  RUN_UNITTEST_PREFIX: "{{.RUN_MODULE_PREFIX}} unittest discover ."
-  VENV_PYTHON: ".venv/bin/{{.PYTHON}}"
+  PYTEST_PREFIX: pytest
+  POLY_BASES: "{{.DASBOOTSTRAP_HOME}}/bases/**/*"
+  POLY_COMPONENTS: "{{.DASBOOTSTRAP_HOME}}/components/**/*"
+  PYTHON_SRC:
+    sh: fd --glob "*.py" | tr '\n' ' '
+  SCRIPTS:
+    sh: fd --no-ignore --glob '*.sh' | tr '\n' ' '
+
+includes:
+  inv:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-inventory.yaml"
+    dir: "{{.DASBOOTSTRAP_HOME}}"
 
 tasks:
+
+  adhoc:
+    desc: Use an ad-hoc ansible command to execute a local script on a remote machine
+    cmds:
+      - "{{.ANSIBLE}} all -m ansible.builtin.setup {{.ANSIBLE_ALL_INV_SUFFIX}}"
+    ignore_error: true
+
+  build:
+    desc: Build all projects
+    deps:
+      - task: poetry:shell
+    cmds:
+      - "{{.DBS_VENV_POETRY}} build-project"
+    sources:
+      - "{{.POLY_BASES}}"
+      - "{{.POLY_COMPONENTS}}"
+    generates:
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages/dasbootstrap"
 
   poetry:init:
       desc: Initialize new poetry project
       status:
         - test -f pyproject.toml
       cmds:
-          - "{{.POETRY}} init --no-interaction"
+          - "{{.DBS_VENV_POETRY}} init --no-interaction"
 
-  venv:init:
+  poetry:shell:
     desc: Initialize the virtual environment for this project
     status:
       - test -d .venv
     cmds:
-      - "{{.PYTHON}} -m venv .venv"
+      - "poetry shell"
 
   poetry:install:
     desc: Install the poetry packages if missing
     deps:
-      - task: venv:init
       - task: poetry:init
+      - task: poetry:shell
     cmds:
-      - "{{.POETRY}} lock"
-      - "{{.POETRY}} install --no-root"
+      - "{{.DBS_VENV_POETRY}} lock"
+      - "{{.DBS_VENV_POETRY}} install --no-root"
     sources:
       - ".venv/lib/python{{.PYTHON_VER}}/site-packages"
       - ".venv/lib64/python{{.PYTHON_VER}}/site-packages"
       - "pyproject.toml"
+
+  venv:install:
+    desc: Install the dasbootstrap project to the venv
+    deps:
+      - task: build
+    cmds:
+      - "{{.DBS_VENV_PIP}} install dist/*.whl"
+    sources:
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages/dasbootstrap"
 
   update:containers:
       deps:
           - task: poetry:shell
       desc: Update lxc and kvm containers
       cmds:
-          - "{{.DASBOOTSTRAP_PREFIX}} update-containers --user ansible"
+          - "{{.DBS_VENV_PYTHON}} {{.DBS_MODULE_DASBOOTSTRAP}} update-containers --user ansible 2>/dev/null"
 
   create:kvm:
       desc: Create a KVM by hostname
       cmds:
           - |
-            {{.DASBOOTSTRAP_PREFIX}} create-kvm --app-name {{.KVM_HOST}}
+            "{{.DBS_VENV_PYTHON}} {{.DBS_MODULE_DASBOOTSTRAP}} create-kvm --app-name {{.KVM_HOST}} 2>/dev/null"
       vars:
           KVM_HOST:
               sh: |
@@ -69,57 +93,64 @@ tasks:
   create:lxc:
       desc: Create an LXC by hostname
       deps:
-        - task: poetry:install
+        - task: venv:install
       cmds:
           - |
-              {{.DASBOOTSTRAP_PREFIX}} create-lxc --app-name "{{ .LXC_HOST }}"
+              "{{.DBS_VENV_PYTHON}} {{.DBS_MODULE_DASBOOTSTRAP}} create-lxc --app-name "{{ .LXC_HOST }}" 2>/dev/null"
       vars:
           LXC_HOST:
               sh: |
                   echo "$(find ~/.ansible/inventory/host_vars -name "*.yaml" -exec sh -c 'basename {} .yaml' \; | gum choose)"
+
   destroy:lxc:
       desc: Destroy an LXC by hostname
       cmds:
           - |
-              {{.DASBOOTSTRAP_PREFIX}} destroy --app-name {{.LXC_HOST}}
+              {{.DBS_VENV_PYTHON}} {{.DBS_MODULE_DASBOOTSTRAP}} destroy --app-name -- {{.CLI_ARGS}} 2>/dev/null
       vars:
           LXC_HOST:
               sh: |
                   echo $(gum input --prompt="What is the hostname for the LXC template? " --placeholder "lxc")
-  dump-inventory:
-      desc: Dump the available ansible dynamic sources to a static hosts.yaml
-      cmds:
-          - |
-              {{.DASBOOTSTRAP_PREFIX}} dump-inventory
   update-collections:
       internal: true
+      deps:
+        - task: update-external-srcs
       desc: Update the available ansible collections using ~/.ansible/collections/requirements.yml
       cmds:
           - |
-              {{.DASBOOTSTRAP_PREFIX}} update-collections
+              {{.DBS_VENV_PYTHON}} {{.DBS_MODULE_DASBOOTSTRAP}} update-collections 2>/dev/null
   update-roles:
+      deps:
+        - task: update-external-srcs
       internal: true
       desc: Update the available ansible roles using ~/.ansible/roles/requirements.yml
       cmds:
-          - |
-              {{.DASBOOTSTRAP_PREFIX}} update-roles
-  update-facts:
-      internal: true
-      desc: Update ansible facts
-      cmds:
-          - |
-              {{.DASBOOTSTRAP_PREFIX}} update-facts
+         - |
+             {{.DBS_VENV_PYTHON}} {{.DBS_MODULE_DASBOOTSTRAP}} update-roles 2>/dev/null
+
+  update-external-srcs:
+    silent: true
+    internal: true
+    run: "once"
+    desc: Download and validate external sources ansible depends upon
+    cmds:
+      - "{{.ANSIBLE_PLAYBOOK}} {{.ANSIBLE_HOME}}/playbooks/maintainence/find_sqlite.yaml {{.ANSIBLE_ALL_INV_SUFFIX}}/ 2>/dev/null"
+      - "cp {{.DASBOOTSTRAP_HOME}}/ansible/collections/requirements.yml {{.ANSIBLE_HOME}}/collections/requirements.yml"
+      - "cp {{.DASBOOTSTRAP_HOME}}/ansible/roles/requirements.yml {{.ANSIBLE_HOME}}/roles/requirements.yml"
+    generates:
+      - "{{.ANSIBLE_HOME}}/secrets/db.sqlite"
+
   galaxy:collection:install:
     desc: "Install collections"
     cmds:
       - "{{.ANSIBLE_COLLECTIONS_INSTALL_PREFIX}}"
-    dir: "{{.ANSIBLE_WORKING_DIR}}"
+    dir: "{{.ANSIBLE_HOME}}"
 
   galaxy:role:install:
     desc: "Install roles"
     cmds:
       - "{{.ANSIBLE_ROLES_INSTALL_PREFIX}}"
-    dir: "{{.ANSIBLE_WORKING_DIR}}"
+    dir: "{{.ANSIBLE_HOME}}"
 
   update:
       desc: Update dasbootstrap and ansible dependencies
@@ -133,7 +164,8 @@ tasks:
           - "{{.HOME}}/.anbile/roles/**/*.yml"
       deps:
           - task: update-roles
-          - task: update-facts
+          - task: inv:setup
           - task: update-collections
+          - task: update-external-srcs
       cmds:
-          - task: dump-inventory
+          - task: inv:all:yaml:export

@@ -1,0 +1,26 @@
+[systemd_resolved]
+  cache = false
+  cache_from_localhost = false
+  dns = ["192.168.2.19", "192.168.2.20"]
+  dns_stub_listener = true
+  domains = [
+    "local.technohouser.com",
+    "npm.technohouser.com",
+    "hettenhouser.com",
+  ]
+  multicast_dns = "resolve"
+
+[systemd_timesyncd]
+  fallback_ntp = [
+    "time-a-g.nist.gov",
+    "time-b-g.nist.gov",
+    "time-c-g.nist.gov",
+    "time-d-g.nist.gov",
+    "time-e-g.nist.gov",
+  ]
+  ntp = [
+    "0.us.pool.ntp.org",
+    "1.us.pool.ntp.org",
+    "2.us.pool.ntp.org",
+    "3.us.pool.ntp.org",
+  ]

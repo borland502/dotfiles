@@ -16,6 +16,13 @@ vars:
     sh: fd --no-ignore --glob '*.sh' | tr '\n' ' '
 tasks:
 
+  precommit:
+    desc: Run all precommit tasks
+    status:
+      - test -f .pre-commit-config.yaml
+    cmds:
+      - pre-commit run --all-files
+
   poly:cr:base:
     desc: Initialize a polylith base in dasbootstrap
     status:
@@ -76,12 +83,15 @@ tasks:
       - poetry shell
 
   ruff:check:
+    internal: true
     silent: true
     desc: Run ruff
     cmds:
       - "{{.RUN_PREFIX}} ruff check {{.PYTHON_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --line-length 128 --target-version py312"
 
   bandit:
+    internal: true
+    silent: true
     desc: Run bandit
     cmds:
       - "{{.RUN_PREFIX}} bandit -c {{.DASBOOTSTRAP_HOME}}/pyproject.toml -r {{.PYTHON_SRC}}"
@@ -93,18 +103,13 @@ tasks:
       - task: bandit
 
   ruff:format:
+    internal: true
     silent: true
     desc: Format python code in Dasbootstrap
     cmds:
       - "{{.RUN_PREFIX}} ruff format {{.PYTHON_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --line-length 128 --target-version py312"
     sources:
       - "{{.PYTHON_SRC}}"
-
-  format:
-    desc: Format all code with formatters available
-    cmds:
-      ##/* - task: sh:format */##
-      - task: ruff:format
 
   build:
     desc: Build all projects

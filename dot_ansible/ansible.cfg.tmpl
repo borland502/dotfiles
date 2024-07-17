@@ -1,7 +1,7 @@
 [defaults]
 # (boolean) By default Ansible will issue a warning when received from a task action (module or action plugin)
 # These warnings can be silenced by adjusting this setting to False.
-;action_warnings=True
+action_warnings=False
 
 # (list) Accept list of cowsay templates that are 'safe' to use, set to empty list if you want to enable all installed templates.
 ;cowsay_enabled_stencils=bud-frogs, bunny, cheese, daemon, default, dragon, elephant-in-snake, elephant, eyes, hellokitty, kitty, luke-koala, meow, milk, moofasa, moose, ren, sheep, small, stegosaurus, stimpy, supermilker, three-eyes, turkey, turtle, tux, udder, vader-koala, vader, www
@@ -176,7 +176,7 @@ bin_ansible_callbacks=True
 # log_path=ansible/logs/ansible.log
 
 # (pathspec) Colon separated paths in which Ansible will search for Lookup Plugins.
-;lookup_plugins=~/.ansible/plugins/lookup:/usr/share/ansible/plugins/lookup
+lookup_plugins=~/.ansible/plugins/lookup:/usr/share/ansible/plugins/lookup
 
 # (string) Sets the macro for the 'ansible_managed' variable available for :ref:`ansible_collections.ansible.builtin.template_module` and :ref:`ansible_collections.ansible.windows.win_template_module`.  This is only relevant for those two modules.
 ;ansible_managed=Ansible managed
@@ -413,7 +413,7 @@ use_persistent_connections=True
 ;precedence=all_inventory, groups_inventory, all_plugins_inventory, all_plugins_play, groups_plugins_inventory, groups_plugins_play
 
 # (bool) Force 'verbose' option to use stderr instead of stdout
-;verbose_to_stderr=False
+verbose_to_stderr=True
 
 # (integer) For asynchronous tasks in Ansible (covered in Asynchronous Actions and Polling), this is how long, in seconds, to wait for the task spawned by Ansible to connect back to the named pipe used on Windows systems. The default is 5 seconds. This can be too low on slower systems, or systems under heavy load.
 # This is not the total time an async command can run for, but is a separate timeout to wait for an async command to start. The task will only start to be timed against its async_timeout once it has connected to the pipe, so the overall maximum duration the task can take will be extended by the amount specified here.
@@ -600,7 +600,7 @@ context=3
 
 # (boolean) If 'true', it is a fatal error when any given inventory source cannot be successfully parsed by any available inventory plugin; otherwise, this situation only attracts a warning.
 
-;any_unparsed_is_failed=False
+any_unparsed_is_failed=False
 
 # (bool) Toggle to turn on inventory caching.
 # This setting has been moved to the individual inventory plugins as a plugin option :ref:`inventory_plugins`.
@@ -647,7 +647,7 @@ export=False
 # (bool) If 'true' it is a fatal error if every single potential inventory source fails to parse, otherwise this situation will only attract a warning.
 
 ;unparsed_is_failed=False
-
+inventory_unparsed_warning=False
 
 [netconf_connection]
 # (string) This variable is used to enable bastion/jump host with netconf connection. If set to True the bastion/jump host ssh settings should be present in ~/.ssh/config file, alternatively it can be set to custom ssh configuration file path to read the bastion/jump host settings.

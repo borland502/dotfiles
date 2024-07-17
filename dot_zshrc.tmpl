@@ -163,29 +163,14 @@ zstyle :plugin:history-search-multi-word reset-prompt-protect 1
 " \
   zdharma-continuum/history-search-multi-word
 
-# git completions, only when .git present
 zinit wait lucid for \
-  OMZL::git.zsh \
-  OMZP::git \
-  OMZP::git-extras \
-  OMZP::tig \
-  OMZP::git-flow-avh \
-  OMZP::git-auto-fetch \
-  unixorn/git-extra-commands \
-  wfxr/forgit
+  has'eza' atinit'AUTOCD=1' \
+  has'fzf' atinit'AUTOCD=1' \
+    z-shell/zsh-eza \
+    leophys/zsh-plugin-fzf-finder
 
-zinit ice lucid wait='1'
-zinit wait lucid for \
-  light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
-  zsh-users/zsh-autosuggestions \
-  zsh-users/zsh-completions \
-  agkozak/zsh-z \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-  zdharma-continuum/fast-syntax-highlighting \
-  as"completion" is-snippet \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+# Utilize Turbo and initialize the completion system
+zi wait pack atload=+"zicompinit; zicdreplay" for system-completions
 
 zinit light-mode for \
   pick"zsh-lazyload.zsh" \

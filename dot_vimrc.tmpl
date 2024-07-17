@@ -27,18 +27,9 @@ set rtp+={{.xdg_data_home}}/vim/bundle/Vundle.vim
 call vundle#begin('{{.xdg_data_home}}/vim/bundle')
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'google/vim-maktaba'
-Plugin 'google/vim-codefmt'
-
-Plugin 'google/vim-glaive'
-
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
-Plugin 'phanviet/vim-monokai-pro'
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-surround'
+{{range .vim.plugins}}
+{{.}}
+{{end}}
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -86,3 +77,4 @@ augroup autoformat_settings
   autocmd FileType swift AutoFormatBuffer swift-format
   autocmd FileType vue AutoFormatBuffer prettier
 augroup END
+autocmd BufNewFile,BufRead /dev/shm/gopass* setlocal noswapfile nobackup noundofile viminfo=""
