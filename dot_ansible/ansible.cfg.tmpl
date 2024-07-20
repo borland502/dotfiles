@@ -634,7 +634,7 @@ any_unparsed_is_failed=False
 
 # (list) List of enabled inventory plugins, it also determines the order in which they are used.
 # enable_plugins = community.general.proxmox,community.general.nmap,microsoft.ad.ldap,ini,toml,yaml
-enable_plugins = sqlite,community.general.proxmox,community.general.nmap,microsoft.ad.ldap,ini,toml,yaml
+enable_plugins = community.zabbix.zabbix_inventory,sqlite,community.general.proxmox,community.general.nmap,microsoft.ad.ldap,ini,toml,yaml
 # (bool) Controls if ansible-inventory will accurately reflect Ansible's view into inventory or its optimized for exporting.
 export=False
 

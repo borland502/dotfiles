@@ -1,0 +1,30 @@
+# tools
+zinit wait lucid for \
+bindmap"^R -> ^H" atinit"
+zstyle :history-search-multi-word page-size 10
+zstyle :history-search-multi-word highlight-color fg=red,bold
+zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+" \
+  zdharma-continuum/history-search-multi-word
+
+zinit wait lucid for \
+  unixorn/prettyping \
+  MichaelAquilina/zsh-autoswitch-virtualenv \
+  " \
+    has'eza' atinit'AUTOCD=1' \
+      z-shell/zsh-eza \
+    has'fzf' atinit'AUTOCD=1' \
+      leophys/zsh-plugin-fzf-finder \
+      redxtech/zsh-fzf-utils \
+      aubreypwd/zsh-plugin-fd \
+      agkozak/zsh-z \
+      reegnz/jq-zsh-plugin \
+      b0o/zfzf
+
+zinit ice lucid wait='1' for \
+ has'fzf' changyuheng/fz \
+ laggardkernel/zsh-thefuck \
+ mattmc3/zman
+
+zi ice as'null' sbin'bin/*'
+zi light z-shell/zsh-diff-so-fancy

@@ -96,6 +96,11 @@ tasks:
     cmds:
       - "{{.RUN_PREFIX}} bandit -c {{.DASBOOTSTRAP_HOME}}/pyproject.toml -r {{.PYTHON_SRC}}"
 
+  format:
+    desc: Correct mistakes using the format functions of linters
+    cmds:
+      - task: ruff:format
+
   lint:
     desc: Lint Dasbootstrap
     cmds:

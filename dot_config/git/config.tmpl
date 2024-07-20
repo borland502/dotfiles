@@ -14,8 +14,12 @@
 {{ if or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin") -}}
 [credential "https://github.com"]
     helper =
-    helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+    helper = !$(brew --prefix)/bin/gh auth git-credential
 [credential "https://gist.github.com"]
     helper =
-    helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+    helper = !$(brew --prefix)/bin/gh auth git-credential
+{{- end }}
+[core]
+{{ if or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin") -}}
+  pager = "diff-so-fancy | less --tabs=4 -RF"
 {{- end }}
