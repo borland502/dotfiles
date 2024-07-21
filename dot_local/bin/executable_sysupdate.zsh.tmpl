@@ -1,0 +1,39 @@
+#!/usr/bin/env zsh
+
+{{ if findOneExecutable (list "apt") (list "/bin" "/usr/bin" "/usr/local/bin" ".local/bin") }}
+sudo apt update && sudo apt dist-upgrade -y
+{{- end}}
+
+{{ if findOneExecutable (list "brew")  (list ".local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+#Homebrew update and prune outdated cache
+brew update
+brew upgrade
+brew cleanup -s
+#now diagnostic
+brew doctor
+brew missing
+{{- end}}
+
+{{ if findOneExecutable (list "npm") (list ".local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+# NPM global update
+npm update -g
+npm install -g npm
+{{- end}}
+
+{{- if findOneExecutable (list "tldr") (list ".local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+# misc updates
+tldr --update
+{{- end}}
+
+{{ if findOneExecutable (list "pipx") (list ".local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+pipx upgrade-all
+{{- end}}
+
+{{- if eq .chezmoi.os "darwin" }}
+# OSX Specific updates
+softwareupdate --all --install --force
+{{- end}}
+
+if [[ $(command -v zinit) ]]; then
+  zinit update --all
+fi

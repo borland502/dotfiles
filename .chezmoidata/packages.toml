@@ -49,6 +49,7 @@
     "vim",
     "yamlfmt",
     "yq",
+    "z",
     "zinit",
     "zsh",
   ]

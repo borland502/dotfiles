@@ -1,0 +1,49 @@
+#!/usr/bin/env zsh
+
+source ~/.zshrc
+
+if [[ $(command -v task) ]]; then
+    task --version
+fi
+
+# linuxbrew is not installed on arm
+{{ if findOneExecutable (list "brew") (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH")) }}
+
+# Linuxbrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+{{if not (findOneExecutable .brew.packages (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH"))) }}
+{{range .brew.packages -}}
+"brew" "install" {{.}}
+{{end}}
+{{end -}}
+{{end}}
+
+{{ if findOneExecutable (list "pipx") (list ".local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+{{if not (findOneExecutable .pipx.packages (list (env "PATH"))) }}
+{{range .pipx.packages -}}
+"pipx" "install" {{.}}
+{{end}}
+{{end -}}
+{{end}}
+
+{{ if findOneExecutable (list "poetry") (list ".local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+{{if not (joinPath .chezmoi.homeDir "/.local/share/automation/dasbootstrap/.venv" | lstat )}}
+"cd" "$HOME/.local/share/automation/dasbootstrap"
+"poetry" "install"
+{{end}}
+
+"poetry" "env" "info"
+{{end}}
+
+{{ if findOneExecutable (list "task") (list ".local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+tg --list
+{{end}}
+
+source ~/.zshrc
+# cycle through chezmoi assumed deps
+# for program in "${BREW_LIST[@]}"; do
+#     if ! [[ $(command -v "${program}") ]]; then
+#         brew install "${program}"
+#     fi
+# done
