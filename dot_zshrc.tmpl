@@ -4,6 +4,12 @@
 # Sources
 # https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
 
+{{ if eq .chezmoi.os "darwin" }}
+source /usr/local/opt/zinit/zinit.zsh
+{{ else }}
+source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+{{ end }}
+
 source "${XDG_CONFIG_HOME}/zshrc/exports.zsh"
 
 # profiling
