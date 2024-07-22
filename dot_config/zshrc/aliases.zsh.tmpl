@@ -66,7 +66,6 @@ alias lt='eza --tree --level=2' # tree
 # grep aliases
 alias cgrep='rg -uuu -tc -n -w'
 
-# If python2 doesn't exist, then create an alias to python3 (if it exists)
-{{- if ne .chezmoi.os "darwin" }}
-alias python=python3
-{{ end }}
+if ! [[ $(command -v python) ]]; then
+  alias python=python3
+fi
