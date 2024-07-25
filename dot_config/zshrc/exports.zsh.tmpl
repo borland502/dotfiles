@@ -37,8 +37,10 @@ fi
 
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
 
+{{ if eq .chezmoi.os "linux" }}
 # Wayland
 export GDK_BACKEND=wayland
+{{end}}
 
 # Plugin config vars
 export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
@@ -78,6 +80,6 @@ export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms204
 export M2_HOME="$HOME/.m2"
 
 # XDG script path
-export PATH=$PATH:${XDG_BIN_HOME}
+export PATH=${XDG_BIN_HOME}:${PATH}
 
 export AUTOSWITCH_DEFAULTENV="dasbootstrap"

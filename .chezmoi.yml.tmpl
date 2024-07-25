@@ -69,6 +69,8 @@ data:
     'DBS_VENV_PIP: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/pip"}}"',
     'DBS_VENV_POETRY: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}}"',
     'DBS_VENV_PYTHON: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/python"}} -m "',
+    'DBS_POLY_BASES: "{{$dasbootstrap_home}}/bases/**/*"',
+    'DBS_POLY_COMPONENTS: "{{$dasbootstrap_home}}/components/**/*"',
     'GH: gh',
     'HOME: "{{ $home }}"',
     'JSON_SUFFIX: "--json"',

@@ -8,8 +8,6 @@ vars:
   ##.##
   ##end##
   PYTEST_PREFIX: pytest
-  POLY_BASES: "{{.DASBOOTSTRAP_HOME}}/bases/**/*"
-  POLY_COMPONENTS: "{{.DASBOOTSTRAP_HOME}}/components/**/*"
   PYTHON_SRC:
     sh: fd --glob "*.py" | tr '\n' ' '
   SCRIPTS:
@@ -101,6 +99,17 @@ tasks:
     cmds:
       - task: ruff:format
 
+  install:
+    desc: Install Dasbootstrap and modules
+    deps:
+      - build
+    cmd: pip install {{.DBS_WHEEL}}
+    generates:
+      - "{{.DBS_VENV_PACKAGES}}"
+    vars:
+      DBS_WHEEL:
+        sh: find . -name "dasbootstrap*.whl"
+
   lint:
     desc: Lint Dasbootstrap
     cmds:
@@ -123,8 +132,8 @@ tasks:
     cmds:
       - "{{.POETRY}} build-project"
     sources:
-      - "{{.POLY_BASES}}"
-      - "{{.POLY_COMPONENTS}}"
+      - "{{.DBS_POLY_BASES}}"
+      - "{{.DBS_POLY_COMPONENTS}}"
 
   test:
     desc: Run unit tests
@@ -135,9 +144,9 @@ tasks:
       - "{{.TEST_FILES}}"
     vars:
       TEST_FILES:
-        sh: fd --glob "test*.py" | tr '\n' ' '
+        sh: fd --absolute-path --glob "test*.py" | tr '\n' ' '
     cmds:
-      - "{{.RUN_PREFIX}} pytest"
+      - "{{.RUN_PREFIX}} python -m unittest {{.TEST_FILES}}"
 
   run_app:
     deps:
