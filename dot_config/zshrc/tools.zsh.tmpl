@@ -4,21 +4,13 @@ zi snippet "$(brew --prefix)/etc/profile.d/z.sh"
 zinit wait lucid for \
   zdharma-continuum/history-search-multi-word \
   unixorn/prettyping \
-  MichaelAquilina/zsh-autoswitch-virtualenv \
     has'eza' atinit'AUTOCD=1' \
       z-shell/zsh-eza \
     has'fzf' atinit'AUTOCD=1' \
       leophys/zsh-plugin-fzf-finder \
       redxtech/zsh-fzf-utils \
-      aubreypwd/zsh-plugin-fd \
       agkozak/zsh-z \
-      reegnz/jq-zsh-plugin \
-      b0o/zfzf
-
-zinit ice lucid wait='1' for \
- has'fzf' changyuheng/fz \
- laggardkernel/zsh-thefuck \
- mattmc3/zman
+      reegnz/jq-zsh-plugin 
 
 zi ice as'null' sbin'bin/*'
 zi light z-shell/zsh-diff-so-fancy

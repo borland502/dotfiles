@@ -140,11 +140,9 @@ tasks:
     deps:
       - task: build
       - task: ruff:format
-    sources:
-      - "{{.TEST_FILES}}"
     vars:
       TEST_FILES:
-        sh: fd --absolute-path --glob "test*.py" | tr '\n' ' '
+        sh: fd --glob "test*.py" | tr '\n' ' '
     cmds:
       - "{{.RUN_PREFIX}} python -m unittest {{.TEST_FILES}}"
 

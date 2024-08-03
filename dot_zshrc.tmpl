@@ -54,11 +54,10 @@ SAVEHIST=90000
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
-zinit light-mode for \
-zdharma-continuum/zinit-annex-as-monitor \
-zdharma-continuum/zinit-annex-bin-gem-node \
-zdharma-continuum/zinit-annex-patch-dl \
-zdharma-continuum/zinit-annex-rust
+zinit light-mode depth"1" for \
+      zdharma-continuum/zinit-annex-bin-gem-node \
+      zdharma-continuum/zinit-annex-patch-dl \
+      zdharma-continuum/zinit-annex-rust
 
 # generic plugins to load early and traditionally
 zi load atuinsh/atuin
@@ -77,14 +76,11 @@ OMZP::gpg-agent \
 OMZP::direnv \
 OMZP::eza
 
-# Utilize Turbo and initialize the completion system
-zi wait pack atload=+"zicompinit; zicdreplay" for system-completions
-
 source "${XDG_CONFIG_HOME}/zshrc/tools.zsh"
 
 source "${XDG_CONFIG_HOME}/zshrc/aliases.zsh"
 
-source "${XDG_CONFIG_HOME}/zshrc/completions.zsh"
+source "${XDG_CONFIG_HOME}/zshrc/completions.zsh" 
 
 {{ if (joinPath .chezmoi.homeDir "/.ssh/id_ed25519" | lstat) -}}
 eval "$(ssh-agent)"

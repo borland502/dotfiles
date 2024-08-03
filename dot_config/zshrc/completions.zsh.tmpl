@@ -15,32 +15,14 @@ zinit wait lucid for \
   unixorn/git-extra-commands \
   wfxr/forgit
 
-zinit ice lucid wait='1'
-zinit wait lucid for \
-  light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
-  zsh-users/zsh-autosuggestions \
-  zsh-users/zsh-completions \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-  zdharma-continuum/fast-syntax-highlighting \
-  as"completion" is-snippet \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
-  https://github.com/go-task/task/blob/main/completion/zsh/_task \
-  https://raw.githubusercontent.com/gopasspw/gopass/master/zsh.completion
 
-# if [[ $(command -v brew) && $(command -v zinit) ]];then
-#     for file_name in $(find $($(brew --prefix)/share/zsh/share/site-functions) -name "_*")
-#     do
-#         echo $file_name
-#         break
-#     done
-
-#     for file in $(find $($(brew --prefix)/share/zsh/share/functions) -name "_*")
-#     do
-#         echo $file_name
-#         break
-#     done
-# fi
-
-
+zinit wait lucid depth"1" for \
+      atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+      zdharma-continuum/fast-syntax-highlighting \
+      blockf \
+      zsh-users/zsh-completions \
+      atload"!_zsh_autosuggest_start" \
+      zsh-users/zsh-autosuggestions \
+      https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
+      https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
+      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker 
