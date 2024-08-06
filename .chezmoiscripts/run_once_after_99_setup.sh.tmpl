@@ -1,0 +1,68 @@
+#!/usr/bin/env zsh
+
+pyenv global
+eval "$(pyenv virtualenv-init -)"
+
+{{ if eq .chezmoi.os "darwin" }}
+source /usr/local/opt/zinit/zinit.zsh
+{{ else }}
+source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+{{ end }}
+
+source ~/.zshrc
+
+if [[ $(command -v task) ]]; then
+    task --version
+fi
+
+# linuxbrew is not installed on arm
+{{ if findOneExecutable (list "brew") (list "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin" (env "PATH")) }}
+
+# brew
+{{if eq .chezmoi.os "darwin" }}
+eval "$(/usr/local/bin/brew shellenv)"
+{{else}}
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{end}}
+
+{{if not (findOneExecutable .brew.packages (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH"))) }}
+{{range .brew.packages -}}
+"brew" "install" {{.}}
+{{end}}
+{{end -}}
+{{end}}
+
+{{ if findOneExecutable (list "pipx") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+{{if not (findOneExecutable .pipx.packages (list (env "PATH"))) }}
+{{range .pipx.packages -}}
+"pipx" "install" {{.}}
+{{end}}
+{{end -}}
+{{end}}
+
+{{ if findOneExecutable (list "poetry") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+{{if not (joinPath .chezmoi.homeDir "/.local/share/automation/dasbootstrap/.venv" | lstat )}}
+"cd" "$HOME/.local/share/automation/dasbootstrap"
+"poetry" "install"
+{{end}}
+
+"poetry" "env" "info"
+{{end}}
+
+{{if (findOneExecutable (list "npm") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin")) }}
+{{range .npm.packages -}}
+"npm" "install" {{.}}
+{{end}}
+{{range .npm.global_packages -}}
+"npm" "install" "-g" {{.}}
+{{end}}
+{{end -}}
+
+{{ if findOneExecutable (list "task") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
+tg --list
+{{end}}
+
+source ~/.zshrc
+
+# install vundle plugins
+vim +PluginInstall +qall

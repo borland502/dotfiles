@@ -1,0 +1,95 @@
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+- name: Install the Zoraxy Application
+  hosts: zoraxy
+  become: true
+  gather_facts: false
+  vars:
+    golang_version: '1.22.1'
+    golang_install_dir: "/opt/go/{{ golang_version }}"
+    golang_gopath: "{{ golang_install_dir }}"
+    zoraxy_dir: "{{ golang_gopath }}/src/github.com/tobychui/zoraxy"
+  pre_tasks:
+
+    - name: Create zoraxy group
+      ansible.builtin.group:
+        name: zoraxy
+        state: present
+        system: true
+
+    - name: Create zoraxy service user
+      ansible.builtin.user:
+        name: zoraxy
+        system: true
+        password_lock: true
+        state: present
+        group: zoraxy
+
+  roles:
+    - name: gantsign.golang
+      become: true
+    - name: cimon-io.systemd-service
+      become: true
+      vars:
+        systemd_service:
+          zoraxy:
+            enabled: "No"
+            exec_start: "/bin/bash -lc '/srv/zoraxy/zoraxy -port=:8000'"
+            working_directory: /srv/zoraxy
+            user: zoraxy
+            group: zoraxy
+            restart: "on-failure"
+            wanted_by: "multi-user.target"
+
+  post_tasks:
+
+    - name: Clone zoraxy
+      ansible.builtin.git:
+        repo: "https://github.com/tobychui/zoraxy"
+        dest: "{{ zoraxy_dir }}"
+        version: main
+        single_branch: true
+        update: true
+        force: true
+
+    - name: Ensure Go directory exists
+      ansible.builtin.file:
+        path: "{{ golang_gopath }}"
+        state: directory
+        mode: "0755"
+
+    - name: Set Zoraxy dir to dedicated account
+      ansible.builtin.file:
+        path: /srv/zoraxy
+        state: directory
+        owner: zoraxy
+        group: zoraxy
+        mode: "0755"
+
+    - name: Install zoraxy
+      environment:
+        GOROOT: "{{ golang_gopath }}"
+        GOPATH: "{{ zoraxy_dir }}"
+        PATH: "{{ golang_gopath }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      ansible.builtin.shell:
+        cmd: |
+          cd {{ zoraxy_dir }}/src
+          go mod tidy
+          go build
+          cp "{{ zoraxy_dir }}/src/zoraxy" /srv/zoraxy/zoraxy
+        creates: /srv/zoraxy/zoraxy
+
+    - name: Set zoraxy bin to dedicated account
+      ansible.builtin.file:
+        path: /srv/zoraxy/zoraxy
+        state: file
+        owner: zoraxy
+        group: zoraxy
+        mode: "0700"
+
+    - name: Start the systemd service for zoraxy
+      ansible.builtin.systemd_service:
+        name: zoraxy
+        state: started
+        enabled: true
+
+

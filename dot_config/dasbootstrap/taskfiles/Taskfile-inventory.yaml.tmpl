@@ -1,0 +1,73 @@
+# chezmoi:template:left-delimiter="[[" right-delimiter=]]
+version: "3"
+
+vars:
+  [[range .taskfile -]]
+  [[.]]
+  [[end -]]
+  [[range .taskfile_ansible -]]
+  [[.]]
+  [[end]]
+tasks:
+  clean:
+    desc: Purge inventory cache
+    cmds:
+      - "rm -rf {{.ANSIBLE_INV_CACHE}}"
+
+  setup:
+    silent: true
+    run: "once"
+    desc: Use an ad-hoc ansible command to manually prime additional inventory variables
+    cmds:
+      - "{{.ANSIBLE}} all -m ansible.builtin.setup {{.ANSIBLE_ALL_INV_SUFFIX}} 2>/dev/null"
+    ignore_error: true
+
+  all:toml:
+    silent: true
+    desc: Dump all available hosts in the Inventory to TOML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.TOML_SUFFIX}} 2>/dev/null"
+
+  nmap:toml:
+    silent: true
+    desc: Use nmap to scan for all hosts with an open ssh port (22 or 2222) to TOML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_NMAP_INV_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.TOML_SUFFIX}} 2>/dev/null"
+
+  proxmox:toml:
+    desc: Use proxmox dynamic inventory module to dump all hosts to TOML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_PROXMOX_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.TOML_SUFFIX}} 2>/dev/null"
+
+  all:yaml:export:
+    internal: true
+    silent: true
+    run: once
+    desc: Dump all available hosts to a static yaml file in ~/.ansible/inventory/hosts.yaml
+    cmds:
+      - >-
+        {{.ANSIBLE_INVENTORY}} {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.YAML_SUFFIX}}
+        > {{.ANSIBLE_HOME}}/inventory/hosts.yaml
+
+  all:yaml:
+    silent: true
+    desc: Dump all available hosts in the Inventory to YAML
+    cmds:
+      - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.YAML_SUFFIX}} 2>/dev/null"
+
+  list:hosts:
+    silent: true
+    desc: Lists hostnames for all sources both static and dynamic in ~/.ansible/inventory without host_vars
+    cmds:
+      - "{{.ANSIBLE}} all {{.ANSIBLE_ALL_INV_SUFFIX}} --list-hosts 2> /dev/null | uniq | sort"
+
+  list:groups:
+    desc: List group names for all sources without group_vars
+    silent: true
+    cmds:
+      - "echo '{{.GROUP_LIST}}'"
+    vars:
+      GROUP_LIST:
+        sh: >-
+          {{.ANSIBLE_INVENTORY}} all {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} --list 2> /dev/null |
+          jq -r '.[] | keys, .children | select(. != null) | .[]' | uniq | sort

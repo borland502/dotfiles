@@ -1,6 +1,7 @@
+# These are collections of pre-chezmoi scripts from dasbootstrap that cannot be added to chezmoi directly
 [".local/bin/has"]
   executable = true
-  refreshPeriod = "5m"
+  refreshPeriod = "1h"
   type = "file"
   url = "https://git.io/_has"
 ["./local/bin/sqlite_backup.sh"]
@@ -10,7 +11,3 @@
 [".local/bin/.hasrc"]
   type = "file"
   url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/bin/.hasrc"
-[".local/bin/sysupdate.zsh"]
-  executable = true
-  type = "file"
-  url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/bin/sysupdate.zsh"

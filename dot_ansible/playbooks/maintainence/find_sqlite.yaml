@@ -1,0 +1,9 @@
+- name: Update Proxmox nodes on the network
+  hosts: watchyourlan.local.technohouser.com
+  remote_user: ansible
+  tasks:
+    - name: Run find sqlite script on host
+      ansible.posix.synchronize:
+        mode: pull
+        src: "~/db.sqlite"
+        dest: "{{ lookup('env', 'HOME') }}/.ansible/secrets/"

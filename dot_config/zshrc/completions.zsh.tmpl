@@ -5,18 +5,23 @@ gopass completion zsh >"${XDG_CACHE_HOME}/completions/_gopass"
 zi snippet "${XDG_CACHE_HOME}/completions/_gopass"
 {{end}}
 
-# if [[ $(command -v brew) && $(command -v zinit) ]];then
-#     for file_name in $(find $($(brew --prefix)/share/zsh/share/site-functions) -name "_*")
-#     do
-#         echo $file_name
-#         break
-#     done
+zinit wait lucid for \
+  OMZL::git.zsh \
+  OMZP::git \
+  OMZP::git-extras \
+  OMZP::tig \
+  OMZP::git-flow-avh \
+  OMZP::git-auto-fetch \
+  unixorn/git-extra-commands \
+  wfxr/forgit
 
-#     for file in $(find $($(brew --prefix)/share/zsh/share/functions) -name "_*")
-#     do
-#         echo $file_name
-#         break
-#     done
-# fi
-
-
+zinit wait lucid depth"1" for \
+      atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+      zdharma-continuum/fast-syntax-highlighting \
+      blockf \
+      zsh-users/zsh-completions \
+      atload"!_zsh_autosuggest_start" \
+      zsh-users/zsh-autosuggestions \
+      https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
+      https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
+      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker 

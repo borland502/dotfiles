@@ -1,0 +1,89 @@
+# shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
+{{- if eq .chezmoi.os "darwin" }}
+
+export CLICOLOR="1"
+
+# Huber prereqs
+export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
+
+{{- else if eq .chezmoi.os "linux" }}
+
+# linuxbrew is not installed on arm
+{{if findOneExecutable (list "brew") (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH")) }}
+if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+    # Linuxbrew
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    # Zinit initialization -- assume prior install
+    source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+    elif [[ -d "$HOME/.linuxbrew" ]]; then
+    eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
+    source "${HOME}/.linuxbrew/opt/zinit/zinit.zsh"
+fi
+{{end}}
+
+{{- if eq .chezmoi.os "microsoft" }}
+# WSL
+# Hack: Solve slow FZF issue
+unsetopt PATH_DIRS
+{{ end }}
+
+{{ else }}
+
+{{ end }}
+
+if [[ -z "$XDG_DATA_HOME" ]]; then
+    source "${HOME}/.zshenv"
+fi
+
+export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
+
+{{ if eq .chezmoi.os "linux" }}
+# Wayland
+export GDK_BACKEND=wayland
+{{end}}
+
+# Plugin config vars
+export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
+
+if ! [[ -f "$XDG_DATA_HOME/z" ]]; then
+    mkdir -p "$XDG_DATA_HOME/z"
+    touch "$ZSHZ_DATA"
+fi
+
+export ZSHZ_KEEP_DIRS=(/opt/net /net)
+export ZSHZ_CASE=smart
+
+# Pyenv
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+{{if (findOneExecutable (list "npm") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin")) }}
+# Nodejs
+export NVM_AUTO_USE=true
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
+{{end}}
+
+## Homebrew
+export HOMEBREW_CASK_OPTS=--require-sha
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+
+#GPG config
+export GPG_TTY=$TTY
+
+export EDITOR='vim'
+export VISUAL='vim'
+export SYSTEMD_EDITOR='vim'
+
+export PYTHONIOENCODING=UTF-8
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
+##Maven
+export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=1C"
+export M2_HOME="$HOME/.m2"
+
+# XDG script path
+export PATH=${XDG_BIN_HOME}:${PATH}
+
+export AUTOSWITCH_DEFAULTENV="dasbootstrap"

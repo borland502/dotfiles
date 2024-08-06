@@ -6,6 +6,10 @@
 {{ . | replace ": " "=" }}
 {{ end -}}
 
-{{range .directories -}}
+{{range .taskfile -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
+
+{{range .taskfile_ansible -}}
 {{ . | replace ": " "=" }}
 {{ end -}}

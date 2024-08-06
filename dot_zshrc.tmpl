@@ -4,92 +4,16 @@
 # Sources
 # https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
 
+{{ if eq .chezmoi.os "darwin" }}
+source /usr/local/opt/zinit/zinit.zsh
+{{ else }}
+source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+{{ end }}
+
+source "${XDG_CONFIG_HOME}/zshrc/exports.zsh"
+
 # profiling
 # zmodload zsh/zprof
-
-
-# shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
-{{- if eq .chezmoi.os "darwin" }}
-
-export CLICOLOR="1"
-
-# Huber prereqs
-export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
-
-{{- else if eq .chezmoi.os "linux" }}
-
-# linuxbrew is not installed on arm
-{{if findOneExecutable (list "brew") (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH")) }}
-if [[ -d /home/linuxbrew/.linuxbrew ]]; then
-    # Linuxbrew
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    # Zinit initialization -- assume prior install
-    source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
-    elif [[ -d "$HOME/.linuxbrew" ]]; then
-    eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
-    source "${HOME}/.linuxbrew/opt/zinit/zinit.zsh"
-fi
-{{end}}
-
-{{- if eq .chezmoi.os "microsoft" }}
-# WSL
-# Hack: Solve slow FZF issue
-unsetopt PATH_DIRS
-{{ end }}
-
-{{ else }}
-
-{{ end }}
-
-if [[ -z "$XDG_DATA_HOME" ]]; then
-    source "${HOME}/.zshenv"
-fi
-
-export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
-
-# Wayland
-export GDK_BACKEND=wayland
-
-# Plugin config vars
-export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
-
-if ! [[ -f "$XDG_DATA_HOME/z" ]]; then
-    mkdir -p "$XDG_DATA_HOME/z"
-    touch "$ZSHZ_DATA"
-fi
-
-export ZSHZ_KEEP_DIRS=(/opt/net /net)
-export ZSHZ_CASE=smart
-
-# Pyenv
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-
-# Nodejs
-export NVM_AUTO_USE=true
-
-## Homebrew
-export HOMEBREW_CASK_OPTS=--require-sha
-export HOMEBREW_NO_INSECURE_REDIRECT=1
-
-#GPG config
-export GPG_TTY=$TTY
-
-export EDITOR='vim'
-export VISUAL='vim'
-export SYSTEMD_EDITOR='vim'
-
-export PYTHONIOENCODING=UTF-8
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
-
-##Maven
-export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=1C"
-export M2_HOME="$HOME/.m2"
-
-# XDG script path
-export PATH=$PATH:${XDG_BIN_HOME}
-
 # do not beep at me dammit
 setopt NO_BEEP
 # no c-s/c-q output freezing
@@ -130,11 +54,10 @@ SAVEHIST=90000
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
-zinit light-mode for \
-zdharma-continuum/zinit-annex-as-monitor \
-zdharma-continuum/zinit-annex-bin-gem-node \
-zdharma-continuum/zinit-annex-patch-dl \
-zdharma-continuum/zinit-annex-rust
+zinit light-mode depth"1" for \
+      zdharma-continuum/zinit-annex-bin-gem-node \
+      zdharma-continuum/zinit-annex-patch-dl \
+      zdharma-continuum/zinit-annex-rust
 
 # generic plugins to load early and traditionally
 zi load atuinsh/atuin
@@ -150,50 +73,14 @@ OMZP::brew \
 OMZP::cp \
 OMZP::gcloud \
 OMZP::gpg-agent \
-OMZP::ansible \
-OMZP::direnv
+OMZP::direnv \
+OMZP::eza
 
-# tools
-zinit wait lucid for \
-bindmap"^R -> ^H" atinit"
-zstyle :history-search-multi-word page-size 10
-zstyle :history-search-multi-word highlight-color fg=red,bold
-zstyle :plugin:history-search-multi-word reset-prompt-protect 1
-" \
-  zdharma-continuum/history-search-multi-word
-
-# git completions, only when .git present
-zinit wait lucid for \
-  OMZL::git.zsh \
-  OMZP::git \
-  OMZP::git-extras \
-  OMZP::tig \
-  OMZP::git-flow-avh \
-  OMZP::git-auto-fetch \
-  unixorn/git-extra-commands \
-  wfxr/forgit
-
-zinit ice lucid wait='1'
-zinit wait lucid for \
-  light-mode atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" atload"_zsh_autosuggest_start" \
-  zsh-users/zsh-autosuggestions \
-  zsh-users/zsh-completions \
-  agkozak/zsh-z \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-  zdharma-continuum/fast-syntax-highlighting \
-  as"completion" is-snippet \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
-  https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task
-
-zinit light-mode for \
-  pick"zsh-lazyload.zsh" \
-  qoomon/zsh-lazyload
+source "${XDG_CONFIG_HOME}/zshrc/tools.zsh"
 
 source "${XDG_CONFIG_HOME}/zshrc/aliases.zsh"
 
-source "${XDG_CONFIG_HOME}/zshrc/completions.zsh"
+source "${XDG_CONFIG_HOME}/zshrc/completions.zsh" 
 
 {{ if (joinPath .chezmoi.homeDir "/.ssh/id_ed25519" | lstat) -}}
 eval "$(ssh-agent)"
@@ -207,9 +94,4 @@ eval "$(starship init zsh)"
 {{if (joinPath .chezmoi.homeDir "$HOME/.sdkman/bin/sdkman-init.sh" | lstat) -}}
 export SDKMAN_DIR="$HOME/.sdkman"
 zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
-{{end}}
-
-{{if (joinPath .xdg_data_home "/automation/dasbootstrap/.venv/bin/activate" | lstat )}}
-# default to dasbootstrap venv
-source ${XDG_DATA_HOME}/automation/dasbootstrap/.venv/bin/activate
 {{end}}

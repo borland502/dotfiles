@@ -29,7 +29,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{ end }}
 
 # Setup pyenv ( python version manager )
-if [ -x "$HOMEBREW_PREFIX/bin/pyenv" ]; then
+{{/* if [ -x "$HOMEBREW_PREFIX/bin/pyenv" ]; then
     set -o allexport
     {{range .pyenv.vars -}}
     {{.}}
@@ -38,7 +38,7 @@ if [ -x "$HOMEBREW_PREFIX/bin/pyenv" ]; then
     {{.}}
     {{end -}}
     set +o allexport
-fi
+fi */}}
 
 source "${XDG_LIB_HOME}/functions.sh"
 

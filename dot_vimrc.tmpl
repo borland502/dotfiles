@@ -1,0 +1,80 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+if empty("$XDG_STATE_HOME")
+    let $XDG_STATE_HOME="$HOME/.cache"
+endif
+
+if empty("$XDG_CONFIG_HOME")
+    let $XDG_CONFIG_HOME="$HOME/.config"
+endif
+
+if empty("$XDG_DATA_HOME")
+    let $XDG_DATA_HOME="$HOME/.local/share"
+endif
+
+set directory=$XDG_STATE_HOME/vim/swap,~/,/tmp
+set backupdir=$XDG_STATE_HOME/vim/backup,~/,/tmp
+set undodir=$XDG_STATE_HOME/vim/undo,~/,/tmp
+set viminfo+=n$XDG_STATE_HOME/vim/viminfo
+set runtimepath+=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
+let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
+
+" set the runtime path to include Vundle and initialize
+set rtp+={{.xdg_data_home}}/vim/bundle/Vundle.vim
+"call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+call vundle#begin('{{.xdg_data_home}}/vim/bundle')
+
+" let Vundle manage Vundle, required
+{{range .vim.plugins}}
+{{.}}
+{{end}}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" the glaive#Install() should go after the "call vundle#end()"
+call glaive#Install()
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" vim +PluginInstall +qall
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+set termguicolors
+colorscheme monokai_pro
+
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript,typescript,arduino AutoFormatBuffer clang-format
+  autocmd FileType clojure AutoFormatBuffer cljstyle
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType elixir,eelixir,heex AutoFormatBuffer mixformat
+  autocmd FileType fish AutoFormatBuffer fish_indent
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType haskell AutoFormatBuffer ormolu
+  " Alternative for web languages: prettier
+  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType jsonnet AutoFormatBuffer jsonnetfmt
+  autocmd FileType julia AutoFormatBuffer JuliaFormatter
+  autocmd FileType kotlin AutoFormatBuffer ktfmt
+  autocmd FileType lua AutoFormatBuffer luaformatterfiveone
+  autocmd FileType markdown AutoFormatBuffer prettier
+  autocmd FileType ocaml AutoFormatBuffer ocamlformat
+  autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+  autocmd FileType ruby AutoFormatBuffer rubocop
+  autocmd FileType rust AutoFormatBuffer rustfmt
+  autocmd FileType swift AutoFormatBuffer swift-format
+  autocmd FileType vue AutoFormatBuffer prettier
+augroup END
+autocmd BufNewFile,BufRead /dev/shm/gopass* setlocal noswapfile nobackup noundofile viminfo=""

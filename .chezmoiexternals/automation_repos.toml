@@ -1,26 +1,20 @@
 [".local/share/automation/dasbootstrap"]
+  refreshPeriod = "1h"
   type = "git-repo"
   url = "https://github.com/borland502/dasbootstrap.git"
-  refreshPeriod = "5m"
 [".local/share/automation/install.doctor"]
+  refreshPeriod = "1h"
   type = "git-repo"
-  url = "https://github.com/borland502/install.doctor.git"
-  refreshPeriod = "24h"
+  url = "https://github.com/megabyte-labs/install.doctor"
 [".local/share/automation/chezmoi"]
+  refreshPeriod = "168h"
   type = "git-repo"
   url = "https://github.com/borland502/dotfiles.git"
-  refreshPeriod = "5m"
 [".local/share/automation/acme.sh"]
+  refreshPeriod = "1h"
   type = "git-repo"
   url = "https://github.com/borland502/acme.sh.git"
-  refreshPeriod = "24h"
 [".local/share/automation/Proxmox"]
+  refreshPeriod = "1h"
   type = "git-repo"
   url = "https://github.com/borland502/Proxmox"
-  refreshPeriod = "24h"
-[".ansible/ansible_collections/technohouser"]
-  type = "git-repo"
-  url = "https://github.com/borland502/technohouser"
-  refreshPeriond = "5m"
-
-

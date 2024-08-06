@@ -1,0 +1,23 @@
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+- name: Install the Caddy Server
+  hosts: caddy.local.technohouser.com
+  roles:
+    - name: caddy_ansible.caddy_ansible
+      vars:
+        caddy_conf_filename: Caddyfile
+        caddy_config: "{{ lookup('template', '##.ansible_home##/templates/caddy/Caddyfile.j2') }}"
+        caddy_packages:
+          - dns.providers.cloudflare
+          - http.authentication.providers.authorizer
+          - http.handlers.authenticator
+          - security
+          - dns.providers.duckdns
+          - http.handlers.trace
+          - http.ip_sources.cloudflare
+          - dns.providers.route53
+        caddy_systemd_capabilities_enabled: false
+        caddy_systemd_capabilities: "CAP_NET_BIND_SERVICE"
+        caddy_environment_variables:
+          CF_ZONE_TOKEN: "{{ lookup('gopass', 'cloudflare/technohouser/cf_zone_token') }}"
+          GOOGLE_EAB_VALUES: "{{ lookup('gopass', 'google/eab/values') }}"
+          ZERO_EAB_VALUES: "{{ lookup('gopass', 'zero/eab/values') }}"

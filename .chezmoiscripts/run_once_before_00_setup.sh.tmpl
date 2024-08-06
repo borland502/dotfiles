@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+{{ if eq .chezmoi.os "darwin" }}
+source /usr/local/opt/zinit/zinit.zsh
+{{ else }}
+source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+{{ end }}
+
+if ! [[ $(command -v gum) ]]; then
+  brew install gum
+fi
+
+if ! [[ -f ${XDG_CONFIG_HOME}/age/key.txt ]]; then
+  mkdir -p ${XDG_CONFIG_HOME}/age
+  chmod -R 0760 "${XDG_CONFIG_HOME}/age"
+
+  echo $(gum input --prompt="What is the private key for age? " --placeholder "AGE-SECRET-KEY-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX") > "${XDG_CONFIG_HOME}/age/key.txt"
+
+  chmod 600 "${XDG_CONFIG_HOME}/age/key.txt"
+fi
