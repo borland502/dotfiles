@@ -9,4 +9,5 @@
     "Plugin 'tpope/vim-fugitive'",
     "Plugin 'tpope/vim-sensible'",
     "Plugin 'tpope/vim-surround'",
+    "Plugin 'isobit/vim-caddyfile'",
   ]

@@ -56,8 +56,12 @@ export ZSHZ_CASE=smart
 # Pyenv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
+{{if (findOneExecutable (list "npm") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin")) }}
 # Nodejs
 export NVM_AUTO_USE=true
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
+{{end}}
 
 ## Homebrew
 export HOMEBREW_CASK_OPTS=--require-sha

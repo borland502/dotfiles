@@ -49,6 +49,15 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 "poetry" "env" "info"
 {{end}}
 
+{{if (findOneExecutable (list "npm") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin")) }}
+{{range .npm.packages -}}
+"npm" "install" {{.}}
+{{end}}
+{{range .npm.global_packages -}}
+"npm" "install" "-g" {{.}}
+{{end}}
+{{end -}}
+
 {{ if findOneExecutable (list "task") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
 tg --list
 {{end}}

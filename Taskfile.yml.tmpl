@@ -34,6 +34,12 @@ includes:
   py:
     taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-pyprojects.yaml"
     dir: "{{.DASBOOTSTRAP_HOME}}"
+# machine-specific configuration
+[[- if eq .chezmoi.hostname "caddy" ]]
+  caddy:
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/host_specific/caddy.yaml"
+[[- end ]]
+
 
 tasks:
   default:

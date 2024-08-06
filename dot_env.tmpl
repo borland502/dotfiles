@@ -6,10 +6,6 @@
 {{ . | replace ": " "=" }}
 {{ end -}}
 
-{{range .directories -}}
-{{ . | replace ": " "=" }}
-{{ end -}}
-
 {{range .taskfile -}}
 {{ . | replace ": " "=" }}
 {{ end -}}
