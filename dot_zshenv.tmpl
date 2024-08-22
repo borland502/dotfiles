@@ -5,9 +5,6 @@ set -o allexport
 {{range .xdg -}}
 {{ . | replace ": " "=" }}
 {{end -}}
-{{range .xdg -}}
-{{ . | replace ": " "=" }}
-{{end -}}
 set +o allexport
 
 {{- if ne .chezmoi.os "darwin" }}

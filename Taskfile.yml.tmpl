@@ -18,21 +18,21 @@ vars:
 
 includes:
   ans:
-    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-ansible.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-ansible.yaml"
     dir: "{{.DASBOOTSTRAP_HOME}}"
   bin:
-    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-scripts.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-scripts.yaml"
     dir: "{{.XDG_BIN_HOME}}"
   chez:
-    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-chezmoi.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-chezmoi.yaml"
     dir: "{{.CHEZMOI_HOME}}"
   install:
-    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-install.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-install.yaml"
   inv:
-    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-inventory.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-inventory.yaml"
     dir: "{{.DASBOOTSTRAP_HOME}}"
   py:
-    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-pyprojects.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-pyprojects.yaml"
     dir: "{{.DASBOOTSTRAP_HOME}}"
 # machine-specific configuration
 [[- if eq .chezmoi.hostname "caddy" ]]

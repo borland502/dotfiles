@@ -1,0 +1,72 @@
+#!/usr/bin/env zsh
+# @author Jeremy Hettenhouser
+#
+# Sources
+# https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
+
+source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+
+# profiling
+# zmodload zsh/zprof
+# do not beep at me dammit
+setopt NO_BEEP
+# no c-s/c-q output freezing
+setopt NO_FLOW_CONTROL
+# allow expansion in prompts
+setopt PROMPT_SUBST
+# display PID when suspending processes as well
+setopt LONG_LIST_JOBS
+# try to avoid the 'zsh: no matches found...'
+setopt NONOMATCH
+# report the status of backgrounds jobs immediately
+setopt NOTIFY
+# whenever a command completion is attempted, make sure the entire command path
+# is hashed first.
+setopt HASH_LIST_ALL
+# not just at the end
+setopt COMPLETE_IN_WORD
+# use zsh style word splitting
+setopt NO_SH_WORD_SPLIT
+# allow use of comments in interactive code
+setopt INTERACTIVE_COMMENTS
+# this is default, but set for share_history
+setopt APPEND_HISTORY
+# If the internal history needs to be trimmed to add the current command line, setting this option will cause the oldest history event that has a duplicate to be lost before losing a unique event from the list. You should be sure to set the value of HISTSIZE to a larger number than SAVEHIST in order to give you some room for the duplicated events, otherwise this option will behave just like HIST_IGNORE_ALL_DUPS once the history fills up with unique events.
+setopt HIST_EXPIRE_DUPS_FIRST
+# When searching for history entries in the line editor, do not display duplicates of a line previously found, even if the duplicates are not contiguous.
+setopt HIST_FIND_NO_DUPS
+# If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
+setopt HIST_IGNORE_ALL_DUPS
+
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+
+## History.
+HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
+HISTSIZE=90000
+SAVEHIST=90000
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode depth"1" for \
+zdharma-continuum/zinit-annex-bin-gem-node \
+zdharma-continuum/zinit-annex-patch-dl \
+zdharma-continuum/zinit-annex-rust
+
+# generic plugins to load early and traditionally
+zi load atuinsh/atuin
+zi light MichaelAquilina/zsh-you-should-use
+
+zinit wait lucid for \
+OMZP::npm \
+OMZP::vscode \
+OMZP::brew \
+OMZP::cp \
+OMZP::gpg-agent \
+OMZP::direnv \
+OMZP::eza
+
+eval "$(ssh-agent)"
+ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
+
+eval "$(starship init zsh)"

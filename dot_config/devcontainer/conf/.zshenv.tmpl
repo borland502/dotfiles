@@ -1,0 +1,29 @@
+##  Make the defaults explicit
+## Comments grabbed from arch wiki on the variables
+
+set -o allexport
+{{range .xdg -}}
+{{ . | replace ": " "=" }}
+{{end -}}
+set +o allexport
+
+# Set PATH, MANPATH, etc., for Homebrew linux.
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+set -o allexport
+{{range .pyenv.vars -}}
+{{.}}
+{{end}}
+{{range .pyenv.cmds -}}
+{{.}}
+{{end -}}
+set +o allexport
+
+set -o allexport
+{{range .nvm.vars -}}
+{{.}}
+{{end}}
+{{range .nvm.cmds -}}
+{{.}}
+{{end -}}
+set +o allexport
