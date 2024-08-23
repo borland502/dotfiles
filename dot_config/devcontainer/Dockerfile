@@ -6,11 +6,13 @@ LABEL authors="Jeremy Hettenhouser"
 RUN \
     --mount=type=cache,target=/var/cache/apt \
     DEBIAN_FRONTEND=noninteractive \
+    apt-get \
     -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
     dist-upgrade && apt-get -yqq install --no-install-recommends curl ca-certificates
 
 # add repo for gum (https://github.com/audacioustux/devcontainers/blob/main/src/common-utils-extras/install.sh)
-RUN mkdir -p /etc/apt/keyrings &&
+RUN \
+    mkdir -p /etc/apt/keyrings &&
     curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
     echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
 
@@ -75,6 +77,7 @@ USER vscode
 
 ENV HOME /home/vscode
 ENV TZ="America/New_York"
+ENV USER_ID=1000
 
 ENV XDG_BIN_HOME ${HOME}/.local/bin
 ENV XDG_LIB_HOME ${HOME}/.local/lib
@@ -84,13 +87,14 @@ ENV XDG_DATA_HOME ${HOME}/.local/share
 
 ENV PYENV_ROOT ${XDG_DATA_HOME}/.pyenv
 ENV NVM_DIR ${XDG_DATA_HOME}/.nvm
-ENV DEBIAN_FRONTEND noninteractive
 ENV NONINTERACTIVE 1
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
 
 WORKDIR ${XDG_DATA_HOME}
 # Pyenv - Python install
-RUN git clone https://github.com/pyenv/pyenv .pyenv && pyenv install "3.12" && pyenv global "3.12"
+RUN \
+    --mount=type=cache,target=/${XDG_DATA_HOME}/.pyenv,uid="${USER_ID}" \
+    git clone https://github.com/pyenv/pyenv .pyenv && pyenv install "3.12" && pyenv global "3.12"
 # NVM - Node install
 RUN mkdir -p ${NVM_DIR} &&
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash &&
@@ -102,18 +106,21 @@ RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
 
 # Run this as a distinct step so that brew populates autocomplete and other shell addons to zsh rather than bash
 RUN \
-    --mount=type=cache,target=/home/vscode/.cache/Homebrew \
+    --mount=type=cache,target=${XDG_CACHE_HOME}/Homebrew,uid="${USER_ID}" \
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
     brew install zsh &&
     sudo chsh --shell /home/linuxbrew/.linuxbrew/bin/zsh vscode && zsh
 
 RUN \
-    --mount=type=cache,target=/home/vscode/.cache/Homebrew \
+    --mount=type=cache,target=${XDG_CACHE_HOME}/Homebrew,uid="${USER_ID}" \
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
-    brew install eza btop curl wget bat chezmoi fd rg sd gum wget fzf go-task git tldr gh vim jq yq \
-        pygments starship z zinit
+    brew install eza btop curl wget bat fd rg sd gum wget fzf go-task git tldr gh vim jq yq \
+        pygments starship z zinit pipx
 
-RUN npm install -g typescript ts-node nodemon tsx nx playwright jest eslint tsc prettier-eslint
+RUN \. ${NVM_DIR}/nvm.sh && npm install -g typescript ts-node nodemon tsx nx zx playwright jest eslint tsc prettier-eslint
+
+RUN pipx ensurepath && pipx install --include-deps ansible poetry &&
+    pipx inject --include-apps ansible argcomplete
 
 # COPY --chown=vscode:vscode "./.zshrc" "/home/vscode/.zshrc"
 
