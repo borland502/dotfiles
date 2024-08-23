@@ -14,8 +14,8 @@ RUN \
 
 # add repo for gum (https://github.com/audacioustux/devcontainers/blob/main/src/common-utils-extras/install.sh)
 RUN \
-  mkdir -p /etc/apt/keyrings &&
-  curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
+  mkdir -p /etc/apt/keyrings && \
+  curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg && \
   echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
 
 RUN \
@@ -71,7 +71,7 @@ RUN \
   git
 
 # cleanup
-RUN apt-get clean &&
+RUN apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/vscode
@@ -98,8 +98,8 @@ RUN \
   --mount=type=cache,target=/${XDG_DATA_HOME}/pyenv,uid="${USER_ID}" \
   git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/pyenv && pyenv install "3.12" && pyenv global "3.12"
 # NVM - Node install
-RUN mkdir -p ${NVM_DIR} &&
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash &&
+RUN mkdir -p ${NVM_DIR} && \
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash && \
   \. ${NVM_DIR}/nvm.sh && nvm install --lts && nvm use --lts
 WORKDIR ${HOME}
 
@@ -109,19 +109,19 @@ RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
 # Run this as a distinct step so that brew populates autocomplete and other shell addons to zsh rather than bash
 RUN \
   --mount=type=cache,target=${XDG_CACHE_HOME}/Homebrew,uid="${USER_ID}" \
-  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
-  brew install zsh &&
+  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
+  brew install zsh && \
   sudo chsh --shell /home/linuxbrew/.linuxbrew/bin/zsh vscode && zsh
 
 RUN \
   --mount=type=cache,target=${XDG_CACHE_HOME}/Homebrew,uid="${USER_ID}" \
-  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
+  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
   brew install eza btop curl wget bat fd rg sd gum wget fzf go-task git tldr gh vim jq yq \
     pygments starship z zinit pipx
 
 RUN \. ${NVM_DIR}/nvm.sh && npm install -g typescript ts-node nodemon tsx nx zx playwright jest eslint tsc prettier-eslint
 
-RUN pipx ensurepath && pipx install --include-deps ansible poetry &&
+RUN pipx ensurepath && pipx install --include-deps ansible poetry && \
   pipx inject --include-apps ansible argcomplete
 
 # COPY --chown=vscode:vscode "./.zshrc" "/home/vscode/.zshrc"
