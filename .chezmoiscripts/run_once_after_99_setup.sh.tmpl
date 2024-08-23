@@ -32,10 +32,12 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{end -}}
 {{end}}
 
+pipx ensurepath
+
 {{ if findOneExecutable (list "pipx") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
 {{if not (findOneExecutable .pipx.packages (list (env "PATH"))) }}
 {{range .pipx.packages -}}
-"pipx" "install" {{.}}
+"pipx" "install" "--include-deps" {{.}}
 {{end}}
 {{end -}}
 {{end}}
@@ -60,6 +62,12 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 {{ if findOneExecutable (list "task") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
 tg --list
+{{ else }}
+    {{if eq .chezmoi.os "windows" }}
+        ${XDG_DATA_HOME}/automation/dasbootstrap/bin/install_task.ps1
+    {{else}}
+        ${XDG_DATA_HOME}/automation/dasbootstrap/bin/install_task.sh
+    {{end}}
 {{end}}
 
 source ~/.zshrc

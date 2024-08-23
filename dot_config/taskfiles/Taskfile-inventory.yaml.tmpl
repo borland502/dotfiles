@@ -55,6 +55,11 @@ tasks:
     cmds:
       - "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.YAML_SUFFIX}} 2>/dev/null"
 
+  all:json:
+    silent: true
+    desc: Dump all available hosts in the Inventory to JSON
+    cmd: "{{.ANSIBLE_INVENTORY}} {{.ANSIBLE_ALL_INV_SUFFIX}} {{.ANSIBLE_VARS_SUFFIX}} {{.ANSIBLE_INV_EXPORT_SUFFIX}} {{.JSON_SUFFIX}} 2>/dev/null"
+
   list:hosts:
     silent: true
     desc: Lists hostnames for all sources both static and dynamic in ~/.ansible/inventory without host_vars

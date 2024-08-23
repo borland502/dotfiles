@@ -3,6 +3,8 @@
 FROM mcr.microsoft.com/vscode/devcontainers/base:bookworm
 LABEL authors="Jeremy Hettenhouser"
 
+ARG PYTHON_VER="3.12"
+
 RUN \
   --mount=type=cache,target=/var/cache/apt \
   DEBIAN_FRONTEND=noninteractive \
@@ -79,16 +81,16 @@ ENV HOME /home/vscode
 ENV TZ="America/New_York"
 ENV USER_ID=1000
 
-ENV XDG_BIN_HOME ${HOME}/.local/bin
-ENV XDG_LIB_HOME ${HOME}/.local/lib
-ENV XDG_CONFIG_HOME ${HOME}/.config
-ENV XDG_CACHE_HOME ${HOME}/.cache
-ENV XDG_DATA_HOME ${HOME}/.local/share
+ENV XDG_BIN_HOME=${HOME}/.local/bin
+ENV XDG_LIB_HOME=${HOME}/.local/lib
+ENV XDG_CONFIG_HOME=${HOME}/.config
+ENV XDG_CACHE_HOME=${HOME}/.cache
+ENV XDG_DATA_HOME=${HOME}/.local/share
 
-ENV PYENV_ROOT ${XDG_DATA_HOME}/.pyenv
-ENV NVM_DIR ${XDG_DATA_HOME}/.nvm
-ENV NONINTERACTIVE 1
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
+ENV PYENV_ROOT=${XDG_DATA_HOME}/.pyenv
+ENV NVM_DIR=${XDG_DATA_HOME}/.nvm
+ENV NONINTERACTIVE=1
+ENV PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
 
 WORKDIR ${XDG_DATA_HOME}
 # Pyenv - Python install

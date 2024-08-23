@@ -2,5 +2,5 @@ version: "3"
 
 includes:
   chez:
-    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-chezmoi.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/chezmoi.yaml"
     dir: "{{.CHEZMOI_HOME}}"
