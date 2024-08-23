@@ -18,7 +18,7 @@ vars:
 
 includes:
   ans:
-    taskfile: "./Taskfile.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-ansible.yaml"
     dir: "{{.ANSIBLE_HOME}}"
   bin:
     taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/Taskfile-scripts.yaml"
