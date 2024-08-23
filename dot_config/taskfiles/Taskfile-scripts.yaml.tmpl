@@ -17,9 +17,3 @@ tasks:
       - zsh -c sysupdate.zsh
 
 
-  lint:
-    desc: Use linters on ansible related code.  Allows formatting when available
-    cmds:
-      - ansible-lint --profile=production --fix
-      - shellcheck
-      - shfmt

@@ -3,8 +3,9 @@
 FROM mcr.microsoft.com/vscode/devcontainers/base:bookworm
 LABEL authors="Jeremy Hettenhouser"
 
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get \
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    DEBIAN_FRONTEND=noninteractive \
     -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
     dist-upgrade && apt-get -yqq install --no-install-recommends curl ca-certificates
 
@@ -13,8 +14,10 @@ RUN mkdir -p /etc/apt/keyrings &&
     curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
     echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
 
-# TODO: Abstract out to script: https://github.com/devcontainers/features/blob/main/src/common-utils/main.sh
-RUN apt-get update && apt-get -yqq install --no-install-recommends \
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get -yqq install --no-install-recommends \
     socat \
     parallel \
     gum \
@@ -98,11 +101,15 @@ WORKDIR ${HOME}
 RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Run this as a distinct step so that brew populates autocomplete and other shell addons to zsh rather than bash
-RUN test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
+RUN \
+    --mount=type=cache,target=/home/vscode/.cache/Homebrew \
+    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
     brew install zsh &&
     sudo chsh --shell /home/linuxbrew/.linuxbrew/bin/zsh vscode && zsh
 
-RUN test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
+RUN \
+    --mount=type=cache,target=/home/vscode/.cache/Homebrew \
+    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" &&
     brew install eza btop curl wget bat chezmoi fd rg sd gum wget fzf go-task git tldr gh vim jq yq \
         pygments starship z zinit
 
