@@ -53,15 +53,23 @@ fi
 export ZSHZ_KEEP_DIRS=(/opt/net /net)
 export ZSHZ_CASE=smart
 
+
+# Nodejs
+export NVM_AUTO_USE=true
+export NVM_DIR="${XDG_DATA_HOME}/nvm"
+
+if ! [[ -d ${XDG_DATA_HOME}/nvm ]]; then
+    mkdir -p ${NVM_DIR} && \
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash && \
+    \. ${NVM_DIR}/nvm.sh && nvm install --lts && nvm use --lts
+fi
+
 # Pyenv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
-{{if (findOneExecutable (list "npm") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin")) }}
-# Nodejs
-export NVM_AUTO_USE=true
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
-{{end}}
+if ! [[ -d ${XDG_DATA_HOME}/pyenv ]]; then
+    git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/pyenv && pyenv install "3.12" && pyenv global "3.12"
+fi
 
 ## Homebrew
 export HOMEBREW_CASK_OPTS=--require-sha
