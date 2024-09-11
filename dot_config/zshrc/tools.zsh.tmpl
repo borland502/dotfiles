@@ -1,5 +1,5 @@
 # tools
-zi snippet "$(brew --prefix)/etc/profile.d/z.sh"
+mkdir -p "$(brew --prefix)/etc/profile.d/"
 
 zinit wait lucid for \
   zdharma-continuum/history-search-multi-word \
@@ -12,5 +12,6 @@ zinit wait lucid for \
       agkozak/zsh-z \
       reegnz/jq-zsh-plugin 
 
+zi snippet "$(brew --prefix)/etc/profile.d/z.sh"
 zi ice as'null' sbin'bin/*'
 zi light z-shell/zsh-diff-so-fancy

@@ -15,9 +15,6 @@ alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 {{- end }}
 
 # Aliases
-alias psnginx='ps -ef | grep nginx'
-alias startnginx='sudo nginx'
-alias stopnginx='sudo nginx -s stop'
 alias ping='prettyping --nolegend'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 
@@ -40,6 +37,9 @@ alias cdgh='cd $HOME/Development/github'
 
 alias gcala='gcalcli agenda'
 alias gcah="gcalcli --calendar $HASSIO_CAL_NAME quick $1"
+
+# kitty term ssh
+alias kssh='kitten ssh'
 
 # todo.txt
 alias tdl='td list'

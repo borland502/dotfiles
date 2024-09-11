@@ -8,6 +8,8 @@ vars:
   ##end##
   CADDYFILE: "/etc/caddy/Caddyfile"
   CADDY_EXE: "/usr/local/bin/caddy"
+  HOSTNAME:
+    sh: echo "${HOSTNAME}"
 
 tasks:
   prep:
