@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://taskfile.dev/schema.json
 # chezmoi:template:left-delimiter="##" right-delimiter=##
 version: "3"
 
@@ -16,10 +15,64 @@ vars:
 
 includes:
   inv:
-    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/inventory.yaml"
+    taskfile: "{{.XDG_CONFIG_HOME}}/dasbootstrap/taskfiles/Taskfile-inventory.yaml"
     dir: "{{.DASBOOTSTRAP_HOME}}"
 
 tasks:
+
+  adhoc:
+    desc: Use an ad-hoc ansible command to execute a local script on a remote machine
+    cmds:
+      - "{{.ANSIBLE}} all -m ansible.builtin.setup {{.ANSIBLE_ALL_INV_SUFFIX}}"
+    ignore_error: true
+
+  build:
+    desc: Build all projects
+    deps:
+      - task: poetry:shell
+    cmds:
+      - "{{.DBS_VENV_POETRY}} build-project"
+    sources:
+      - "{{.POLY_BASES}}"
+      - "{{.POLY_COMPONENTS}}"
+    generates:
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages/dasbootstrap"
+
+  poetry:init:
+      desc: Initialize new poetry project
+      status:
+        - test -f pyproject.toml
+      cmds:
+          - "{{.DBS_VENV_POETRY}} init --no-interaction"
+
+  poetry:shell:
+    desc: Initialize the virtual environment for this project
+    status:
+      - test -d .venv
+    cmds:
+      - "poetry shell"
+
+  poetry:install:
+    desc: Install the poetry packages if missing
+    deps:
+      - task: poetry:init
+      - task: poetry:shell
+    cmds:
+      - "{{.DBS_VENV_POETRY}} lock"
+      - "{{.DBS_VENV_POETRY}} install --no-root"
+    sources:
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages"
+      - ".venv/lib64/python{{.PYTHON_VER}}/site-packages"
+      - "pyproject.toml"
+
+  venv:install:
+    desc: Install the dasbootstrap project to the venv
+    deps:
+      - task: build
+    cmds:
+      - "{{.DBS_VENV_PIP}} install dist/*.whl"
+    sources:
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages/dasbootstrap"
 
   update:containers:
       deps:

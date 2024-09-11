@@ -15,9 +15,6 @@ alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 {{- end }}
 
 # Aliases
-alias psnginx='ps -ef | grep nginx'
-alias startnginx='sudo nginx'
-alias stopnginx='sudo nginx -s stop'
 alias ping='prettyping --nolegend'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 
@@ -29,13 +26,8 @@ alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias mvncv=mvn clean verify
 alias mvnt='mvn clean test -T1.5C'
 
-alias cdnginx='cd /usr/local/etc/nginx'
-alias cdliquibase='cd $HOME/Development/bitbucket/liquibase'
 alias cdc="chezmoi cd"
 alias cddev='cd $HOME/Development'
-alias cdbb='cd $HOME/Development/bitbucket'
-alias cda2web='cd $HOME/Development/bitbucket/assist2-web'
-alias cda2svc='cd $HOME/Development/bitbucket/assist2-services'
 alias cdgh='cd $HOME/Development/github'
 
 alias gcala='gcalcli agenda'

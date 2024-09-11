@@ -7,6 +7,8 @@
   gpgSign = true
 [gpg]
   format = ssh
+[pull]
+  rebase = true
 {{- if (eq .chezmoi.hostname "automation") }}
 [status]
   submodulesummary = true
