@@ -18,3 +18,5 @@ private_key.txt
 .config/gphotos-sync
 .config/gh/hosts.yml
 .venv
+
+dot_vim/bundle
