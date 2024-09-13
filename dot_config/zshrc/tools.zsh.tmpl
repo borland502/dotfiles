@@ -1,16 +1,11 @@
-# tools
+#!/usr/bin/env zsh
+
 zinit wait lucid for \
-bindmap"^R -> ^H" atinit"
-zstyle :history-search-multi-word page-size 10
-zstyle :history-search-multi-word highlight-color fg=red,bold
-zstyle :plugin:history-search-multi-word reset-prompt-protect 1
-" \
   zdharma-continuum/history-search-multi-word
 
 zinit wait lucid for \
   unixorn/prettyping \
   MichaelAquilina/zsh-autoswitch-virtualenv \
-  " \
     has'eza' atinit'AUTOCD=1' \
       z-shell/zsh-eza \
     has'fzf' atinit'AUTOCD=1' \
