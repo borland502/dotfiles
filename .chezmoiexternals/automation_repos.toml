@@ -18,3 +18,7 @@
   refreshPeriod = "1h"
   type = "git-repo"
   url = "https://github.com/borland502/Proxmox"
+[".local/share/automation/home-ops"]
+  refreshPeriod = "1h"
+  type = "git-repo"
+  url = "https://github.com/borland502/home-ops"

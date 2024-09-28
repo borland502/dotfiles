@@ -5,7 +5,7 @@
 # https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
 
 {{ if eq .chezmoi.os "darwin" }}
-source /usr/local/opt/zinit/zinit.zsh
+source /opt/homebrew/opt/zinit/zinit.zsh
 {{ else }}
 source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
 {{ end }}
@@ -86,6 +86,10 @@ source "${XDG_CONFIG_HOME}/zshrc/completions.zsh"
 eval "$(ssh-agent)"
 ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
 {{end -}}
+
+{{ if (joinPath .chezmoi.homeDir "/.local/share/nvm/nvm.sh" | lstat) -}}
+source  "${XDG_DATA_HOME}/nvm/nvm.sh"
+{{end}}
 
 {{if (and (ne .chezmoi.homeDir "") (lookPath "starship")) -}}
 eval "$(starship init zsh)"
