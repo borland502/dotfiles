@@ -2,8 +2,7 @@
 version: "3"
 
 vars:
-  CHEZMOI_PREFIX: "{{.RUN_PREFIX}} chezmoi"
-  VENV_PYTHON: "{{.RUN_PREFIX}} python"
+  CHEZMOI_PREFIX: "chezmoi"
 
 tasks:
   default:
@@ -22,19 +21,34 @@ tasks:
       - "{{.CHEZMOI_PREFIX}} init"
 
   apply:
+    interactive: true
     desc: "Apply changes from downloaded dotfiles"
     cmds:
       - task: sync
       - task: update
       - task: init
       - "{{.CHEZMOI_PREFIX}} diff"
+      - task: stash
       - "{{.CHEZMOI_PREFIX}} apply"
+      - task: stash:pop
+      - "source ~/.zshrc"
+
+  stash:
+    desc: "Stash chezmoi changes"
+    cmds:
+      - "git stash"
+
+  stash:pop:
+    desc: "Pop chezmoi stash"
+    cmds:
+      - "git stash pop"
 
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
     preconditions:
       - sh: "has unison"
     cmd: unison -batch -auto "${XDG_DATA_HOME}/automation/chezmoi" "${XDG_DATA_HOME}/chezmoi"
+    ignore_error: true
 
   predeploy:
     desc: "Deploy chezmoi"

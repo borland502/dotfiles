@@ -5,7 +5,7 @@
 # https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
 
 {{ if eq .chezmoi.os "darwin" }}
-source /opt/homebrew/opt/zinit/zinit.zsh
+source "/opt/homebrew/opt/zinit/zinit.zsh"
 {{ else }}
 source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
 {{ end }}
