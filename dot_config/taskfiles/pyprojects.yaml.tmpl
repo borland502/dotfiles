@@ -24,21 +24,21 @@ tasks:
   poly:cr:base:
     desc: Initialize a polylith base in dasbootstrap
     status:
-      - test -d {{.DASBOOTSTRAP_HOME}}/bases/dasbootstrap/{{.CLI_ARGS}}
+      - test -d ${DASBOOTSTRAP_HOME}/bases/dasbootstrap/{{.CLI_ARGS}}
     cmds:
       - "{{.POETRY}} poly create base --name={{.CLI_ARGS}}"
 
   poly:cr:comp:
     desc: Initialize a polylith component in dasbootstrap
     status:
-      - test -d {{.DASBOOTSTRAP_HOME}}/components/dasbootstrap/{{.CLI_ARGS}}
+      - test -d ${DASBOOTSTRAP_HOME}/components/dasbootstrap/{{.CLI_ARGS}}
     cmds:
       - "{{.POETRY}} poly create component --name={{.CLI_ARGS}}"
 
   poly:cr:proj:
     desc: Initialize a polylith project in dasbootstrap
     status:
-      - test -d {{.DASBOOTSTRAP_HOME}}/projects/{{.CLI_ARGS}}
+      - test -d ${DASBOOTSTRAP_HOME}/projects/{{.CLI_ARGS}}
     cmds:
       - "{{.POETRY}} poly create project --name={{.CLI_ARGS}}"
 
@@ -75,7 +75,7 @@ tasks:
     deps:
       - task: poetry:install
     preconditions:
-      - sh: test "{{.DASBOOTSTRAP_HOME}}/.venv/bin/poetry" = "$(pwd)/.venv/bin/poetry"
+      - sh: test "${DASBOOTSTRAP_HOME}/.venv/bin/poetry" = "$(pwd)/.venv/bin/poetry"
         msg: "Cannot activate poetry venv for dasbootstrap"
     cmds:
       - poetry shell
@@ -85,14 +85,14 @@ tasks:
     silent: true
     desc: Run ruff
     cmds:
-      - "{{.RUN_PREFIX}} ruff check {{.PYTHON_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --line-length 128 --target-version py312"
+      - "{{.RUN_PREFIX}} ruff check {{.PYTHON_SRC}} --config ${DASBOOTSTRAP_HOME}/pyproject.toml --line-length 128 --target-version py312"
 
   bandit:
     internal: true
     silent: true
     desc: Run bandit
     cmds:
-      - "{{.RUN_PREFIX}} bandit -c {{.DASBOOTSTRAP_HOME}}/pyproject.toml -r {{.PYTHON_SRC}}"
+      - "{{.RUN_PREFIX}} bandit -c ${DASBOOTSTRAP_HOME}/pyproject.toml -r {{.PYTHON_SRC}}"
 
   format:
     desc: Correct mistakes using the format functions of linters
@@ -121,7 +121,7 @@ tasks:
     silent: true
     desc: Format python code in Dasbootstrap
     cmds:
-      - "{{.RUN_PREFIX}} ruff format {{.PYTHON_SRC}} --config {{.DASBOOTSTRAP_HOME}}/pyproject.toml --line-length 128 --target-version py312"
+      - "{{.RUN_PREFIX}} ruff format {{.PYTHON_SRC}} --config ${DASBOOTSTRAP_HOME}/pyproject.toml --line-length 128 --target-version py312"
     sources:
       - "{{.PYTHON_SRC}}"
 
@@ -152,4 +152,4 @@ tasks:
       - task: poetry:install
     desc: Run Automation Station
     cmds:
-      - "{{.ST_RUN_PREFIX}} {{.DASBOOTSTRAP_HOME}}/bases/dasbootstrap/automation_station/Home.py"
+      - "{{.ST_RUN_PREFIX}} ${DASBOOTSTRAP_HOME}/bases/dasbootstrap/automation_station/Home.py"

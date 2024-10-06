@@ -1,14 +1,7 @@
-# chezmoi:template:left-delimiter="##" right-delimiter=##
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 
 vars:
-  ##range .taskfile -##
-  ##.##
-  ##end##
-  ##range .xdg -##
-  ##.##
-  ##end##
   CHEZMOI_PREFIX: "{{.RUN_PREFIX}} chezmoi"
   VENV_PYTHON: "{{.RUN_PREFIX}} python"
 
@@ -40,7 +33,7 @@ tasks:
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
     preconditions:
-        - has unison
+      - sh: "has unison"
     cmd: unison -batch -auto "${XDG_DATA_HOME}/automation/chezmoi" "${XDG_DATA_HOME}/chezmoi"
 
   predeploy:

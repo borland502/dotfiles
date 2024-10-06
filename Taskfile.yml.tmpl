@@ -1,25 +1,13 @@
 # chezmoi:template:left-delimiter="[[" right-delimiter=]]
 version: "3"
 
-vars:
-  [[range .xdg -]]
-  [[.]]
-  [[end -]]
-  [[range .taskfile -]]
-  [[.]]
-  [[end -]]
-  [[range .taskfile_ansible -]]
-  [[.]]
-  [[end -]]
-  RUN_PREFIX: "{{.POETRY}} run"
-  VENV_PYTHON: "{{.RUN_PREFIX}} python"
-  RUN_MODULE_PREFIX: "{{.RUN_PREFIX}} {{.PYTHON}} -m"
-  DASBOOTSTRAP_PREFIX: "{{.RUN_MODULE_PREFIX}} dasbootstrap"
+dotenv:
+  - "${HOME}/.env"
 
 includes:
   ans:
-    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/ansible.yaml"
-    dir: "{{.ANSIBLE_HOME}}"
+    taskfile: "${XDG_CONFIG_HOME}/taskfiles/ansible.yaml"
+    dir: "${DASBOOTSTRAP_HOME}"
   bin:
     taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/scripts.yaml"
     dir: "{{.XDG_BIN_HOME}}"
@@ -28,12 +16,7 @@ includes:
     dir: "{{.CHEZMOI_HOME}}"
   install:
     taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/install.yaml"
-  inv:
-    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/inventory.yaml"
-    dir: "{{.DASBOOTSTRAP_HOME}}"
-  py:
-    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/pyprojects.yaml"
-    dir: "{{.DASBOOTSTRAP_HOME}}"
+
 # machine-specific configuration
 [[- if eq .chezmoi.hostname "caddy" ]]
   caddy:

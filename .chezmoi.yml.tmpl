@@ -17,9 +17,9 @@
 {{- $ansible_venv := joinPath $ansible_home ".venv" -}}
 {{- $chezmoi_venv := joinPath .chezmoi.homeDir ".venv" -}}
 {{- $dasbootstrap_venv := joinPath $dasbootstrap_home ".venv" -}}
-{{- $poetry := "poetry" -}}
+{{- $poetry := expandenv ("$xdg_bin_home/poetry") -}}
 {{- $python_ver := (3.12 | toString) -}}
-{{- $runPrefix := "poetry run" -}}
+{{- $runPrefix := "$poetry run" -}}
 {{- $venvPrefix := "pyenv virtualenv" -}}
 {{- $rsyncPrefix := "rsync -avzPh" -}}
 
@@ -60,11 +60,9 @@ data:
     'DASBOOTSTRAP_HOME: "{{$dasbootstrap_home}}"',
     'DBS_MODULE_DASBOOTSTRAP: "dasbootstrap.dasbootstrap.core"',
     'DBS_MODULE_KIOSK: "dasbootstrap.chromekiosk"',
-    'DBS_RUN_PREFIX: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run"',
     'DBS_VENV_PACKAGES: "{{joinPath $dasbootstrap_home (nospace (cat "/.venv/lib/python" $python_ver)) "/site-packages/dasbootstrap"}}"',
-    'DBS_VENV_PIP: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/pip"}}"',
-    'DBS_VENV_POETRY: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}}"',
-    'DBS_VENV_PYTHON: "{{joinPath $dasbootstrap_home "/.venv/bin/poetry"}} run {{joinPath $dasbootstrap_home "/.venv/bin/python"}} -m "',
+    'DBS_VENV_PIP: "{{joinPath $dasbootstrap_home "/.venv/bin/pip"}}"',
+    'DBS_VENV_PYTHON: "run {{joinPath $dasbootstrap_home "/.venv/bin/python"}} -m "',
     'DBS_POLY_BASES: "{{$dasbootstrap_home}}/bases/**/*"',
     'DBS_POLY_COMPONENTS: "{{$dasbootstrap_home}}/components/**/*"',
     'GH: gh',
