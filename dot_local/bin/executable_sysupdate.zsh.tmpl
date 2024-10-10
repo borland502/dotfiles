@@ -6,29 +6,34 @@
   {{end}}
 {{- end}}
 
-{{ if findOneExecutable (list "brew")  (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
-#Homebrew update and prune outdated cache
-brew update
-brew upgrade
-brew cleanup -s
-#now diagnostic
-brew doctor
-brew missing
-{{- end}}
+if has brew; then
+  #Homebrew update and prune outdated cache
+  brew update
+  brew upgrade
+  brew cleanup -s
+  #now diagnostic
+  brew doctor
+  brew missing
+fi
 
-{{ if findOneExecutable (list "npm") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
-# NPM global update
-npm update -g
-npm install -g npm
-{{- end}}
+if has npm; then
+  # NPM global update
+  npm update -g
+  npm install -g npm
+fi
 
-{{- if findOneExecutable (list "tldr") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
-# misc updates
-tldr --update
-{{- end}}
+if has tldr; then
+  # misc updates
+  tldr --update
+fi
 
-{{ if findOneExecutable (list "pipx") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
-pipx upgrade-all
+if has pipx; then
+  pipx upgrade-all
+fi
+
+{{- if eq .chezmoi.os "darwin" }}
+  # OSX Specific updates
+  softwareupdate --all --install --force
 {{- end}}
 
 {{- if eq .chezmoi.os "darwin" }}

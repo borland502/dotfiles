@@ -4,7 +4,7 @@
 export CLICOLOR="1"
 
 # Huber prereqs
-export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
+export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig:$(brew --prefix)/opt/postgresql@16/lib/pkgconfig"
 
 {{- else if eq .chezmoi.os "linux" }}
 
@@ -93,5 +93,6 @@ export M2_HOME="$HOME/.m2"
 
 # XDG script path
 export PATH=${XDG_BIN_HOME}:${PATH}
+export PATH=$(brew --prefix)/opt/postgresql@16/bin:$PATH
 
 export AUTOSWITCH_DEFAULTENV="dasbootstrap"

@@ -14,41 +14,10 @@ local config = wezterm.config_builder()
 --  end
 --end
 
-local os_win = "Windows"
-local os_mac = "MacOS"
-local os_linux = "Linux"
+--local os_win = "Windows"
+--local os_mac = "MacOS"
+--local os_linux = "Linux"
 --local cur_os = get_current_os()
-
--- Resize the window (called by event handlers)
-function resize_window(window, pane, cols, rows)
-  local overrides = window:get_config_overrides() or {}
-  overrides.initial_cols = cols
-  overrides.initial_rows = rows
-  window:set_config_overrides(overrides)
-  window:perform_action(wezterm.action.ResetFontAndWindowSize, pane)
-end
-
---- params: window, pane
-local function refresh_config(window, _)
-  if cur_os == os_mac then
-    local overrides = window:get_config_overrides() or {}
-    local macDisplay = wezterm.gui.screens().active.name == "Built-in Retina Display"
-    local font_size = macDisplay and 16 or 15
-    if window:effective_config().font_size ~= font_size then
-      overrides.font_size = font_size
-      window:set_config_overrides(overrides)
-    end
-  end
-end
-
--- Resize window handlers
-wezterm.on("resize-small", function(window, pane)
-  resize_window(window, pane, 169, 49)
-end)
-
-wezterm.on("resize-large", function(window, pane)
-  resize_window(window, pane, 201, 49)
-end)
 
 wezterm.on("gui-startup", function()
 	local screen = wezterm.gui.screens().active

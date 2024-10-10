@@ -20,3 +20,5 @@ private_key.txt
 .venv
 
 dot_vim/bundle
+
+node_modules

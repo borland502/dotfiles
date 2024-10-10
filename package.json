@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/minimist": "^1.2.5"
+  }
+}
