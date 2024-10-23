@@ -3,11 +3,11 @@
 #  type = "git-repo"
 #  url = "https://github.com/borland502/dasbootstrap.git"
 [".local/share/vim/bundle/Vundle.vim"]
-  refreshPeriod = "72h"
-  type = "git-repo"
-  url = "https://github.com/VundleVim/Vundle.vim.git"
+refreshPeriod = "72h"
+type = "git-repo"
+url = "https://github.com/VundleVim/Vundle.vim.git"
 [".local/share/vim/bundle/python-mode"]
-  refreshPeriod = "72h"
-  type = "git-repo"
-  url = "https://github.com/python-mode/python-mode.git"
-  clone.args = ["--recurse-submodules"]
+refreshPeriod = "72h"
+type = "git-repo"
+url = "https://github.com/python-mode/python-mode.git"
+clone.args = ["--recurse-submodules"]

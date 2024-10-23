@@ -1,9 +1,9 @@
 [".local/share/fonts/FiraCode"]
-  type = "archive"
-  url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/FiraCode.zip"
-  checksum.sha256 = "1ad776cc5c186ff7ba1e2a05eea6701dfa57f7a1763e1db3422979301fb86209"
+type = "archive"
+url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/FiraCode.zip"
+checksum.sha256 = "1ad776cc5c186ff7ba1e2a05eea6701dfa57f7a1763e1db3422979301fb86209"
 
 [".local/share/fonts/FiraMono"]
-  type = "archive"
-  url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/FiraMono.zip"
-  checksum.sha256 = "16b2e467bda33c1b6692778ccc3cc3cd860137a5d9f9f90233f10fc6b9d17b58"
+type = "archive"
+url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/FiraMono.zip"
+checksum.sha256 = "16b2e467bda33c1b6692778ccc3cc3cd860137a5d9f9f90233f10fc6b9d17b58"

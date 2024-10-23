@@ -1,5 +1,5 @@
 [vim]
-  plugins = [
+plugins = [
     "Plugin 'VundleVim/Vundle.vim'",
     "Plugin 'alker0/chezmoi.vim'",
     "Plugin 'google/vim-codefmt'",
@@ -10,4 +10,4 @@
     "Plugin 'tpope/vim-sensible'",
     "Plugin 'tpope/vim-surround'",
     "Plugin 'isobit/vim-caddyfile'",
-  ]
+]

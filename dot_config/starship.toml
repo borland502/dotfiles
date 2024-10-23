@@ -55,7 +55,7 @@ style = "#fc618d"
 
 [python]
 pyenv_version_name = true
-python_binary = ["python3","python"]
+python_binary = ["python3", "python"]
 format = "[$symbol$version]($style) "
 style = "bold #7bd88f"
 

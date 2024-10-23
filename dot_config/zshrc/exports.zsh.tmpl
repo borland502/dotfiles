@@ -1,3 +1,6 @@
+# XDG script path
+export PATH=${XDG_BIN_HOME}:$(brew --prefix)/bin:${PATH}
+
 # shellcheck disable=SC1009,SC1050,SC1054,SC1072,SC1073
 {{- if eq .chezmoi.os "darwin" }}
 
@@ -5,6 +8,9 @@ export CLICOLOR="1"
 
 # Huber prereqs
 export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
+
+# Use all gnu utils rather than the elderly BSD ones
+export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
 
 {{- else if eq .chezmoi.os "linux" }}
 
@@ -31,6 +37,9 @@ unsetopt PATH_DIRS
 
 {{ end }}
 
+export LS_COLORS="$(dircolors --print-ls-colors ${XDG_CONFIG_HOME}/colors/dircolors.monokai)"
+export EZA_COLORS="$(dircolors --print-ls-colors ${XDG_CONFIG_HOME}/colors/dircolors.monokai)"
+
 if [[ -z "$XDG_DATA_HOME" ]]; then
     source "${HOME}/.zshenv"
 fi
@@ -53,10 +62,19 @@ fi
 export ZSHZ_KEEP_DIRS=(/opt/net /net)
 export ZSHZ_CASE=smart
 
+# kitty terminal
+export KITTY_CONFIG_DIRECTORY="${XDG_CONFIG_HOME}/kitty"
+export KITTY_CACHE_DIRECTORY="${XDG_CACHE_HOME}/kitty"
+export KITTY_RUNTIME_DIRECTORY="${XDG_RUNTIME_DIR}/kitty"
+export COLORTERM="truecolor"
+export ZDOTDIR="${HOME}"
+
+
 
 # Nodejs
 export NVM_AUTO_USE=true
 export NVM_DIR="${XDG_DATA_HOME}/nvm"
+export NODE_CONFIG_DIR="${XDG_CONFIG_HOME}/home-ops"
 
 if ! [[ -d ${XDG_DATA_HOME}/nvm ]]; then
     mkdir -p ${NVM_DIR} && \
@@ -79,7 +97,7 @@ export HOMEBREW_NO_INSECURE_REDIRECT=1
 export GPG_TTY=$TTY
 
 export EDITOR='vim'
-export VISUAL='vim'
+export VISUAL='vscode'
 export SYSTEMD_EDITOR='vim'
 
 export PYTHONIOENCODING=UTF-8
@@ -90,8 +108,3 @@ export LANGUAGE=en_US.UTF-8
 ##Maven
 export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED -Xms1024m -Xms2048m -Dmaven.artifact.threads=1C"
 export M2_HOME="$HOME/.m2"
-
-# XDG script path
-export PATH=${XDG_BIN_HOME}:${PATH}
-
-export AUTOSWITCH_DEFAULTENV="dasbootstrap"

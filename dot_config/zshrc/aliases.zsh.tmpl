@@ -1,8 +1,8 @@
-alias rsync-cp="rsync -avhi --progress"
-alias rsync-mv="rsync -avz --progress -h --remove-source-files"
-alias rsync-update="rsync -avzu --progress -h"
-alias rsync-sync="rsync -avzu --delete --progress -h"
-alias rsync-bak="rsync -avbuh --progress --backup-dir=../archive"
+alias rsync-cp="rsync -avzhi --compress-choice=zstd --info=progress2 --stats"
+alias rsync-mv="rsync -avz --compress-choice=zstd --progress -h --remove-source-files"
+alias rsync-update="rsync -avzu --compress-choice=zstd --progress -h"
+alias rsync-sync="rsync -avzu --compress-choice=zstd --delete --info=progress2 --no-whole-file -h"
+alias rsync-bak="rsync -avbuh --numeric-ids --compress-choice=zstd --progress --backup-dir=../archive"
 
 {{- if eq .chezmoi.os "darwin" }}
 # Open the current directory in a Finder window

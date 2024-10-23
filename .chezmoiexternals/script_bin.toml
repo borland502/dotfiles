@@ -1,13 +1,13 @@
 # These are collections of pre-chezmoi scripts from dasbootstrap that cannot be added to chezmoi directly
 [".local/bin/has"]
-  executable = true
-  refreshPeriod = "1h"
-  type = "file"
-  url = "https://git.io/_has"
+executable = true
+refreshPeriod = "1h"
+type = "file"
+url = "https://git.io/_has"
 ["./local/bin/sqlite_backup.sh"]
-  checksum.sha256 = "de631a26e143a476d9e73d824a42c887d85bf8441710ffb55ad7a020c7bb0a89"
-  type = "file"
-  url = "https://raw.githubusercontent.com/efrecon/sqlite-backup/master/backup.sh"
+checksum.sha256 = "de631a26e143a476d9e73d824a42c887d85bf8441710ffb55ad7a020c7bb0a89"
+type = "file"
+url = "https://raw.githubusercontent.com/efrecon/sqlite-backup/master/backup.sh"
 [".local/bin/.hasrc"]
-  type = "file"
-  url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/bin/.hasrc"
+type = "file"
+url = "https://raw.githubusercontent.com/borland502/dasbootstrap/main/bin/.hasrc"

@@ -10,36 +10,44 @@ tasks:
     cmds:
       - task -l
 
-  update:
-    desc: "Update chezmoi from github dotfiles"
-    cmds:
-      - "{{.CHEZMOI_PREFIX}} update"
-      - task: sync
-
+#  update:
+#    desc: "Update chezmoi from github dotfiles"
+#    interactive: true
+#    cmds:
+#      - "{{.CHEZMOI_PREFIX}} update"
+#      - task: sync
+#
   init:
     desc: "(re)Intialize chezmoi state from templates"
+    interactive: true
     cmds:
       - "{{.CHEZMOI_PREFIX}} init"
 
   apply:
-    desc: "Apply changes from downloaded dotfiles"
+    desc: "Apply changes"
+    interactive: true
     cmds:
-      - task: sync
-      - task: update
+#      - task: update
       - task: init
-      - "{{.CHEZMOI_PREFIX}} diff"
       - "{{.CHEZMOI_PREFIX}} apply"
 
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
-    preconditions:
-      - sh: "has unison"
-    cmd: unison -batch -auto "${XDG_DATA_HOME}/automation/chezmoi" "${XDG_DATA_HOME}/chezmoi"
-
-  predeploy:
-    desc: "Deploy chezmoi"
+    ignore_error: true
     interactive: true
-    deps:
-      - task: apply
+    preconditions:
+      - sh: "command -v unison"
+      - sh: "command -v rsync"
     cmds:
-      - "{{.CHEZMOI_PREFIX}} git status"
+      - unison -batch -auto "${XDG_DATA_HOME}/automation/chezmoi" "${XDG_DATA_HOME}/chezmoi" 2> /dev/null
+      - >-
+        rsync -avzu --compress-choice="zstd" --delete --info=progress2 --no-whole-file 
+        -h "${XDG_DATA_HOME}/automation/chezmoi/" "${XDG_DATA_HOME}/chezmoi"
+
+#  predeploy:
+#    desc: "Deploy chezmoi"
+#    interactive: true
+#    deps:
+#      - task: apply
+#    cmds:
+#      - "{{.CHEZMOI_PREFIX}} git status"
