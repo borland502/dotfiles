@@ -16,19 +16,16 @@
 #Disabled Requires -RunAsAdministrator
 
 # Create missing $IsWindows if running Powershell 5 or below.
-if (!(Test-Path variable:global:IsWindows))
-{
+if (!(Test-Path variable:global:IsWindows)) {
     Set-Variable "IsWindows" -Scope "Global" -Value ([System.Environment]::OSVersion.Platform -eq "Win32NT")
 }
 
-if ($null -eq (Get-Variable "ColorInfo" -ErrorAction "Ignore"))
-{
+if ($null -eq (Get-Variable "ColorInfo" -ErrorAction "Ignore")) {
     Set-Variable -Name ColorInfo -Value "DarkYellow"
 }
 Set-Variable -Name count -Value 0 -Scope Script
 
-function eos
-{
+function eos {
     <#
     .SYNOPSIS
         Terminates the script and counts the actions taken.
@@ -37,12 +34,10 @@ function eos
     .OUTPUTS
         None
     #>
-    if ($count)
-    {
+    if ($count) {
         Write-Host "Done! $count modification(s) applied." -ForegroundColor $ColorInfo
     }
-    else
-    {
+    else {
         Write-Host "No modifications performed." -ForegroundColor $ColorInfo
     }
     Remove-Variable -Name count -Scope Script
@@ -53,16 +48,14 @@ $hereString = "
     This script will perform the following non-destructive adjustements to the system (if required):
         - Install package provider NuGet
         - Install/update Powershell modules"
-if ($IsWindows)
-{
+if ($IsWindows) {
     $hereString += "
         - Enable LongPaths support for file paths above 260 characters"
 }
 $hereString += [Environment]::NewLine
 Write-Host $hereString -ForegroundColor $ColorInfo
 $confirmation = Read-Host -Prompt "Do you want to proceed? [y/N]"
-if ($confirmation -notMatch '^y(es)?$')
-{
+if ($confirmation -notMatch '^y(es)?$') {
     eos
     exit
 }
@@ -75,12 +68,10 @@ Remove-Variable -Name ("confirmation", "hereString")
 
 # Install NuGet package manager required to install WSL Interop and others.
 # See https://www.nuget.org/
-if (Get-PackageProvider -ListAvailable -Name NuGet -ErrorAction "Ignore")
-{
+if (Get-PackageProvider -ListAvailable -Name NuGet -ErrorAction "Ignore") {
     Write-Host "NuGet already installed, skipping." -ForegroundColor $ColorInfo
 }
-else
-{
+else {
     Write-Host "Installing NuGet..." -ForegroundColor $ColorInfo
     Install-PackageProvider -Name NuGet -Force
     $count++
@@ -162,25 +153,20 @@ $modules = @{
     };
 }
 ($modules.GetEnumerator() | Sort-Object -Property name) | ForEach-Object {
-    if (!$_.Value.Install -or (!$IsCoreCLR -and $_.Value.IsCoreCLR))
-    {
+    if (!$_.Value.Install -or (!$IsCoreCLR -and $_.Value.IsCoreCLR)) {
         continue
     }
 
-    if (Get-Module -ListAvailable -Name $_.Name -ErrorAction "Ignore")
-    {
-        Write-Host "Checking for $( $_.Name ) updates ($( $_.Value.Info ))..." -ForegroundColor $ColorInfo
+    if (Get-Module -ListAvailable -Name $_.Name -ErrorAction "Ignore") {
+        Write-Host "Checking for $($_.Name) updates ($($_.Value.Info))..." -ForegroundColor $ColorInfo
         Update-Module $_.Name
     }
-    else
-    {
-        Write-Host "Installing $( $_.Name ) ($( $_.Value.Info ))..." -ForegroundColor $ColorInfo
-        if ($AllowPrerelease -and $_.Value.Prerelease)
-        {
+    else {
+        Write-Host "Installing $($_.Name) ($($_.Value.Info))..." -ForegroundColor $ColorInfo
+        if ($AllowPrerelease -and $_.Value.Prerelease) {
             Install-Module $_.Name -Scope CurrentUser -Force:$_.Value.Force -SkipPublisherCheck:$_.Value.SkipPublisherCheck -AllowClobber:$_.Value.AllowClobber -AllowPrerelease:$_.Value.Prerelease
         }
-        else
-        {
+        else {
             Install-Module $_.Name -Scope CurrentUser -Force:$_.Value.Force -SkipPublisherCheck:$_.Value.SkipPublisherCheck -AllowClobber:$_.Value.AllowClobber
         }
         Get-Module -ListAvailable -Name $_.Name
@@ -190,14 +176,11 @@ $modules = @{
 
 # Setup Scoop.
 # See https://github.com/lukesampson/scoop
-if ($IsWindows)
-{
-    if (!(Get-Command "scoop" -ErrorAction "Ignore"))
-    {
+if ($IsWindows) {
+    if (!(Get-Command "scoop" -ErrorAction "Ignore")) {
         Invoke-Expression (New-Object System.Net.WebClient).DoanloadString('https://get.scoop.sh')
     }
-    if (Get-Command "scoop" -ErrorAction "Ignore")
-    {
+    if (Get-Command "scoop" -ErrorAction "Ignore") {
         Write-Host "Verifying the state of Scoop..." -ForegroundColor $ColorInfo
         Get-Command -Name scoop -ErrorAction Stop
         Invoke-Command -ScriptBlock { scoop checkup }
@@ -205,58 +188,56 @@ if ($IsWindows)
         # Install any missing bucket.
         $bucketList = Invoke-Command -ScriptBlock { scoop bucket list }
         $buckets = (
-        "extras",
-        "nerd-fonts",
-        "twpayne",
-        "main",
+            "extras",
+            "nerd-fonts",
+            "twpayne",
+            "main",
         )
         $buckets | ForEach-Object {
-            if (!$bucketList.Contains($_))
-            {
+            if (!$bucketList.Contains($_)) {
                 Invoke-Command -ScriptBlock { scoop bucket add $_ }
             }
         }
 
         # Install any missing app.
         $appList = Invoke-Command -ScriptBlock { scoop export }
-        $appList = $appList -replace "[\s].+", ""
+        $appList = $appList -replace "[\s].+",""
         $apps = (
-        "chezmoi",
-        "FiraCode-NF-Mono",
-        "FiraCode-NF",
-        "git",
-        "less",
-        "micro",
-        "neofetch",
-        "ntop",
-        "ripgrep",
-        "sqlite",
-        "starship",
-        "sudo",
-        "vim",
-        "wget",
-        "winfetch",
-        "fzf",
-        "ripgrep",
-        "bat",
-        "vscode",
-        "vivaldi",
-        "7z",
-        "modern7z",
-        "jq",
-        "tealdeer",
-        "oh-my-posh",
-        "posh-docker",
-        "posh-git",
-        "posh-cd",
-        "windows-terminal",
-        "lua-for-windows",
-        "winaero-tweaker",
+            "chezmoi",
+            "FiraCode-NF-Mono",
+            "FiraCode-NF",
+            "git",
+            "less",
+            "micro",
+            "neofetch",
+            "ntop",
+            "ripgrep",
+            "sqlite",
+            "starship",
+            "sudo",
+            "vim",
+            "wget",
+            "winfetch",
+            "fzf",
+            "ripgrep",
+            "bat",
+            "vscode",
+            "vivaldi",
+            "7z",
+            "modern7z",
+            "jq",
+            "tealdeer",
+            "oh-my-posh",
+            "posh-docker",
+            "posh-git",
+            "posh-cd",
+            "windows-terminal",
+            "lua-for-windows",
+            "winaero-tweaker",
 
         )
         $apps | ForEach-Object {
-            if (!$appList.Contains($_))
-            {
+            if (!$appList.Contains($_)) {
                 Invoke-Command -ScriptBlock { scoop install $_ }
                 $count++
             }
@@ -271,16 +252,13 @@ if ($IsWindows)
 
 # Enable LongPaths support for file paths above 260 characters.
 # See https://social.msdn.microsoft.com/Forums/en-US/fc85630e-5684-4df6-ad2f-5a128de3deef
-if ($IsWindows)
-{
+if ($IsWindows) {
     $property = 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem'
     $name = 'LongPathsEnabled'
-    if ((Get-ItemPropertyValue $property -Name $name) -ne 0)
-    {
+    if ((Get-ItemPropertyValue $property -Name $name) -ne 0) {
         Write-Host "LongPaths support already enabled, skipping." -ForegroundColor $ColorInfo
     }
-    else
-    {
+    else {
         Write-Host "Enabling LongPaths support for file paths above 260 characters." -ForegroundColor $ColorInfo
         Set-ItemProperty $property -Name $name -Value 1
         $count++

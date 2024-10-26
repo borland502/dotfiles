@@ -47,7 +47,6 @@ scriptEnv:
   XDG_DATA_HOME: {{$xdg_data_home}}
   XDG_LIB_HOME: {{$xdg_lib_home}}
   XDG_STATE_HOME: {{$xdg_state_home}}
-  XDG_RUNTIME_DIR: {{$xdg_runtime_dir}}
 
 # all variables avoid shell interpolation so that conversion to .env, export var, etc is easier
 data:
@@ -57,9 +56,17 @@ data:
   email: "{{ $email }}"
   taskfile: [
     'ANSIBLE_HOME: "{{$home}}/.ansible"',
-    'AUTOMATION_HOME: "{{$xdg_data_home}}/automation"',
     'BREW: brew',
     'CHEZMOI_HOME: "{{.chezmoi.sourceDir}}"',
+    'DASBOOTSTRAP_HOME: "{{$dasbootstrap_home}}"',
+    'DBS_MODULE_DASBOOTSTRAP: "dasbootstrap.dasbootstrap.core"',
+    'DBS_MODULE_KIOSK: "dasbootstrap.chromekiosk"',
+    'DBS_VENV_PACKAGES: "{{joinPath $dasbootstrap_home (nospace (cat "/.venv/lib/python" $python_ver)) "/site-packages/dasbootstrap"}}"',
+    'DBS_VENV_PIP: "{{joinPath $dasbootstrap_home "/.venv/bin/pip"}}"',
+    'DBS_VENV_PYTHON: "run {{joinPath $dasbootstrap_home "/.venv/bin/python"}} -m "',
+    'DBS_POLY_BASES: "{{$dasbootstrap_home}}/bases/**/*"',
+    'DBS_POLY_COMPONENTS: "{{$dasbootstrap_home}}/components/**/*"',
+    'GH: gh',
     'HOME: "{{ $home }}"',
     'JSON_SUFFIX: "--json"',
     'PIP: pip3',
@@ -116,5 +123,4 @@ data:
     'XDG_STATE_HOME: {{$xdg_state_home}}',
     'XDG_BIN_HOME: {{$xdg_bin_home}}',
     'XDG_LIB_HOME: {{$xdg_lib_home}}',
-    'XDG_RUNTIME_DIR: {{$xdg_runtime_dir}}',
   ]

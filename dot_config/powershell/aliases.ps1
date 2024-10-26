@@ -40,8 +40,7 @@ Set-Alias -Name "......" -Value Set-LocationUp5 -Description "Goes up five direc
 # Directory browsing
 # -----------------------------------------------------------------------------
 
-if (!(Get-Command "ls" -ErrorAction "Ignore"))
-{
+if (!(Get-Command "ls" -ErrorAction "Ignore")) {
     Set-Alias -Name "ls" -Value Get-ChildItemSimple -Description "Lists visible files in wide format."
 }
 
@@ -65,8 +64,7 @@ Set-Alias -Name "ff" -Value Find-File -Description "Finds files."
 
 Set-Alias -Name "mirror" -Value Copy-ItemMirror -Description "Makes an exact copy of files and folders."
 
-if (!(Get-Command "touch" -ErrorAction "Ignore"))
-{
+if (!(Get-Command "touch" -ErrorAction "Ignore")) {
     Set-Alias -Name "touch" -Value New-ItemEmpty -Description "Creates an empty file or updates its timestamp."
 }
 
@@ -78,8 +76,7 @@ Set-Alias -Name "alias" -Value Get-Aliases -Description "Lists aliases."
 
 Set-Alias -Name "c" -Value Clear-Host -Description "Clears screen."
 
-if (Test-Path alias:h)
-{
+if (Test-Path alias:h) {
     Remove-Item alias:h
 }
 Set-Alias -Name "h" -Value "Search-History" -Description "Displays/Searches global history."
@@ -121,8 +118,7 @@ Set-Alias -Name "weekday" -Value Get-Weekday -Description "Displays weekday numb
 # Networking
 # -----------------------------------------------------------------------------
 
-if (Test-Path alias:fastping)
-{
+if (Test-Path alias:fastping) {
     Remove-Item alias:fastping
 }
 Set-Alias -Name "fastping" -Value Invoke-FastPingSimple -Description "Pings hostname(s) 30 times in quick succession."
@@ -169,19 +165,15 @@ Set-Alias -Name "mnt" -Value Get-Mounts -Description "Lists drive mounts."
 
 Set-Alias -Name "path" -Value Get-Path -Description "Prints each PATH entry on a separate line."
 
-foreach ($_ in ("ntop", "atop", "htop", "top", "Get-TopProcess"))
-{
-    if (Get-Command $_ -ErrorAction "Ignore")
-    {
+foreach ($_ in ("ntop", "atop", "htop", "top", "Get-TopProcess")) {
+    if (Get-Command $_ -ErrorAction "Ignore") {
         Set-Alias -Name "top" -Value $_ -Description "Monitors processes and system resources."
         break
     }
 }
 
-foreach ($_ in ("winfetch", "neofetch", "screenfetch"))
-{
-    if (Get-Command $_ -ErrorAction "Ignore")
-    {
+foreach ($_ in ("winfetch", "neofetch", "screenfetch")) {
+    if (Get-Command $_ -ErrorAction "Ignore") {
         Set-Alias -Name "sysinfo" -Value $_ -Description "Displays information about the system."
         break
     }
@@ -189,8 +181,7 @@ foreach ($_ in ("winfetch", "neofetch", "screenfetch"))
 
 Set-Alias -Name "update" -Value Update-Packages -Description "Keeps all apps and packages up to date."
 
-if (!(Get-Command "which" -ErrorAction "Ignore"))
-{
+if (!(Get-Command "which" -ErrorAction "Ignore")) {
     Set-Alias -Name "which" -Value Search-Command -Description "Locates a command."
 }
 
@@ -234,8 +225,7 @@ Set-Alias -Name "ve" -Value Initialize-Venv -Description "Python: creates the vi
 # macOS
 # -----------------------------------------------------------------------------
 
-if ($IsMacOS)
-{
+if ($IsMacOS) {
     Set-Alias -Name "hidedesktop" -Value Hide-DesktopIcons -Description "Hides desktop icons."
 
     Set-Alias -Name "showdesktop" -Value Show-DesktopIcons -Description "Shows desktop icons."
@@ -253,8 +243,7 @@ if ($IsMacOS)
 # Windows
 # -----------------------------------------------------------------------------
 
-if ($IsWindows)
-{
+if ($IsWindows) {
     Set-Alias -Name "hidefiles" -Value Hide-HiddenFiles -Description "Hides hidden files in Explorer."
 
     Set-Alias -Name "showfiles" -Value Show-HiddenFiles -Description "Shows hidden files in Explorer."
@@ -291,19 +280,15 @@ Set-Alias -Name "repos" -Value Set-LocationCode -Description "Navigates to Code 
 
 # Varia
 # -----------------------------------------------------------------------------
-foreach ($_ in ("Set-Clipboard", "Set-ClipboardText"))
-{
-    if (Get-Command $_ -ErrorAction "Ignore")
-    {
+foreach ($_ in ("Set-Clipboard", "Set-ClipboardText")) {
+    if (Get-Command $_ -ErrorAction "Ignore") {
         Set-Alias -Name "cb" -Value $_ -Description "Copies contents to the clipboard."
         break
     }
 }
 
-foreach ($_ in ("Get-Clipboard", "Get-ClipboardText"))
-{
-    if (Get-Command $_ -ErrorAction "Ignore")
-    {
+foreach ($_ in ("Get-Clipboard", "Get-ClipboardText")) {
+    if (Get-Command $_ -ErrorAction "Ignore") {
         Set-Alias -Name "cbpaste" -Value $_ -Description "Copies contents to the clipboard."
         break
     }
