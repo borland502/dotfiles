@@ -22,7 +22,6 @@ tasks:
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
     preconditions:
-      - sh: "command -v unison"
       - sh: "command -v rsync"
     cmds:
       - >-
