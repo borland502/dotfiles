@@ -1,0 +1,155 @@
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+version: "3"
+vars:
+  ##range .taskfile -##
+  ##.##
+  ##end -##
+  ##range .taskfile_ansible -##
+  ##.##
+  ##end##
+  PYTEST_PREFIX: pytest
+  PYTHON_SRC:
+    sh: fd --glob "*.py" | tr '\n' ' '
+  SCRIPTS:
+    sh: fd --no-ignore --glob '*.sh' | tr '\n' ' '
+tasks:
+
+  precommit:
+    desc: Run all precommit tasks
+    status:
+      - test -f .pre-commit-config.yaml
+    cmds:
+      - pre-commit run --all-files
+
+  poly:cr:base:
+    desc: Initialize a polylith base in dasbootstrap
+    status:
+      - test -d ${DASBOOTSTRAP_HOME}/bases/dasbootstrap/{{.CLI_ARGS}}
+    cmds:
+      - "{{.POETRY}} poly create base --name={{.CLI_ARGS}}"
+
+  poly:cr:comp:
+    desc: Initialize a polylith component in dasbootstrap
+    status:
+      - test -d ${DASBOOTSTRAP_HOME}/components/dasbootstrap/{{.CLI_ARGS}}
+    cmds:
+      - "{{.POETRY}} poly create component --name={{.CLI_ARGS}}"
+
+  poly:cr:proj:
+    desc: Initialize a polylith project in dasbootstrap
+    status:
+      - test -d ${DASBOOTSTRAP_HOME}/projects/{{.CLI_ARGS}}
+    cmds:
+      - "{{.POETRY}} poly create project --name={{.CLI_ARGS}}"
+
+  poetry:init:
+      desc: Initialize new poetry project
+      status:
+        - test -f pyproject.toml
+      cmds:
+          - "{{.POETRY}} init --no-interaction"
+
+  venv:init:
+    desc: Initialize the virtual environment for this project
+    status:
+      - test -d .venv
+    cmds:
+      - "{{.PYTHON}} -m venv .venv"
+
+  poetry:install:
+    desc: Install the poetry packages if missing
+    deps:
+      - task: venv:init
+      - task: poetry:init
+    cmds:
+      - "{{.POETRY}} lock"
+      - "{{.POETRY}} install"
+    sources:
+      - ".venv/lib/python{{.PYTHON_VER}}/site-packages"
+      - ".venv/lib64/python{{.PYTHON_VER}}/site-packages"
+      - "pyproject.toml"
+
+  poetry:shell:
+    silent: true
+    desc: Activate the poetry shell for Dasbootstrap
+    deps:
+      - task: poetry:install
+    preconditions:
+      - sh: test "${DASBOOTSTRAP_HOME}/.venv/bin/poetry" = "$(pwd)/.venv/bin/poetry"
+        msg: "Cannot activate poetry venv for dasbootstrap"
+    cmds:
+      - poetry shell
+
+  ruff:check:
+    internal: true
+    silent: true
+    desc: Run ruff
+    cmds:
+      - "{{.RUN_PREFIX}} ruff check {{.PYTHON_SRC}} --config ${DASBOOTSTRAP_HOME}/pyproject.toml --line-length 128 --target-version py312"
+
+  bandit:
+    internal: true
+    silent: true
+    desc: Run bandit
+    cmds:
+      - "{{.RUN_PREFIX}} bandit -c ${DASBOOTSTRAP_HOME}/pyproject.toml -r {{.PYTHON_SRC}}"
+
+  format:
+    desc: Correct mistakes using the format functions of linters
+    cmds:
+      - task: ruff:format
+
+  install:
+    desc: Install Dasbootstrap and modules
+    deps:
+      - build
+    cmd: pip install {{.DBS_WHEEL}}
+    generates:
+      - "{{.DBS_VENV_PACKAGES}}"
+    vars:
+      DBS_WHEEL:
+        sh: find . -name "dasbootstrap*.whl"
+
+  lint:
+    desc: Lint Dasbootstrap
+    cmds:
+      - task: ruff:check
+      - task: bandit
+
+  ruff:format:
+    internal: true
+    silent: true
+    desc: Format python code in Dasbootstrap
+    cmds:
+      - "{{.RUN_PREFIX}} ruff format {{.PYTHON_SRC}} --config ${DASBOOTSTRAP_HOME}/pyproject.toml --line-length 128 --target-version py312"
+    sources:
+      - "{{.PYTHON_SRC}}"
+
+  build:
+    desc: Build all projects
+    deps:
+      - task: poetry:shell
+    cmds:
+      - "{{.POETRY}} build-project"
+    sources:
+      - "{{.DBS_POLY_BASES}}"
+      - "{{.DBS_POLY_COMPONENTS}}"
+
+  test:
+    desc: Run unit tests
+    deps:
+      - task: build
+      - task: ruff:format
+    vars:
+      TEST_FILES:
+        sh: fd --glob "test*.py" | tr '\n' ' '
+    cmds:
+      - "{{.RUN_PREFIX}} python -m unittest {{.TEST_FILES}}"
+
+  run_app:
+    deps:
+      - task: build
+      - task: poetry:install
+    desc: Run Automation Station
+    cmds:
+      - "{{.ST_RUN_PREFIX}} ${DASBOOTSTRAP_HOME}/bases/dasbootstrap/automation_station/Home.py"

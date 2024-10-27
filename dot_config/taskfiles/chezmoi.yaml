@@ -9,26 +9,15 @@ tasks:
     cmds:
       - task -l
 
-  update:
-    desc: "Update chezmoi from github dotfiles"
-    cmds:
-      - "{{.CHEZMOI_PREFIX}} update"
-      - task: sync
-
   init:
     desc: "(re)Intialize chezmoi state from templates"
     cmds:
-      - "{{.CHEZMOI_PREFIX}} init"
+      - "chezmoi init"
 
   apply:
     desc: "Apply changes from downloaded dotfiles"
     cmds:
-      - task: sync
-      - task: update
-      - task: init
-      - "{{.CHEZMOI_PREFIX}} diff"
-      - "{{.CHEZMOI_PREFIX}} apply"
-
+      - chezmoi apply
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
     preconditions:
@@ -38,6 +27,7 @@ tasks:
       - unison -batch -auto "${XDG_DATA_HOME}/automation/home-ops/scripts/dotfiles" "${XDG_DATA_HOME}/chezmoi" 2> /dev/null
       - >-
         rsync -avzu --compress-choice="zstd" --delete --info=progress2 --no-whole-file
+        --backup --backup-dir="${XDG_CACHE_HOME}/chezmoi" --suffix=".bak"
         -h "${XDG_DATA_HOME}/automation/home-ops/scripts/dotfiles/" "${XDG_DATA_HOME}/chezmoi"
       - task: init
       - task: apply
