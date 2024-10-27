@@ -2,8 +2,7 @@
 version: "3"
 
 vars:
-  CHEZMOI_PREFIX: "{{.RUN_PREFIX}} chezmoi"
-  VENV_PYTHON: "{{.RUN_PREFIX}} python"
+  CHEZMOI_PREFIX: "chezmoi"
 
 tasks:
   default:
@@ -33,13 +32,12 @@ tasks:
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
     preconditions:
-      - sh: "has unison"
-    cmd: unison -batch -auto "${XDG_DATA_HOME}/automation/chezmoi" "${XDG_DATA_HOME}/chezmoi"
-
-  predeploy:
-    desc: "Deploy chezmoi"
-    interactive: true
-    deps:
-      - task: apply
+      - sh: "command -v unison"
+      - sh: "command -v rsync"
     cmds:
-      - "{{.CHEZMOI_PREFIX}} git status"
+      - unison -batch -auto "${XDG_DATA_HOME}/automation/home-ops/scripts/dotfiles" "${XDG_DATA_HOME}/chezmoi" 2> /dev/null
+      - >-
+        rsync -avzu --compress-choice="zstd" --delete --info=progress2 --no-whole-file
+        -h "${XDG_DATA_HOME}/automation/home-ops/scripts/dotfiles/" "${XDG_DATA_HOME}/chezmoi"
+      - task: init
+      - task: apply

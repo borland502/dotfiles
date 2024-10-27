@@ -1,0 +1,28 @@
+# chezmoi:template:left-delimiter="[[" right-delimiter=]]
+version: "3"
+
+dotenv:
+  - "${HOME}/.env"
+
+includes:
+  ans:
+    taskfile: "${XDG_CONFIG_HOME}/taskfiles/ansible.yaml"
+  chez:
+    taskfile: "${XDG_CONFIG_HOME}/taskfiles/chezmoi.yaml"
+  scripts:
+    taskfile: "${XDG_DATA_HOME}/automation/home-ops/scripts/scripts.yaml"
+  keepassxc:
+    taskfile: "${XDG_CONFIG_HOME}/taskfiles/keepassxc.yaml"
+  validate:
+    taskfile: "${XDG_CONFIG_HOME}/taskfiles/validate.yaml"
+  install:
+    taskfile: "${XDG_CONFIG_HOME}/taskfiles/install.yaml"
+
+tasks:
+  default:
+    cmds:
+      - |
+        command -v brew >/dev/null || { echo "brew is mandatory for this to work, please install it"; exit 1; }
+        command -v gum >/dev/null|| brew install gum
+        selected=$(task --list-all | grep -v "task: Available" | grep -v "default:" | gum filter --indicator="->" --placeholder="Type to search for a task...")
+        echo "$selected" | awk '{sub(/:$/, "", $2); print $2}' | xargs task

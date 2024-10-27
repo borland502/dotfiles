@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+# chezmoi:template:left-delimiter="##" right-delimiter=##
+version: "3"
+
+vars:
+  ##range .taskfile -##
+  ##.##
+  ##end##
+  ##range .xdg -##
+  ##.##
+  ##end##
+
+tasks:
+  system:update:
+    desc: Update the local system
+    cmds:
+      - zsh -c sysupdate.zsh
+
+

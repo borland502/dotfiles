@@ -6,7 +6,7 @@ url = "https://github.com/borland502/dasbootstrap.git"
 refreshPeriod = "2160h"
 type = "git-repo"
 url = "https://github.com/megabyte-labs/install.doctor"
-[".local/share/automation/chezmoi"]
+[".local/share/automation/home-ops/scripts/dotfiles"]
 refreshPeriod = "2160h"
 type = "git-repo"
 url = "https://github.com/borland502/dotfiles.git"
