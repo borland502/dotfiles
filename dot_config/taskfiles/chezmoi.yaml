@@ -18,16 +18,16 @@ tasks:
     desc: "Apply changes from downloaded dotfiles"
     cmds:
       - chezmoi apply
+
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
     preconditions:
       - sh: "command -v unison"
       - sh: "command -v rsync"
     cmds:
-      - unison -batch -auto "${XDG_DATA_HOME}/automation/home-ops/scripts/dotfiles" "${XDG_DATA_HOME}/chezmoi" 2> /dev/null
       - >-
         rsync -avzu --compress-choice="zstd" --delete --info=progress2 --no-whole-file
-        --backup --backup-dir="${XDG_CACHE_HOME}/chezmoi" --suffix=".bak"
+        --backup --backup-dir="${XDG_CACHE_HOME}/chezmoi" --suffix=".bak" --delete --exclude=".git"
         -h "${XDG_DATA_HOME}/automation/home-ops/scripts/dotfiles/" "${XDG_DATA_HOME}/chezmoi"
       - task: init
       - task: apply
