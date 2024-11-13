@@ -1,3 +1,5 @@
+## This file should match the variables in env.toml and sourced in the home directory as ~/.env
+
 {{range .xdg -}}
 {{ . | replace ": " "=" }}
 {{ end -}}
@@ -11,5 +13,9 @@
 {{ end -}}
 
 {{range .taskfile_ansible -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
+
+{{range .versions.vars -}}
 {{ . | replace ": " "=" }}
 {{ end -}}

@@ -1,6 +1,0 @@
-version: "3"
-
-includes:
-  chez:
-    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/chezmoi.yaml"
-    dir: "{{.CHEZMOI_HOME}}"

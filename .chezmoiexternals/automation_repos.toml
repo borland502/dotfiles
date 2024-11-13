@@ -1,24 +1,20 @@
-[".local/share/automation/dasbootstrap"]
-refreshPeriod = "2160h"
-type = "git-repo"
-url = "https://github.com/borland502/dasbootstrap.git"
 [".local/share/automation/install.doctor"]
-refreshPeriod = "2160h"
-type = "git-repo"
-url = "https://github.com/megabyte-labs/install.doctor"
+  refreshPeriod = "2160h"
+  type = "git-repo"
+  url = "https://github.com/megabyte-labs/install.doctor"
 [".local/share/automation/home-ops/scripts/dotfiles"]
-refreshPeriod = "2160h"
-type = "git-repo"
-url = "https://github.com/borland502/dotfiles.git"
+  refreshPeriod = "2160h"
+  type = "git-repo"
+  url = "https://github.com/borland502/dotfiles.git"
 [".local/share/automation/acme.sh"]
-refreshPeriod = "2160h"
-type = "git-repo"
-url = "https://github.com/borland502/acme.sh.git"
-[".local/share/automation/Proxmox"]
-refreshPeriod = "2160h"
-type = "git-repo"
-url = "https://github.com/borland502/Proxmox"
+  refreshPeriod = "2160h"
+  type = "git-repo"
+  url = "https://github.com/borland502/acme.sh.git"
 [".local/share/automation/home-ops"]
-refreshPeriod = "2160h"
-type = "git-repo"
-url = "https://github.com/borland502/home-ops"
+  refreshPeriod = "2160h"
+  type = "git-repo"
+  url = "https://github.com/borland502/home-ops"
+[".local/share/automation/proxmoxve"]
+  refreshPeriod = "2160h"
+  type = "git-repo"
+  url = "https://github.com/community-scripts/ProxmoxVE.git"

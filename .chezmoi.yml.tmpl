@@ -47,6 +47,7 @@ scriptEnv:
   XDG_DATA_HOME: {{$xdg_data_home}}
   XDG_LIB_HOME: {{$xdg_lib_home}}
   XDG_STATE_HOME: {{$xdg_state_home}}
+  XDG_RUNTIME_DIR: {{$xdg_runtime_dir}}
 
 # all variables avoid shell interpolation so that conversion to .env, export var, etc is easier
 data:
@@ -123,4 +124,5 @@ data:
     'XDG_STATE_HOME: {{$xdg_state_home}}',
     'XDG_BIN_HOME: {{$xdg_bin_home}}',
     'XDG_LIB_HOME: {{$xdg_lib_home}}',
+    'XDG_RUNTIME_DIR: {{$xdg_runtime_dir}}',
   ]
