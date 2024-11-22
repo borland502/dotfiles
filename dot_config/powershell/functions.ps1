@@ -37,8 +37,8 @@ function Set-LocationHome
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -48,14 +48,16 @@ function Set-LocationHome
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationLast {
+function Set-LocationLast
+{
     <#
     .SYNOPSIS
         Goes to last used directory.
@@ -67,30 +69,36 @@ function Set-LocationLast {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
     begin {
-        if (!(Test-Path variable:global:LocationHistoryForward)) {
+        if (!(Test-Path variable:global:LocationHistoryForward))
+        {
             Set-Variable "LocationHistoryForward" -Scope "Global" -Value $false
         }
-        if (!$LocationHistoryForward) {
+        if (!$LocationHistoryForward)
+        {
             $path = "-"
         }
-        else {
+        else
+        {
             $path = "+"
         }
         Write-Verbose "Destination set to $path"
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
-            if (!$LocationHistoryForward) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
+            if (!$LocationHistoryForward)
+            {
                 Set-Variable "LocationHistoryForward" -Scope "Global" -Value $true
             }
-            else {
+            else
+            {
                 Set-Variable "LocationHistoryForward" -Scope "Global" -Value $false
             }
             Write-Verbose "Navigating to $path"
@@ -99,7 +107,8 @@ function Set-LocationLast {
     }
 }
 
-function Set-LocationUp {
+function Set-LocationUp
+{
     <#
     .SYNOPSIS
         Goes up a directory.
@@ -111,8 +120,8 @@ function Set-LocationUp {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -122,14 +131,16 @@ function Set-LocationUp {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationUp2 {
+function Set-LocationUp2
+{
     <#
     .SYNOPSIS
         Goes up two directories.
@@ -141,8 +152,8 @@ function Set-LocationUp2 {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -152,14 +163,16 @@ function Set-LocationUp2 {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationUp3 {
+function Set-LocationUp3
+{
     <#
     .SYNOPSIS
         Goes up three directories.
@@ -171,8 +184,8 @@ function Set-LocationUp3 {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -182,14 +195,16 @@ function Set-LocationUp3 {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationUp4 {
+function Set-LocationUp4
+{
     <#
     .SYNOPSIS
         Goes up four directories.
@@ -201,8 +216,8 @@ function Set-LocationUp4 {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -212,14 +227,16 @@ function Set-LocationUp4 {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationUp5 {
+function Set-LocationUp5
+{
     <#
     .SYNOPSIS
         Goes up five directories.
@@ -231,8 +248,8 @@ function Set-LocationUp5 {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -242,7 +259,8 @@ function Set-LocationUp5 {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
@@ -253,7 +271,8 @@ function Set-LocationUp5 {
 # Directory browsing
 # -----------------------------------------------------------------------------
 
-function Get-ChildItemSimple {
+function Get-ChildItemSimple
+{
     <#
     .SYNOPSIS
         Lists visible files in wide format.
@@ -270,25 +289,28 @@ function Get-ChildItemSimple {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$false,
-            ValueFromPipeline=$true
+                Mandatory = $false,
+                ValueFromPipeline = $true
         )]
         [string[]]$Path = ".",
 
-        [Parameter(ValueFromRemainingArguments=$true)]
+        [Parameter(ValueFromRemainingArguments = $true)]
         $Params
     )
 
     begin {
         # https://stackoverflow.com/a/33302472
-        $hashtable = @{}
-        if ($Params) {
+        $hashtable = @{ }
+        if ($Params)
+        {
             $Params | ForEach-Object {
-                if ($_ -match "^-") {
-                    $hashtable.$($_ -replace "^-") = $null
+                if ($_ -match "^-")
+                {
+                    $hashtable.$( $_ -replace "^-" ) = $null
                 }
-                else {
-                    $hashtable.$(([string[]]$hashtable.Keys)[-1]) = $_
+                else
+                {
+                    $hashtable.$( ([string[]]$hashtable.Keys)[-1] ) = $_
                 }
             }
         }
@@ -299,7 +321,8 @@ function Get-ChildItemSimple {
     }
 }
 
-function Get-ChildItemVisible {
+function Get-ChildItemVisible
+{
     <#
     .SYNOPSIS
         Lists visible files in long format.
@@ -316,25 +339,28 @@ function Get-ChildItemVisible {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$false,
-            ValueFromPipeline=$true
+                Mandatory = $false,
+                ValueFromPipeline = $true
         )]
         [string[]]$Path = ".",
 
-        [Parameter(ValueFromRemainingArguments=$true)]
+        [Parameter(ValueFromRemainingArguments = $true)]
         $Params
     )
 
     begin {
         # https://stackoverflow.com/a/33302472
-        $hashtable = @{}
-        if ($Params) {
+        $hashtable = @{ }
+        if ($Params)
+        {
             $Params | ForEach-Object {
-                if ($_ -match "^-") {
-                    $hashtable.$($_ -replace "^-") = $null
+                if ($_ -match "^-")
+                {
+                    $hashtable.$( $_ -replace "^-" ) = $null
                 }
-                else {
-                    $hashtable.$(([string[]]$hashtable.Keys)[-1]) = $_
+                else
+                {
+                    $hashtable.$( ([string[]]$hashtable.Keys)[-1] ) = $_
                 }
             }
         }
@@ -345,7 +371,8 @@ function Get-ChildItemVisible {
     }
 }
 
-function Get-ChildItemAll {
+function Get-ChildItemAll
+{
     <#
     .SYNOPSIS
         Lists all files in long format, excluding `.` and `..`.
@@ -362,25 +389,28 @@ function Get-ChildItemAll {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$false,
-            ValueFromPipeline=$true
+                Mandatory = $false,
+                ValueFromPipeline = $true
         )]
         [string[]]$Path = ".",
 
-        [Parameter(ValueFromRemainingArguments=$true)]
+        [Parameter(ValueFromRemainingArguments = $true)]
         $Params
     )
 
     begin {
         # https://stackoverflow.com/a/33302472
-        $hashtable = @{}
-        if ($Params) {
+        $hashtable = @{ }
+        if ($Params)
+        {
             $Params | ForEach-Object {
-                if ($_ -match "^-") {
-                    $hashtable.$($_ -replace "^-") = $null
+                if ($_ -match "^-")
+                {
+                    $hashtable.$( $_ -replace "^-" ) = $null
                 }
-                else {
-                    $hashtable.$(([string[]]$hashtable.Keys)[-1]) = $_
+                else
+                {
+                    $hashtable.$( ([string[]]$hashtable.Keys)[-1] ) = $_
                 }
             }
         }
@@ -391,7 +421,8 @@ function Get-ChildItemAll {
     }
 }
 
-function Get-ChildItemDirectory {
+function Get-ChildItemDirectory
+{
     <#
     .SYNOPSIS
         Lists only directories in long format.
@@ -408,25 +439,28 @@ function Get-ChildItemDirectory {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$false,
-            ValueFromPipeline=$true
+                Mandatory = $false,
+                ValueFromPipeline = $true
         )]
         [string[]]$Path = ".",
 
-        [Parameter(ValueFromRemainingArguments=$true)]
+        [Parameter(ValueFromRemainingArguments = $true)]
         $Params
     )
 
     begin {
         # https://stackoverflow.com/a/33302472
-        $hashtable = @{}
-        if ($Params) {
+        $hashtable = @{ }
+        if ($Params)
+        {
             $Params | ForEach-Object {
-                if ($_ -match "^-") {
-                    $hashtable.$($_ -replace "^-") = $null
+                if ($_ -match "^-")
+                {
+                    $hashtable.$( $_ -replace "^-" ) = $null
                 }
-                else {
-                    $hashtable.$(([string[]]$hashtable.Keys)[-1]) = $_
+                else
+                {
+                    $hashtable.$( ([string[]]$hashtable.Keys)[-1] ) = $_
                 }
             }
         }
@@ -437,7 +471,8 @@ function Get-ChildItemDirectory {
     }
 }
 
-function Get-ChildItemHidden {
+function Get-ChildItemHidden
+{
     <#
     .SYNOPSIS
         Lists only hidden files in long format.
@@ -454,25 +489,28 @@ function Get-ChildItemHidden {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$false,
-            ValueFromPipeline=$true
+                Mandatory = $false,
+                ValueFromPipeline = $true
         )]
         [string[]]$Path = ".",
 
-        [Parameter(ValueFromRemainingArguments=$true)]
+        [Parameter(ValueFromRemainingArguments = $true)]
         $Params
     )
 
     begin {
         # https://stackoverflow.com/a/33302472
-        $hashtable = @{}
-        if ($Params) {
+        $hashtable = @{ }
+        if ($Params)
+        {
             $Params | ForEach-Object {
-                if ($_ -match "^-") {
-                    $hashtable.$($_ -replace "^-") = $null
+                if ($_ -match "^-")
+                {
+                    $hashtable.$( $_ -replace "^-" ) = $null
                 }
-                else {
-                    $hashtable.$(([string[]]$hashtable.Keys)[-1]) = $_
+                else
+                {
+                    $hashtable.$( ([string[]]$hashtable.Keys)[-1] ) = $_
                 }
             }
         }
@@ -487,7 +525,8 @@ function Get-ChildItemHidden {
 # File management
 # -----------------------------------------------------------------------------
 
-function Copy-ItemSecure {
+function Copy-ItemSecure
+{
     <#
     .SYNOPSIS
         Makes an exact copy of files.
@@ -514,17 +553,18 @@ function Copy-ItemSecure {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$true,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                ValueFromPipeline = $true
         )]
         [string]$Source,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$Destination
     )
 
     $SourcePath = Split-Path -Path $Source
-    if (!$SourcePath) {
+    if (!$SourcePath)
+    {
         $SourcePath = '.'
     }
     $File = Split-Path -Path $Source -Leaf
@@ -532,7 +572,8 @@ function Copy-ItemSecure {
     robocopy /COPY:DAT /DCOPY:DAT /LEV:0 /R:1000000 /W:30 $SourcePath $Destination $File
 }
 
-function Find-Directory {
+function Find-Directory
+{
     <#
     .SYNOPSIS
         Finds directories.
@@ -546,7 +587,8 @@ function Find-Directory {
     Get-ChildItem -Path . -Directory -Name -Recurse -ErrorAction SilentlyContinue -Include @args
 }
 
-function Find-File {
+function Find-File
+{
     <#
     .SYNOPSIS
         Finds files.
@@ -561,7 +603,8 @@ function Find-File {
 }
 
 # Mirror directories
-function Copy-ItemMirror {
+function Copy-ItemMirror
+{
     <#
     .SYNOPSIS
         Makes an exact copy of files and folders.
@@ -592,12 +635,12 @@ function Copy-ItemMirror {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$true,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                ValueFromPipeline = $true
         )]
         [string]$Source,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$Destination,
 
         [Parameter()]
@@ -610,7 +653,8 @@ function Copy-ItemMirror {
     robocopy /MIR /COPY:DAT /DCOPY:DAT /R:1000000 /W:30 $Source $Destination $Files $Flags
 }
 
-function New-ItemEmpty {
+function New-ItemEmpty
+{
     <#
     .SYNOPSIS
         Creates an empty file or updates its timestamp.
@@ -626,16 +670,18 @@ function New-ItemEmpty {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$true,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                ValueFromPipeline = $true
         )]
         [string]$File
     )
 
-    if (Test-Path $File) {
+    if (Test-Path $File)
+    {
         (Get-ChildItem $File).LastWriteTime = Get-Date
     }
-    else {
+    else
+    {
         New-Item -ItemType File $File
     }
 }
@@ -644,7 +690,8 @@ function New-ItemEmpty {
 # General
 # -----------------------------------------------------------------------------
 
-function Get-Aliases {
+function Get-Aliases
+{
     <#
     .SYNOPSIS
         Lists aliases.
@@ -658,7 +705,8 @@ function Get-Aliases {
     Get-Alias | Format-Table Name,ResolvedCommandName,Description,HelpUri
 }
 
-function Search-History {
+function Search-History
+{
     <#
     .SYNOPSIS
         Displays/Searches global history.
@@ -670,10 +718,11 @@ function Search-History {
         Get-Content
     #>
     $pattern = '*' + $args + '*'
-    Get-Content (Get-PSReadlineOption).HistorySavePath | ? {$_ -Like $pattern} | Get-Unique
+    Get-Content (Get-PSReadlineOption).HistorySavePath | ? { $_ -Like $pattern } | Get-Unique
 }
 
-function Search-HistorySession {
+function Search-HistorySession
+{
     <#
     .SYNOPSIS
         Displays/Searches session history.
@@ -686,10 +735,11 @@ function Search-HistorySession {
         Get-History
     #>
     $pattern = '*' + $args + '*'
-    Get-History | Where-Object {$_.CommandLine -like $pattern}
+    Get-History | Where-Object { $_.CommandLine -like $pattern }
 }
 
-function New-ItemSetLocation {
+function New-ItemSetLocation
+{
     <#
     .SYNOPSIS
         Makes a directory and changes to it.
@@ -711,31 +761,35 @@ function New-ItemSetLocation {
         Get-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param(
         [Parameter(
-            Mandatory=$true,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                ValueFromPipeline = $true
         )]
         [string]$Path
     )
 
-    if (!(Test-Path -path $Path)) {
-        if ($PSCmdlet.ShouldProcess($Path, 'Create directory')) {
+    if (!(Test-Path -path $Path))
+    {
+        if ( $PSCmdlet.ShouldProcess($Path, 'Create directory'))
+        {
             New-Item -ItemType Directory -Path $Path
             Write-Verbose "Path $Path created."
         }
     }
 
-    if ($PSCmdlet.ShouldProcess($Path, 'Go to directory')) {
+    if ( $PSCmdlet.ShouldProcess($Path, 'Go to directory'))
+    {
         Write-Verbose "Navigating to $Path"
         Set-Location -Path $Path -PassThru
     }
 }
 
-function Invoke-RepeatCommand {
+function Invoke-RepeatCommand
+{
     <#
     .SYNOPSIS
         Repeats a command `x` times.
@@ -754,13 +808,13 @@ function Invoke-RepeatCommand {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [int]$Count,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Command,
 
-        [Parameter(ValueFromRemainingArguments=$true)]
+        [Parameter(ValueFromRemainingArguments = $true)]
         $Params
     )
 
@@ -769,11 +823,13 @@ function Invoke-RepeatCommand {
     }
 
     process {
-        for ($i=1; $i -le $Count; $i++) {
-            if ($Params) {
+        for ($i = 1; $i -le $Count; $i++) {
+            if ($Params)
+            {
                 &$Command $Params
             }
-            else {
+            else
+            {
                 &$Command
             }
         }
@@ -784,7 +840,8 @@ function Invoke-RepeatCommand {
 # Time
 # -----------------------------------------------------------------------------
 
-function Get-DateExtended {
+function Get-DateExtended
+{
     <#
     .SYNOPSIS
         Display local date and time in ISO-8601 format `YYYY-MM-DDThh:mm:ss`.
@@ -800,7 +857,8 @@ function Get-DateExtended {
     Get-Date -Format "yyyy-MM-ddTHH:mm:ss"
 }
 
-function Get-DateExtendedUTC {
+function Get-DateExtendedUTC
+{
     <#
     .SYNOPSIS
         Display UTC date and time in ISO-8601 format `YYYY-MM-DDThh:mm:ss`.
@@ -816,7 +874,8 @@ function Get-DateExtendedUTC {
     (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss")
 }
 
-function Get-CalendarDate {
+function Get-CalendarDate
+{
     <#
     .SYNOPSIS
         Displays local date in `YYYY-MM-DD` format.
@@ -832,7 +891,8 @@ function Get-CalendarDate {
     Get-Date -Format "yyyy-MM-dd"
 }
 
-function Get-CalendarDateUTC {
+function Get-CalendarDateUTC
+{
     <#
     .SYNOPSIS
         Displays UTC date in `YYYY-MM-DD` format.
@@ -848,7 +908,8 @@ function Get-CalendarDateUTC {
     (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd")
 }
 
-function Get-Time {
+function Get-Time
+{
     <#
     .SYNOPSIS
         Displays local time in `hh:mm:ss` format.
@@ -864,7 +925,8 @@ function Get-Time {
     Get-Date -Format "HH:mm:ss"
 }
 
-function Get-TimeUTC {
+function Get-TimeUTC
+{
     <#
     .SYNOPSIS
         Displays UTC time in `hh:mm:ss` format.
@@ -880,7 +942,8 @@ function Get-TimeUTC {
     (Get-Date).ToUniversalTime().ToString("HH:mm:ss")
 }
 
-function Get-Timestamp {
+function Get-Timestamp
+{
     <#
     .SYNOPSIS
         Display Unix time stamp.
@@ -894,7 +957,8 @@ function Get-Timestamp {
     Get-Date -UFormat %s -Millisecond 0
 }
 
-function Get-WeekDate {
+function Get-WeekDate
+{
     <#
     .SYNOPSIS
         Displays week number in ISO-9601 format `YYYY-Www`.
@@ -907,10 +971,11 @@ function Get-WeekDate {
     .LINK
         https://en.wikipedia.org/wiki/ISO_8601
     #>
-    (Get-Date -UFormat %Y-W) + (Get-Date -UFormat %W).PadLeft(2,'0')
+    (Get-Date -UFormat %Y-W) + (Get-Date -UFormat %W).PadLeft(2, '0')
 }
 
-function Get-Weekday {
+function Get-Weekday
+{
     <#
     .SYNOPSIS
         Displays weekday number.
@@ -931,7 +996,8 @@ function Get-Weekday {
 # -----------------------------------------------------------------------------
 
 #TODO: re-connect this erased function.
-function Invoke-FastPingSimple {
+function Invoke-FastPingSimple
+{
     <#
     .SYNOPSIS
         Pings hostname(s) 30 times in quick succession.
@@ -944,7 +1010,8 @@ function Invoke-FastPingSimple {
     param()
 }
 
-function Clear-DNSCache {
+function Clear-DNSCache
+{
     <#
     .SYNOPSIS
         Flushes the DNS cache.
@@ -956,20 +1023,24 @@ function Clear-DNSCache {
     [CmdletBinding()]
     param()
 
-    if ($IsLinux) {
+    if ($IsLinux)
+    {
         sudo /etc/init.d/dns-clean restart
     }
-    elseif ($IsMacOS) {
+    elseif ($IsMacOS)
+    {
         dscacheutil -flushcache
         sudo killall -HUP mDNSResponder
     }
-    else {
+    else
+    {
         ipconfig /flushdns
     }
     Write-Information "DNS cache flushed."
 }
 
-function Get-IPS {
+function Get-IPS
+{
     <#
     .SYNOPSIS
         Gets all IP addresses.
@@ -981,15 +1052,18 @@ function Get-IPS {
     .LINK
         Get-NetIPAddress
     #>
-    if ($IsWindows) {
-        Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred"} | Sort-object IPAddress | Format-Table -Wrap -AutoSize
+    if ($IsWindows)
+    {
+        Get-NetIPAddress | Where-Object { $_.AddressState -eq "Preferred" } | Sort-object IPAddress | Format-Table -Wrap -AutoSize
     }
-    else {
+    else
+    {
         ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'
     }
 }
 
-function Get-LocalIP {
+function Get-LocalIP
+{
     <#
     .SYNOPSIS
         Gets local IP address.
@@ -999,16 +1073,19 @@ function Get-LocalIP {
         System.String
         Object
     #>
-    if ($IsWindows) {
-        $IPAddress = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.Ipaddress.length -gt 1}
+    if ($IsWindows)
+    {
+        $IPAddress = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.Ipaddress.length -gt 1 }
         $IPAddress.ipaddress[0]
     }
-    else {
+    else
+    {
         ipconfig getifaddr en0
     }
 }
 
-function Get-PublicIP {
+function Get-PublicIP
+{
     <#
     .SYNOPSIS
         Gets external IP address.
@@ -1026,7 +1103,8 @@ function Get-PublicIP {
     Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
 }
 
-function Invoke-RestMethodGet {
+function Invoke-RestMethodGet
+{
     <#
     .SYNOPSIS
         Sends a GET http request.
@@ -1040,7 +1118,8 @@ function Invoke-RestMethodGet {
     Invoke-RestMethod -Method GET @args
 }
 
-function Invoke-RestMethodHead {
+function Invoke-RestMethodHead
+{
     <#
     .SYNOPSIS
         Sends a HEAD http request.
@@ -1054,7 +1133,8 @@ function Invoke-RestMethodHead {
     Invoke-RestMethod -Method HEAD @args
 }
 
-function Invoke-RestMethodPost {
+function Invoke-RestMethodPost
+{
     <#
     .SYNOPSIS
         Sends a POST http request.
@@ -1068,7 +1148,8 @@ function Invoke-RestMethodPost {
     Invoke-RestMethod -Method POST @args
 }
 
-function Invoke-RestMethodPut {
+function Invoke-RestMethodPut
+{
     <#
     .SYNOPSIS
         Sends a PUT http request.
@@ -1082,7 +1163,8 @@ function Invoke-RestMethodPut {
     Invoke-RestMethod -Method PUT @args
 }
 
-function Invoke-RestMethodDelete {
+function Invoke-RestMethodDelete
+{
     <#
     .SYNOPSIS
         Sends a DELETE http request.
@@ -1096,7 +1178,8 @@ function Invoke-RestMethodDelete {
     Invoke-RestMethod -Method DELETE @args
 }
 
-function Invoke-RestMethodTrace {
+function Invoke-RestMethodTrace
+{
     <#
     .SYNOPSIS
         Sends a TRACE http request.
@@ -1110,7 +1193,8 @@ function Invoke-RestMethodTrace {
     Invoke-RestMethod -Method TRACE @args
 }
 
-function Invoke-RestMethodOptions {
+function Invoke-RestMethodOptions
+{
     <#
     .SYNOPSIS
         Sends an OPTIONS http request.
@@ -1131,7 +1215,8 @@ function Invoke-RestMethodOptions {
 # Power management
 # -----------------------------------------------------------------------------
 
-function Invoke-Lock {
+function Invoke-Lock
+{
     <#
     .SYNOPSIS
         Locks the session.
@@ -1143,31 +1228,37 @@ function Invoke-Lock {
         None
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Medium'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Medium'
     )]
     param(
         [switch]$Force
     )
 
-    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Lock the session.")) {
+    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Lock the session."))
+    {
 
-        if ($IsWindows) {
-            Invoke-Command {rundll32.exe user32.dll,LockWorkStation}
+        if ($IsWindows)
+        {
+            Invoke-Command { rundll32.exe user32.dll,LockWorkStation }
         }
-        elseif ($IsMacOS) {
+        elseif ($IsMacOS)
+        {
             pmset displaysleepnow
         }
-        elseif (Get-Command "vlock" -ErrorAction "Ignore") {
+        elseif (Get-Command "vlock" -ErrorAction "Ignore")
+        {
             vlock --all
         }
-        elseif (Get-Command "gnome-screensaver-command" -ErrorAction "Ignore") {
+        elseif (Get-Command "gnome-screensaver-command" -ErrorAction "Ignore")
+        {
             gnome-screensaver-command --lock
         }
     }
 }
 
-function Invoke-Hibernate {
+function Invoke-Hibernate
+{
     <#
     .SYNOPSIS
         Goes to sleep.
@@ -1179,27 +1270,32 @@ function Invoke-Hibernate {
         None
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Medium'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Medium'
     )]
     param(
         [switch]$Force
     )
 
-    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Send the system to sleep.")) {
-        if ($IsLinux) {
+    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Send the system to sleep."))
+    {
+        if ($IsLinux)
+        {
             systemctl suspend
         }
-        elseif ($IsMacOS) {
+        elseif ($IsMacOS)
+        {
             pmset sleep now
         }
-        else {
+        else
+        {
             shutdown.exe /h
         }
     }
 }
 
-function Invoke-Restart {
+function Invoke-Restart
+{
     <#
     .SYNOPSIS
         Restarts the system.
@@ -1213,27 +1309,32 @@ function Invoke-Restart {
         Restart-Computer
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Medium'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Medium'
     )]
     param(
         [switch]$Force
     )
 
-    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Restart the system.")) {
-        if ($IsLinux) {
+    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Restart the system."))
+    {
+        if ($IsLinux)
+        {
             sudo /sbin/reboot
         }
-        elseif ($IsMacOS) {
+        elseif ($IsMacOS)
+        {
             osascript -e 'tell application "System Events" to restart'
         }
-        else {
+        else
+        {
             Restart-Computer
         }
     }
 }
 
-function Invoke-PowerOff {
+function Invoke-PowerOff
+{
     <#
     .SYNOPSIS
         Shuts down the system.
@@ -1247,21 +1348,25 @@ function Invoke-PowerOff {
         Stop-Computer
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Medium'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Medium'
     )]
     param(
         [switch]$Force
     )
 
-    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Shut down the system.")) {
-        if ($IsLinux) {
+    if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to do this?", "Shut down the system."))
+    {
+        if ($IsLinux)
+        {
             sudo /sbin/poweroff
         }
-        elseif ($IsMacOS) {
+        elseif ($IsMacOS)
+        {
             osascript -e 'tell application "System Events" to shut down'
         }
-        else {
+        else
+        {
             Stop-Computer
         }
     }
@@ -1271,7 +1376,8 @@ function Invoke-PowerOff {
 # Sysadmin
 # -----------------------------------------------------------------------------
 
-function Add-EnvPath {
+function Add-EnvPath
+{
     <#
     .SYNOPSIS
         Adds a path to the global path list.
@@ -1295,7 +1401,7 @@ function Add-EnvPath {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$Path,
 
         [ValidateSet('Machine', 'User', 'Session')]
@@ -1307,13 +1413,15 @@ function Add-EnvPath {
 
     begin {
         $separator = ';'
-        if (!$IsWindows) {
+        if (!$IsWindows)
+        {
             $separator = ':'
         }
     }
 
     process {
-        if ($Container -ne 'Session') {
+        if ($Container -ne 'Session')
+        {
             $containerMapping = @{
                 Machine = [EnvironmentVariableTarget]::Machine
                 User = [EnvironmentVariableTarget]::User
@@ -1321,11 +1429,14 @@ function Add-EnvPath {
             $containerType = $containerMapping[$Container]
 
             $persistedPaths = [Environment]::GetEnvironmentVariable('Path', $containerType) -Split $separator
-            if ($persistedPaths -NotContains $Path) {
-                if ($Position -eq 'Append') {
+            if ($persistedPaths -NotContains $Path)
+            {
+                if ($Position -eq 'Append')
+                {
                     $persistedPaths = $persistedPaths + $Path | Where { $_ }
                 }
-                else {
+                else
+                {
                     $persistedPaths = @($Path | Where { $_ }) + $persistedPaths
                 }
                 [Environment]::SetEnvironmentVariable('Path', $persistedPaths -Join ';', $containerType)
@@ -1333,11 +1444,14 @@ function Add-EnvPath {
         }
 
         $envPaths = $env:PATH -Split $separator
-        if ($envPaths -NotContains $Path) {
-            if ($Position -eq 'Append') {
+        if ($envPaths -NotContains $Path)
+        {
+            if ($Position -eq 'Append')
+            {
                 $envPaths = $envPaths + $Path | Where { $_ }
             }
-            else {
+            else
+            {
                 $envPaths = @($Path | Where { $_ }) + $envPaths
             }
             $env:PATH = $envPaths -Join $separator
@@ -1345,7 +1459,8 @@ function Add-EnvPath {
     }
 }
 
-function Get-Mounts {
+function Get-Mounts
+{
     <#
     .SYNOPSIS
         Lists drive mounts.
@@ -1360,28 +1475,34 @@ function Get-Mounts {
     [CmdletBinding()]
     param()
 
-    if ($IsLinux) {
+    if ($IsLinux)
+    {
         mount | awk -F" " "{ printf \"%s\t%s\n\",\$1,\$3; }" | column -t | egrep ^/dev/ | sort
     }
-    elseif ($IsMacOS) {
+    elseif ($IsMacOS)
+    {
         mount | grep -E ^/dev | column -t
     }
-    else {
-        $Capacity = @{Name="Capacity(GB)";Expression={[math]::round(($_.Capacity/ 1073741824))}}
-        $FreeSpace = @{Name="FreeSpace(GB)";Expression={[math]::round(($_.FreeSpace / 1073741824),1)}}
-        $Usage = @{Name="Usage";Expression={-join([math]::round(100-((($_.FreeSpace / 1073741824)/($_.Capacity / 1073741824)) * 100),0),'%')};Alignment="Right"}
+    else
+    {
+        $Capacity = @{ Name = "Capacity(GB)"; Expression = { [math]::round(($_.Capacity/ 1073741824)) } }
+        $FreeSpace = @{ Name = "FreeSpace(GB)"; Expression = { [math]::round(($_.FreeSpace / 1073741824), 1) } }
+        $Usage = @{ Name = "Usage"; Expression = { -join ([math]::round(100 - ((($_.FreeSpace / 1073741824)/($_.Capacity / 1073741824)) * 100), 0), '%') }; Alignment = "Right" }
 
-        if ($IsCoreCLR) {
+        if ($IsCoreCLR)
+        {
             $volumes = Get-CimInstance -ClassName Win32_Volume
         }
-        else {
+        else
+        {
             $volumes = Get-WmiObject Win32_Volume
         }
         $volumes | Where name -notlike \\?\Volume* | Format-Table DriveLetter, Label, FileSystem, $Capacity, $FreeSpace, $Usage, PageFilePresent, IndexingEnabled, Compressed
     }
 }
 
-function Get-Path {
+function Get-Path
+{
     <#
     .SYNOPSIS
         Prints each PATH entry on a separate lines.
@@ -1392,7 +1513,8 @@ function Get-Path {
     #>
     begin {
         $separator = ';'
-        if (!$IsWindows) {
+        if (!$IsWindows)
+        {
             $separator = ':'
         }
     }
@@ -1402,7 +1524,8 @@ function Get-Path {
     }
 }
 
-function Get-TopProcess {
+function Get-TopProcess
+{
     <#
     .SYNOPSIS
         Monitors processes and system resource..
@@ -1411,7 +1534,8 @@ function Get-TopProcess {
     .OUTPUTS
         System.Object
     #>
-    while ($true) {
+    while ($true)
+    {
         Clear-Host
         # Sort by Working Set size.
         Get-Process | Sort-Object -Descending "WS" | Select-Object -First 30 | Format-Table -Autosize
@@ -1419,7 +1543,8 @@ function Get-TopProcess {
     }
 }
 
-function Update-Packages {
+function Update-Packages
+{
     <#
     .SYNOPSIS
         Keeps all apps and packages up to date.
@@ -1445,48 +1570,58 @@ function Update-Packages {
         https://rubygems.org/
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='High'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'High'
     )]
     param()
 
     Write-Host "Looks for updates for system modules and help, then proceeds to updating any packages by these optional managers: Chocolatey, Choco, npm, RubyGems."
 
-    if ($PSCmdlet.ShouldProcess("System modules", "Update")) {
+    if ( $PSCmdlet.ShouldProcess("System modules", "Update"))
+    {
         Write-Host "Updating system modules..." -ForegroundColor $ColorInfo
         Update-Module
     }
 
-    if ($PSCmdlet.ShouldProcess("Help files", "Update")) {
+    if ( $PSCmdlet.ShouldProcess("Help files", "Update"))
+    {
         Write-Host "Updating help files..." -ForegroundColor $ColorInfo
         Update-Help -Force
     }
 
-    if (Get-Command 'choco' -ErrorAction "Ignore") {
-        if ($PSCmdlet.ShouldProcess("Chocolatey packages", "Update")) {
+    if (Get-Command 'choco' -ErrorAction "Ignore")
+    {
+        if ( $PSCmdlet.ShouldProcess("Chocolatey packages", "Update"))
+        {
             Write-Host "Updating packages with Chocolatey..." -ForegroundColor $ColorInfo
             choco upgrade all
         }
     }
 
-    if (Get-Command 'scoop' -ErrorAction "Ignore") {
-        if ($PSCmdlet.ShouldProcess("Scoop packages", "Update")) {
+    if (Get-Command 'scoop' -ErrorAction "Ignore")
+    {
+        if ( $PSCmdlet.ShouldProcess("Scoop packages", "Update"))
+        {
             Write-Host "Updating packages with Scoop..." -ForegroundColor $ColorInfo
             scoop update *
             scoop cleanup *
         }
     }
 
-    if (Get-Command 'npm' -ErrorAction "Ignore") {
-        if ($PSCmdlet.ShouldProcess("Node.js packages", "Update")) {
+    if (Get-Command 'npm' -ErrorAction "Ignore")
+    {
+        if ( $PSCmdlet.ShouldProcess("Node.js packages", "Update"))
+        {
             Write-Host "Updating Node.js packages with npm..." -ForegroundColor $ColorInfo
             # npm install npm -g
             npm update -g
         }
     }
 
-    if (Get-Command 'gem' -ErrorAction "Ignore") {
-        if ($PSCmdlet.ShouldProcess("Ruby gems", "Update")) {
+    if (Get-Command 'gem' -ErrorAction "Ignore")
+    {
+        if ( $PSCmdlet.ShouldProcess("Ruby gems", "Update"))
+        {
             Write-Host "Updating Ruby gems..." -ForegroundColor $ColorInfo
             gem update --system
             gem update
@@ -1497,7 +1632,8 @@ function Update-Packages {
     Write-Host "Done!"
 }
 
-function Search-Command {
+function Search-Command
+{
     <#
     .SYNOPSIS
         Locates a command.
@@ -1515,8 +1651,8 @@ function Search-Command {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$true,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                ValueFromPipeline = $true
         )]
         [string]$Command
     )
@@ -1528,7 +1664,8 @@ function Search-Command {
 # Applications
 # -----------------------------------------------------------------------------
 
-function Start-Browser {
+function Start-Browser
+{
     <#
     .SYNOPSIS
         Opens file/URL in default browsers.
@@ -1541,15 +1678,18 @@ function Start-Browser {
     .LINK
         https://scriptingosx.com/2017/02/the-macos-open-command/
     #>
-    if ($IsWindows) {
+    if ($IsWindows)
+    {
         start $args
     }
-    else {
+    else
+    {
         open $args
     }
 }
 
-function Start-Chrome {
+function Start-Chrome
+{
     <#
     .SYNOPSIS
         Opens in Google Chrome.
@@ -1561,13 +1701,15 @@ function Start-Chrome {
         https://www.google.com/chrome/
     #>
     $process = "chrome"
-    if ($IsMacOS) {
+    if ($IsMacOS)
+    {
         $process = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
     }
     Start-Process $process $args
 }
 
-function Start-Edge {
+function Start-Edge
+{
     <#
     .SYNOPSIS
         Opens in Microsoft Edge.
@@ -1578,16 +1720,19 @@ function Start-Edge {
     .LINK
         https://www.microsoft.com/en-us/windows/microsoft-edge
     #>
-    if ($IsMacOS) {
+    if ($IsMacOS)
+    {
         $process = "/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge"
         Start-Process $process $args
     }
-    else {
+    else
+    {
         Start microsoft-edge:$args
     }
 }
 
-function Start-Firefox {
+function Start-Firefox
+{
     <#
     .SYNOPSIS
         Opens in Mozilla Firefox.
@@ -1599,13 +1744,15 @@ function Start-Firefox {
         https://www.mozilla.org/firefox/
     #>
     $process = "firefox"
-    if ($IsMacOS) {
+    if ($IsMacOS)
+    {
         $process = "/Applications/Firefox.app/Contents/MacOS/Firefox"
     }
     Start-Process $process $args
 }
 
-function Start-InternetExplorer {
+function Start-InternetExplorer
+{
     <#
     .SYNOPSIS
         Opens in Internet Explorer.
@@ -1619,7 +1766,8 @@ function Start-InternetExplorer {
     Start-Process "iexplore" $args
 }
 
-function Start-Opera {
+function Start-Opera
+{
     <#
     .SYNOPSIS
         Opens in Opera.
@@ -1631,13 +1779,15 @@ function Start-Opera {
         https://www.opera.com/
     #>
     $process = "opera"
-    if ($IsMacOS) {
+    if ($IsMacOS)
+    {
         $process = "/Applications/Opera.app/Contents/MacOS/Opera"
     }
     Start-Process $process $args
 }
 
-function Start-Safari {
+function Start-Safari
+{
     <#
     .SYNOPSIS
         Opens in Safari.
@@ -1651,7 +1801,8 @@ function Start-Safari {
     Start-Process "/Applications/Safari.app/Contents/MacOS/Safari" $args
 }
 
-function Enter-Starship {
+function Enter-Starship
+{
     <#
     .SYNOPSIS
         Enters the Starship cross-shell prompt.
@@ -1667,7 +1818,8 @@ function Enter-Starship {
     Invoke-Expression (&starship init powershell)
 }
 
-function Start-SublimeText {
+function Start-SublimeText
+{
     <#
     .SYNOPSIS
         Opens in Sublime Text.
@@ -1681,7 +1833,8 @@ function Start-SublimeText {
         https://www.sublimetext.com/
     #>
     $process = "sublime"
-    if ($IsWindows) {
+    if ($IsWindows)
+    {
         $process = "subl"
     }
     Invoke-Expression "& '$process' $args"
@@ -1691,7 +1844,8 @@ function Start-SublimeText {
 # Development
 # -----------------------------------------------------------------------------
 
-function Invoke-Docker {
+function Invoke-Docker
+{
     <#
     .SYNOPSIS
         Passthrough to the `docker` command.
@@ -1708,7 +1862,8 @@ function Invoke-Docker {
     Invoke-Expression "$process $args"
 }
 
-function Invoke-DockerCompose {
+function Invoke-DockerCompose
+{
     <#
     .SYNOPSIS
         Passthrough to the `docker-compose` command.
@@ -1725,7 +1880,8 @@ function Invoke-DockerCompose {
     Invoke-Expression "$process $args"
 }
 
-function Invoke-Git {
+function Invoke-Git
+{
     <#
     .SYNOPSIS
         Passthrough to the `git` command.
@@ -1742,7 +1898,8 @@ function Invoke-Git {
     &$process $args
 }
 
-function Invoke-Venv {
+function Invoke-Venv
+{
     <#
     .SYNOPSIS
         Python: activates the virtual environment.
@@ -1754,18 +1911,21 @@ function Invoke-Venv {
         https://docs.python.org/3/tutorial/venv.html
     #>
     $paths = (
-        "./.venv/bin/activate",
-        "./venv/bin/activate"
+    "./.venv/bin/activate",
+    "./venv/bin/activate"
     )
-    foreach ($_ in $paths) {
-        if (Test-Path $_) {
+    foreach ($_ in $paths)
+    {
+        if (Test-Path $_)
+        {
             . $_
             break
         }
     }
 }
 
-function Initialize-Venv {
+function Initialize-Venv
+{
     <#
     .SYNOPSIS
         Python: creates the virtual environment.
@@ -1783,8 +1943,10 @@ function Initialize-Venv {
 # macOS
 # -----------------------------------------------------------------------------
 
-if ($IsMacOS) {
-    function Hide-DesktopIcons {
+if ($IsMacOS)
+{
+    function Hide-DesktopIcons
+    {
         <#
         .SYNOPSIS
             Hides desktop icons.
@@ -1796,18 +1958,20 @@ if ($IsMacOS) {
             https://www.defaults-write.com/os-x-how-to-quickly-hide-the-desktop-icons/
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("All desktop icons", "Hide")) {
+        if ( $PSCmdlet.ShouldProcess("All desktop icons", "Hide"))
+        {
             Invoke-Expression 'defaults write com.apple.finder CreateDesktop -bool false; killall Finder'
             Write-Verbose "Desktop icons are now hidden"
         }
     }
 
-    function Show-DesktopIcons {
+    function Show-DesktopIcons
+    {
         <#
         .SYNOPSIS
             Shows desktop icons.
@@ -1819,18 +1983,20 @@ if ($IsMacOS) {
             https://www.defaults-write.com/os-x-how-to-quickly-hide-the-desktop-icons/
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("All desktop icons", "Show")) {
+        if ( $PSCmdlet.ShouldProcess("All desktop icons", "Show"))
+        {
             Invoke-Expression 'defaults write com.apple.finder CreateDesktop -bool true; killall Finder'
             Write-Verbose "Desktop icons are now visible"
         }
     }
 
-    function Hide-HiddenFiles {
+    function Hide-HiddenFiles
+    {
         <#
         .SYNOPSIS
             Hides hidden files in Finder.
@@ -1842,18 +2008,20 @@ if ($IsMacOS) {
             https://www.defaults-write.com/show-hidden-files-in-os-x-finder/
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to hide these files from the Finder?")) {
+        if ( $PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to hide these files from the Finder?"))
+        {
             Invoke-Expression 'defaults write com.apple.finder AppleShowAllFiles -bool false; killall Finder'
             Write-Verbose "Hidden files are now hidden in the Finder"
         }
     }
 
-    function Show-HiddenFiles {
+    function Show-HiddenFiles
+    {
         <#
         .SYNOPSIS
             Shows hidden files in Finder.
@@ -1865,18 +2033,20 @@ if ($IsMacOS) {
             https://www.defaults-write.com/show-hidden-files-in-os-x-finder/
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to display these files from the Finder?")) {
+        if ( $PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to display these files from the Finder?"))
+        {
             Invoke-Expression 'defaults write com.apple.finder AppleShowAllFiles -bool true; killall Finder'
             Write-Verbose "Hidden files are now visible in the Finder"
         }
     }
 
-    function Disable-Spotlight {
+    function Disable-Spotlight
+    {
         <#
         .SYNOPSIS
             Disables Spotlight.
@@ -1888,19 +2058,21 @@ if ($IsMacOS) {
             https://discussions.apple.com/message/32354266#message32354266
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("Spotlight search system", "Are you sure you want to disable Spotlight?")) {
+        if ( $PSCmdlet.ShouldProcess("Spotlight search system", "Are you sure you want to disable Spotlight?"))
+        {
             Invoke-Expression 'sudo mdutil -a -i off'
             Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 2
             Write-Verbose "Hidden files are now hidden in Explorer"
         }
     }
 
-    function Enable-Spotlight {
+    function Enable-Spotlight
+    {
         <#
         .SYNOPSIS
             Enables Spotlight.
@@ -1912,12 +2084,13 @@ if ($IsMacOS) {
             https://discussions.apple.com/message/32354266#message32354266
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("Spotlight search system", "Are you sure you want to enable Spotlight?")) {
+        if ( $PSCmdlet.ShouldProcess("Spotlight search system", "Are you sure you want to enable Spotlight?"))
+        {
             Invoke-Expression 'sudo mdutil -a -i on'
             Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 2
             Write-Verbose "Hidden files are now hidden in Explorer"
@@ -1929,8 +2102,10 @@ if ($IsMacOS) {
 # Windows
 # -----------------------------------------------------------------------------
 
-if ($IsWindows) {
-    function Hide-HiddenFiles {
+if ($IsWindows)
+{
+    function Hide-HiddenFiles
+    {
         <#
         .SYNOPSIS
             Hides hidden files in Explorer.
@@ -1942,18 +2117,20 @@ if ($IsWindows) {
             https://ss64.com/nt/syntax-reghacks.html
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to hide these files from Explorer?")) {
+        if ( $PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to hide these files from Explorer?"))
+        {
             Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 2
             Write-Verbose "Hidden files are now hidden in Explorer"
         }
     }
 
-    function Show-HiddenFiles {
+    function Show-HiddenFiles
+    {
         <#
         .SYNOPSIS
             Shows hidden files in Explorer.
@@ -1965,12 +2142,13 @@ if ($IsWindows) {
             https://ss64.com/nt/syntax-reghacks.html
         #>
         [CmdletBinding(
-            SupportsShouldProcess=$true,
-            ConfirmImpact='Low'
+                SupportsShouldProcess = $true,
+                ConfirmImpact = 'Low'
         )]
         param()
 
-        if ($PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to display these files from Explorer?")) {
+        if ( $PSCmdlet.ShouldProcess("Hidden files", "Are you sure that you want to display these files from Explorer?"))
+        {
             Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
             Write-Verbose "Hidden files are now visible in Explorer"
         }
@@ -1981,7 +2159,8 @@ if ($IsWindows) {
 # Common paths
 # -----------------------------------------------------------------------------
 
-function Set-LocationDownloads {
+function Set-LocationDownloads
+{
     <#
     .SYNOPSIS
         Navigates to Downloads directory.
@@ -1993,8 +2172,8 @@ function Set-LocationDownloads {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -2004,14 +2183,16 @@ function Set-LocationDownloads {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationDocuments {
+function Set-LocationDocuments
+{
     <#
     .SYNOPSIS
         Navigates to Documents directory.
@@ -2023,8 +2204,8 @@ function Set-LocationDocuments {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -2034,14 +2215,16 @@ function Set-LocationDocuments {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationDesktop {
+function Set-LocationDesktop
+{
     <#
     .SYNOPSIS
         Navigates to Desktop directory.
@@ -2053,8 +2236,8 @@ function Set-LocationDesktop {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -2064,7 +2247,8 @@ function Set-LocationDesktop {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
@@ -2075,7 +2259,8 @@ function Set-LocationDesktop {
 # Configuration paths
 # -----------------------------------------------------------------------------
 
-function Set-LocationChezmoiConf {
+function Set-LocationChezmoiConf
+{
     <#
     .SYNOPSIS
         Navigates to Chezmoi's local repo.
@@ -2089,30 +2274,34 @@ function Set-LocationChezmoiConf {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
     begin {
-        if (Get-Command chezmoi -ErrorAction SilentlyContinue) {
-            $path = "$(chezmoi source-path)"
+        if (Get-Command chezmoi -ErrorAction SilentlyContinue)
+        {
+            $path = "$( chezmoi source-path )"
         }
-        else {
+        else
+        {
             $path = "${HOME}\.local\share\chezmoi"
         }
         Write-Verbose "Destination set to $path"
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationPowershellConf {
+function Set-LocationPowershellConf
+{
     <#
     .SYNOPSIS
         Navigates to Powershell's profile location.
@@ -2126,8 +2315,8 @@ function Set-LocationPowershellConf {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -2137,14 +2326,16 @@ function Set-LocationPowershellConf {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationSublimeConf {
+function Set-LocationSublimeConf
+{
     <#
     .SYNOPSIS
         Navigates to Sublime Text's local repo.
@@ -2158,26 +2349,30 @@ function Set-LocationSublimeConf {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
     begin {
-        if ($IsLinux) {
+        if ($IsLinux)
+        {
             $path = "${HOME}/.config/sublime-text-3/Packages/User"
         }
-        elseif ($IsMacOS) {
+        elseif ($IsMacOS)
+        {
             $path = "${HOME}/Library/Application Support/Sublime Text 3/Packages/User"
         }
-        else {
+        else
+        {
             $path = "${Env:AppData}\Sublime Text 3\Packages\User"
         }
         Write-Verbose "Destination set to $path"
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
@@ -2188,7 +2383,8 @@ function Set-LocationSublimeConf {
 # Custom paths
 # -----------------------------------------------------------------------------
 
-function Set-LocationArchives {
+function Set-LocationArchives
+{
     <#
     .SYNOPSIS
         Navigates to Archives directory.
@@ -2200,8 +2396,8 @@ function Set-LocationArchives {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -2211,14 +2407,16 @@ function Set-LocationArchives {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
     }
 }
 
-function Set-LocationCode {
+function Set-LocationCode
+{
     <#
     .SYNOPSIS
         Navigates to Code directory.
@@ -2230,8 +2428,8 @@ function Set-LocationCode {
         Set-Location
     #>
     [CmdletBinding(
-        SupportsShouldProcess=$true,
-        ConfirmImpact='Low'
+            SupportsShouldProcess = $true,
+            ConfirmImpact = 'Low'
     )]
     param()
 
@@ -2241,7 +2439,8 @@ function Set-LocationCode {
     }
 
     process {
-        if ($PSCmdlet.ShouldProcess($path, 'Go to directory')) {
+        if ( $PSCmdlet.ShouldProcess($path, 'Go to directory'))
+        {
             Write-Verbose "Navigating to $path"
             Set-Location $path
         }
@@ -2252,7 +2451,8 @@ function Set-LocationCode {
 # Varia
 # -----------------------------------------------------------------------------
 
-function Get-FileHashMD5 {
+function Get-FileHashMD5
+{
     <#
     .SYNOPSIS
         Calculates the MD5 hash of an input.
@@ -2274,16 +2474,17 @@ function Get-FileHashMD5 {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$true,
-            Position=0,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                Position = 0,
+                ValueFromPipeline = $true
         )]
         [string]$Path
     )
     Get-FileHash $Path -Algorithm MD5
 }
 
-function Get-FileHashSHA1 {
+function Get-FileHashSHA1
+{
     <#
     .SYNOPSIS
         Calculates the SHA1 hash of an input.
@@ -2305,16 +2506,17 @@ function Get-FileHashSHA1 {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$true,
-            Position=0,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                Position = 0,
+                ValueFromPipeline = $true
         )]
         [string]$Path
     )
     Get-FileHash $Path -Algorithm SHA1
 }
 
-function Get-FileHashSHA256 {
+function Get-FileHashSHA256
+{
     <#
     .SYNOPSIS
         Calculates the SHA256 hash of an input.
@@ -2336,16 +2538,17 @@ function Get-FileHashSHA256 {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$true,
-            Position=0,
-            ValueFromPipeline=$true
+                Mandatory = $true,
+                Position = 0,
+                ValueFromPipeline = $true
         )]
         [string]$Path
     )
     Get-FileHash $Path -Algorithm SHA256
 }
 
-function Get-Weather {
+function Get-Weather
+{
     <#
     .SYNOPSIS
         Display the current weather and forecast.
@@ -2370,18 +2573,19 @@ function Get-Weather {
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory=$false,
-            ValueFromPipeline=$true
+                Mandatory = $false,
+                ValueFromPipeline = $true
         )]
         [string]$Request,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [PSDefaultValue(Help = '10')]
         [int]$Timeout = 10
     )
 
     begin {
-        if ($Request) {
+        if ($Request)
+        {
             $Request = '?' + $Request
         }
         $Request = 'https://wttr.in' + $Request
@@ -2394,7 +2598,8 @@ function Get-Weather {
     }
 }
 
-function Get-WeatherForecast {
+function Get-WeatherForecast
+{
     <#
     .SYNOPSIS
         Displays detailed weather and forecast.
@@ -2413,7 +2618,8 @@ function Get-WeatherForecast {
     Get-Weather 'F'
 }
 
-function Get-WeatherCurrent {
+function Get-WeatherCurrent
+{
     <#
     .SYNOPSIS
         Displays current weather.

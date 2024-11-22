@@ -19,7 +19,8 @@ $ColorWarn = "DarkRed"
 # -----------------------------------------------------------------------------
 
 # Import popular commands from Linux.
-if (Get-Command Import-WslCommand -errorAction Ignore) {
+if (Get-Command Import-WslCommand -errorAction Ignore)
+{
     $WslCommands = @(
         "chmod",
         "grep",
@@ -39,17 +40,17 @@ if (Get-Command Import-WslCommand -errorAction Ignore) {
     }
 
     $WslCommands | ForEach-Object {
-        if (! Get-Command $_ -errorAction Ignore) {
-            wsl command -v $_ > null
-            if ($?) {
-                $WslImportedCommands += $_
-                Import-WslCommand "$_"
-            }
-            else {
-                $Global:Error.RemoveAt($Global:Error.Count - 1)
-            }
-        }
+    if (! Get-Command $_ -errorAction Ignore) {
+    wsl command -v $_ > null
+    if ($?) {
+    $WslImportedCommands += $_
+    Import-WslCommand "$_"
     }
+    else {
+    $Global: Error.RemoveAt($Global: Error.Count - 1)
+    }
+    }
+}
 }
 
 
@@ -57,33 +58,35 @@ if (Get-Command Import-WslCommand -errorAction Ignore) {
 # -----------------------------------------------------------------------------
 
 # Determine user profile parent directory.
-$ProfilePath=Split-Path -parent $profile
+$ProfilePath = Split-Path -parent $profile
 
 # Load functions declarations from separate configuration file.
 if (Test-Path $ProfilePath/functions.ps1) {
-    . $ProfilePath/functions.ps1
+. $ProfilePath/functions.ps1
 }
 
 # Add missing user paths.
 if (Get-Command Add-EnvPath -errorAction Ignore) {
-    if ($IsWindows) {
-        Add-EnvPath -Path "${Env:Programfiles}\Docker\Docker\resources\bin\" -Position "Append"
-        Add-EnvPath -Path "${Env:Programfiles}\Git\cmd\" -Position "Append"
-    }
-    else {
-        Add-EnvPath -Path "/usr/local/sbin" -Position "Prepend"
-        Add-EnvPath -Path "/usr/local/bin" -Position "Prepend"
-    }
+if ($IsWindows) {
+Add-EnvPath -Path "${Env: Programfiles
+}\Docker\Docker\resources\bin\" -Position "Append"
+Add-EnvPath -Path "${Env: Programfiles
+}\Git\cmd\" -Position "Append"
+}
+else {
+Add-EnvPath -Path "/usr/local/sbin" -Position "Prepend"
+Add-EnvPath -Path "/usr/local/bin" -Position "Prepend"
+}
 }
 
 # Load alias definitions from separate configuration file.
 if (Test-Path $ProfilePath/aliases.ps1) {
-    . $ProfilePath/aliases.ps1
+. $ProfilePath/aliases.ps1
 }
 
 # Load custom code from separate configuration file.
 if (Test-Path $ProfilePath/extras.ps1) {
-    . $ProfilePath/extras.ps1
+. $ProfilePath/extras.ps1
 }
 
 
@@ -92,7 +95,7 @@ if (Test-Path $ProfilePath/extras.ps1) {
 
 # Point ripgrep to its configuration file.
 # See https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md
-$Env:RIPGREP_CONFIG_PATH = "$HOME/.ripgreprc"
+$Env: RIPGREP_CONFIG_PATH = "$HOME/.ripgreprc"
 
 
 # Finalization
@@ -102,6 +105,6 @@ $Env:RIPGREP_CONFIG_PATH = "$HOME/.ripgreprc"
 
 # Display if/which WSL Interop commands are imported.
 if ($WslImportedCommands) {
-    Write-Host "Windows Subsystem for Linux (WSL) Interop enabled." -ForegroundColor $ColorInfo
-    Write-Host "WSL commands available:`n`t$($WslImportedCommands | sort)" -ForegroundColor $ColorInfo
+Write-Host "Windows Subsystem for Linux (WSL) Interop enabled." -ForegroundColor $ColorInfo
+Write-Host "WSL commands available:`n`t$($WslImportedCommands | sort)" -ForegroundColor $ColorInfo
 }

@@ -11,11 +11,15 @@ tasks:
 
   init:
     desc: "(re)Intialize chezmoi state from templates"
+    interactive: true
+    run: once
     cmds:
       - "chezmoi init"
 
   apply:
-    desc: "Apply changes from downloaded dotfiles"
+    desc: "Apply changes"
+    interactive: true
+    run: once
     cmds:
       - chezmoi apply
 

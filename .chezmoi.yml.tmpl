@@ -57,17 +57,9 @@ data:
   email: "{{ $email }}"
   taskfile: [
     'ANSIBLE_HOME: "{{$home}}/.ansible"',
+    'AUTOMATION_HOME: "{{$xdg_data_home}}/automation"',
     'BREW: brew',
     'CHEZMOI_HOME: "{{.chezmoi.sourceDir}}"',
-    'DASBOOTSTRAP_HOME: "{{$dasbootstrap_home}}"',
-    'DBS_MODULE_DASBOOTSTRAP: "dasbootstrap.dasbootstrap.core"',
-    'DBS_MODULE_KIOSK: "dasbootstrap.chromekiosk"',
-    'DBS_VENV_PACKAGES: "{{joinPath $dasbootstrap_home (nospace (cat "/.venv/lib/python" $python_ver)) "/site-packages/dasbootstrap"}}"',
-    'DBS_VENV_PIP: "{{joinPath $dasbootstrap_home "/.venv/bin/pip"}}"',
-    'DBS_VENV_PYTHON: "run {{joinPath $dasbootstrap_home "/.venv/bin/python"}} -m "',
-    'DBS_POLY_BASES: "{{$dasbootstrap_home}}/bases/**/*"',
-    'DBS_POLY_COMPONENTS: "{{$dasbootstrap_home}}/components/**/*"',
-    'GH: gh',
     'HOME: "{{ $home }}"',
     'JSON_SUFFIX: "--json"',
     'PIP: pip3',
@@ -85,13 +77,6 @@ data:
   ]
   taskfile_ansible: [
     'ANSIBLE: ansible',
-    'ANSIBLE_INVENTORY: ansible-inventory',
-    'ANSIBLE_PLAYBOOK: ansible-playbook',
-    'ANSIBLE_GALAXY: ansible-galaxy',
-    'ANSIBLE_VAULT: ansible-vault',
-    'ANSIBLE_DOCS: ansible-docs',
-    'ANSIBLE_RUNNER: ansible-runner',
-    'ANSIBLE_PULL: ansible-pull',
     'ANSIBLE_PB_PREFIX: "{{$runPrefix}} ansible-playbook"',
     'ANSIBLE_INV_HOME: "{{$ansible_home}}/inventory"',
     'ANSIBLE_INV_CACHE: "{{$xdg_cache_home}}/ansible"',
