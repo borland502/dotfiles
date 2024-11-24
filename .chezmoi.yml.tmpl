@@ -25,12 +25,10 @@
 {{- $rsyncPrefix := "rsync -avzPh" -}}
 
 keepassxc:
-  database: "{{ $home }}/.local/share/keepass/secrets.kdbx"
-
-encryption: "age"
-age:
-  identity: "{{ $home }}/.config/age/key.txt"
-  recipient: "age16vcpz2q0nzhmu72d7hlj322rz9arlqmk0tlnk8w4ly4k0h607sysc8qwhl"
+  database: "{{ $xdg_data_home }}/trapper_keeper/secrets.kdbx"
+  args: ["--key-file", "{{ $xdg_state_home }}/secrets.keyx", "--yubikey", "2:19116593"]
+  mode: "open"
+  prompt: true
 
 hooks.read-source-state.pre:
   command: ".local/share/chezmoi/.install-password-manager.sh"

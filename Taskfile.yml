@@ -15,8 +15,10 @@ includes:
     taskfile: "${XDG_CONFIG_HOME}/taskfiles/keepassxc.yaml"
   validate:
     taskfile: "${XDG_CONFIG_HOME}/taskfiles/validate.yaml"
+    internal: true
   install:
     taskfile: "${XDG_CONFIG_HOME}/taskfiles/install.yaml"
+    internal: true
 
 tasks:
   default:
