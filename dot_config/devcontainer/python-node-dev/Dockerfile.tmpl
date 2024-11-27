@@ -51,7 +51,7 @@ WORKDIR ${XDG_DATA_HOME}
 # Pyenv - Python install
 RUN \
     --mount=type=cache,target=/${XDG_DATA_HOME}/pyenv,uid="${USER_ID}" \
-    git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/.pyenv && pyenv install "3.12" && pyenv global "3.12"
+    git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/pyenv && pyenv install "3.12" && pyenv global "3.12"
 # NVM - Node install
 RUN mkdir -p ${NVM_DIR} && \
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash && \

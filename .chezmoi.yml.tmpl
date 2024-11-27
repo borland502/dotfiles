@@ -9,6 +9,7 @@
 {{- $xdg_bin_home := expandenv ("$HOME/.local/bin") -}}
 {{- $xdg_lib_home := expandenv ("$HOME/.local/lib") -}}
 {{- $xdg_runtime_dir := expandenv ("$HOME/.local/run") -}}
+{{- $xdg_data_dirs := expandenv ("/usr/local/share:/usr/share:$HOME/.local/bin:/var/lib/flatpak/exports/share:/flatpak/exports/share") -}}
 {{- $ansible_home := expandenv ("$HOME/.ansible") -}}
 {{- $homebrew_home := "/home/linuxbrew/.linuxbrew" -}}
 {{- $ansible_inv_home := joinPath $ansible_home "/inventory" -}}
@@ -25,8 +26,8 @@
 {{- $rsyncPrefix := "rsync -avzPh" -}}
 
 keepassxc:
-  database: "{{ $xdg_data_home }}/trapper_keeper/secrets.kdbx"
-  args: ["--key-file", "{{ $xdg_state_home }}/secrets.keyx", "--yubikey", "2:19116593"]
+  database: "{{ $xdg_data_home }}/keepass/secrets.kdbx"
+  args: ["--key-file", "{{ $xdg_state_home }}/keepass/secrets.keyx", "--yubikey", "2:19116593"]
   mode: "open"
   prompt: true
 
@@ -41,7 +42,7 @@ scriptEnv:
   XDG_CACHE_HOME: {{$xdg_cache_home}}
   XDG_CONFIG_DIRS: /etc/xdg:{{$xdg_config_home}}
   XDG_CONFIG_HOME: {{$xdg_config_home}}
-  XDG_DATA_DIRS: /usr/local/share:/usr/share:{{$xdg_data_home}}/var/lib/flatpak/exports/share:{{$xdg_data_home}}/flatpak/exports/share
+  XDG_DATA_DIRS: /usr/local/share:/usr/share:{{.chezmoi.homeDir}}/.local/bin:{{$xdg_data_home}}/var/lib/flatpak/exports/share:{{$xdg_data_home}}/flatpak/exports/share
   XDG_DATA_HOME: {{$xdg_data_home}}
   XDG_LIB_HOME: {{$xdg_lib_home}}
   XDG_STATE_HOME: {{$xdg_state_home}}
@@ -96,13 +97,19 @@ data:
     'ANSIBLE_SYS_USER: root',
   ]
   # redefine all xdg vars for easier access in go templates
+  xdg_data_dirs: "{{$xdg_data_dirs}}"
+  xdg_config_home: "{{$xdg_config_home}}"
+  xdg_lib_home: "{{$xdg_lib_home}}"
+  xdg_runtime_dir: "{{$xdg_runtime_dir}}"
+  xdg_state_home: "{{$xdg_state_home}}"
+  xdg_cache_home: "{{$xdg_cache_home}}"
   xdg_data_home: "{{$xdg_data_home}}"
   xdg_bin_home: "{{$xdg_bin_home}}"
   xdg: [
     'XDG_CACHE_HOME: {{$xdg_cache_home}}',
     'XDG_CONFIG_DIRS: /etc/xdg:{{$xdg_config_home}}',
     'XDG_CONFIG_HOME: {{$xdg_config_home}}',
-    'XDG_DATA_DIRS: /usr/local/share:/usr/share:{{$xdg_data_home}}/var/lib/flatpak/exports/share:{{$xdg_data_home}}/flatpak/exports/share',
+    'XDG_DATA_DIRS: /usr/local/share:/usr/share:{{$home}}/.local/bin:{{$xdg_data_home}}/var/lib/flatpak/exports/share:{{$xdg_data_home}}/flatpak/exports/share',
     'XDG_DATA_HOME: {{$xdg_data_home}}',
     'XDG_STATE_HOME: {{$xdg_state_home}}',
     'XDG_BIN_HOME: {{$xdg_bin_home}}',

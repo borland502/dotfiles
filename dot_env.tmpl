@@ -16,8 +16,28 @@
 {{ . | replace ": " "=" }}
 {{ end -}}
 
+# Duplicates .zshenv but a handful of scripts reference .env directly
 {{range .versions.vars -}}
 {{ . | replace ": " "=" }}
 {{ end -}}
 
+{{range .kitty.vars -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
+
+{{range .pyenv.vars -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
+
+{{range .nvm.vars -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
+
+{{range .pipx.vars -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
+
+{{range .zsh.vars -}}
+{{ . | replace ": " "=" }}
+{{ end -}}
 

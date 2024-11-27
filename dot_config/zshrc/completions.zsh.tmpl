@@ -1,27 +1,24 @@
 mkdir -p "${XDG_CACHE_HOME}/completions"
 
-{{if and (not ("${XDG_DATA_HOME}/zinit/completions/_gopass" | lstat )) (findOneExecutable (list "gopass") (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH")))}}
-gopass completion zsh >"${XDG_CACHE_HOME}/completions/_gopass"
-zi snippet "${XDG_CACHE_HOME}/completions/_gopass"
-{{end}}
-
 zinit wait lucid for \
   OMZL::git.zsh \
   OMZP::git \
   OMZP::git-extras \
   OMZP::tig \
-  OMZP::git-flow-avh \
   OMZP::git-auto-fetch \
-  unixorn/git-extra-commands \
-  wfxr/forgit
+  unixorn/git-extra-commands
 
 zinit wait lucid depth"1" for \
       atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
       zdharma-continuum/fast-syntax-highlighting \
       blockf \
-      zsh-users/zsh-completions \
-      atload"!_zsh_autosuggest_start" \
-      zsh-users/zsh-autosuggestions \
       https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
       https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker 
+      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+
+# Load completions from Homebrew
+if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
+  for file in /opt/homebrew/share/zsh/site-functions/_*; do
+    cp --remove-destination "$file" "${XDG_DATA_HOME}/zinit/completions"
+  done
+fi

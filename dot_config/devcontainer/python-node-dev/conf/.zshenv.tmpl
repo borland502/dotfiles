@@ -2,7 +2,7 @@
 ## Comments grabbed from arch wiki on the variables
 
 set -o allexport
-{{range .xdg -}}
+{{range .versions.vars -}}
 {{ . | replace ": " "=" }}
 {{end -}}
 set +o allexport
@@ -19,12 +19,28 @@ set -o allexport
 {{end -}}
 set +o allexport
 
+if ! [[ -d ${PYENV_ROOT} ]]; then
+    git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/pyenv && pyenv install "3.12" && pyenv global "3.12"
+fi
+
 set -o allexport
 {{range .nvm.vars -}}
 {{.}}
 {{end}}
 {{range .nvm.cmds -}}
 {{.}}
+{{end -}}
+set +o allexport
+
+if ! [[ -d ${XDG_DATA_HOME}/nvm ]]; then
+    mkdir -p ${NVM_DIR} && \
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash && \
+    \. ${NVM_DIR}/nvm.sh && nvm install --lts && nvm use --lts
+fi
+
+set -o allexport
+{{range .pipx.vars -}}
+{{ . | replace ": " "=" }}
 {{end -}}
 set +o allexport
 

@@ -80,7 +80,7 @@ source "${XDG_CONFIG_HOME}/zshrc/tools.zsh"
 
 source "${XDG_CONFIG_HOME}/zshrc/aliases.zsh"
 
-source "${XDG_CONFIG_HOME}/zshrc/completions.zsh" 
+source "${XDG_CONFIG_HOME}/zshrc/completions.zsh"
 
 {{ if (joinPath .chezmoi.homeDir "/.ssh/id_ed25519" | lstat) -}}
 eval "$(ssh-agent)"
@@ -99,3 +99,6 @@ eval "$(starship init zsh)"
 export SDKMAN_DIR="$HOME/.sdkman"
 zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
 {{end}}
+
+autoload -U +X bashcompinit && bashcompinit
+autoload -U +X compinit && compinit

@@ -1,3 +1,7 @@
+# Use all gnu utils rather than the elderly BSD ones
+export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
+
+# requires dircolors from coreutils
 if [[ -f "${HOME}/.env" ]]; then
     source "${HOME}/.env"
 fi
@@ -12,9 +16,6 @@ export CLICOLOR="1"
 
 # Huber prereqs
 export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
-
-# Use all gnu utils rather than the elderly BSD ones
-export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
 
 {{- else if eq .chezmoi.os "linux" }}
 
@@ -41,55 +42,10 @@ unsetopt PATH_DIRS
 
 {{ end }}
 
-export LS_COLORS="$(dircolors --print-ls-colors ${XDG_CONFIG_HOME}/colors/dircolors.monokai)"
-export EZA_COLORS="$(dircolors --print-ls-colors ${XDG_CONFIG_HOME}/colors/dircolors.monokai)"
-
-if [[ -z "$XDG_DATA_HOME" ]]; then
-    source "${HOME}/.zshenv"
-fi
-
-export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
-
 {{ if eq .chezmoi.os "linux" }}
 # Wayland
 export GDK_BACKEND=wayland
 {{end}}
-
-# Plugin config vars
-export ZSHZ_DATA="$XDG_DATA_HOME/z/.z"
-
-if ! [[ -f "$XDG_DATA_HOME/z" ]]; then
-    mkdir -p "$XDG_DATA_HOME/z"
-    touch "$ZSHZ_DATA"
-fi
-
-export ZSHZ_KEEP_DIRS=(/opt/net /net)
-export ZSHZ_CASE=smart
-
-# kitty terminal
-export KITTY_CONFIG_DIRECTORY="${XDG_CONFIG_HOME}/kitty"
-export KITTY_CACHE_DIRECTORY="${XDG_CACHE_HOME}/kitty"
-export KITTY_RUNTIME_DIRECTORY="${XDG_RUNTIME_DIR}/kitty"
-export COLORTERM="truecolor"
-export ZDOTDIR="${HOME}"
-
-# Nodejs
-export NVM_AUTO_USE=true
-export NVM_DIR="${XDG_DATA_HOME}/nvm"
-export NODE_CONFIG_DIR="${XDG_CONFIG_HOME}/home-ops"
-
-if ! [[ -d ${XDG_DATA_HOME}/nvm ]]; then
-    mkdir -p ${NVM_DIR} && \
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash && \
-    \. ${NVM_DIR}/nvm.sh && nvm install --lts && nvm use --lts
-fi
-
-# Pyenv
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-
-if ! [[ -d ${XDG_DATA_HOME}/pyenv ]]; then
-    git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/pyenv && pyenv install "${PYTHON_VERSION}" && pyenv global "${PYTHON_VERSION}"
-fi
 
 ## Homebrew
 export HOMEBREW_CASK_OPTS=--require-sha

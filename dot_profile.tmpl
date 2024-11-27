@@ -8,7 +8,14 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# if running bash
+set -o allexport
+{{range .xdg -}}
+{{ . | replace ": " "=" }}
+{{end -}}
+set +o allexport
+
+# if running bash or have bash
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
@@ -28,17 +35,6 @@ set +o allexport
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{ end }}
 
-# Setup pyenv ( python version manager )
-{{/* if [ -x "$HOMEBREW_PREFIX/bin/pyenv" ]; then
-    set -o allexport
-    {{range .pyenv.vars -}}
-    {{.}}
-    {{end}}
-    {{range .pyenv.cmds -}}
-    {{.}}
-    {{end -}}
-    set +o allexport
-fi */}}
 
 source "${XDG_LIB_HOME}/functions.sh"
 

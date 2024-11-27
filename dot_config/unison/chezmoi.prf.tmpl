@@ -1,0 +1,20 @@
+# Unison preferences file
+
+# Root directories to synchronize
+root = {{.xdg_data_home}}/automation/home-ops/scripts/dotfiles
+root = {{.xdg_data_home}}/chezmoi
+
+# Synchronization preferences
+auto = true
+batch = true
+backupdir = {{.xdg_cache_home}}/unison
+backuploc = central
+confirmbigdel = false
+fastcheck = true
+times = true
+
+# Resolve conflicts by favoring the newest files
+prefer = newer
+
+# Ignore some files and directories
+ignore = Name {.git,.DS_Store,*.bak,dist,node_modules,.idea}
