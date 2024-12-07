@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  UNISON_PREFIX: "unison"
+  UNISON_HOME: "${HOME}/.unison"
+
+tasks:
+#  all:
+#    desc: "Sync all Unison profiles"
+#    cmd: |
+#        for profile in "{{.UNISON_PROFILES}}"; do
+#            unison "${profile}"
+#        done
+#    dir: "{{.UNISON_HOME}}"
+#    vars:
+#      UNISON_PROFILES:
+#        sh: "fd --extension prf --exclude default.prf --print0 . | xargs -0 -n 1 basename -s .prf"
+
+  proxy:
+    desc: "Bi-directional sync with Unison for caddy/crowdsec/fenrus"
+    preconditions:
+      - sh: test -f "${HOME}/.unison/proxy-config.prf"
+        msg: "Unison profile not found"
+      - sh: test -f "${HOME}/.unison/caddy.prf"
+        msg: "Unison profile not found"
+      - sh: test -f "${HOME}/.unison/fenrus.prf"
+        msg: "Unison profile not found"
+    cmds:
+      - unison proxy-config
+      - unison caddy
+      - unison fenrus
+
+  watchyourlan:
+    desc: "Watch your LAN bi-directional sync with Unison"
+    preconditions:
+      - sh: test -f "${HOME}/.unison/watchyourlan.prf"
+        msg: "Unison profile not found"
+    cmds:
+      - unison watchyourlan
+

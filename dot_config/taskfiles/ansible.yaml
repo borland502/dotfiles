@@ -1,76 +1,21 @@
-# chezmoi:template:left-delimiter="##" right-delimiter=##
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 
 vars:
-  PYTEST_PREFIX: pytest
-  POLY_BASES: "${DASBOOTSTRAP_HOME}/bases/**/*"
-  POLY_COMPONENTS: "${DASBOOTSTRAP_HOME}/components/**/*"
-  PYTHON_SRC:
-    sh: fd --glob "*.py" | tr '\n' ' '
-  SCRIPTS:
-    sh: fd --no-ignore --glob '*.sh' | tr '\n' ' '
+  ANSIBLE_HOME: "${HOME}/.ansible"
+  NX_PREFIX: "nx run-commands "
 
 includes:
   inv:
-    taskfile: "{{.XDG_CONFIG_HOME}}/taskfiles/inventory.yaml"
-    dir: "${DASBOOTSTRAP_HOME}"
+    taskfile: "${XDG_CONFIG_HOME}/taskfiles/inventory.yaml"
+    dir: "${ANSIBLE_HOME}"
 
 tasks:
   adhoc:
     desc: Use an ad-hoc ansible command to execute a local script on a remote machine
     cmds:
-      - "{{.ANSIBLE}} all -m ansible.builtin.setup {{.ANSIBLE_ALL_INV_SUFFIX}}"
+      - "ansible all -m ansible.builtin.setup ${ANSIBLE_ALL_INV_SUFFIX}"
     ignore_error: true
-
-  build:
-    desc: Build all projects
-    deps:
-      - task: poetry:shell
-    cmds:
-      - "{{.POETRY}} build-project"
-    sources:
-      - "{{.POLY_BASES}}"
-      - "{{.POLY_COMPONENTS}}"
-    generates:
-      - "${DASBOOTSTRAP_HOME}/dist/*.whl"
-
-  poetry:init:
-    desc: Initialize new poetry project
-    status:
-      - test -f pyproject.toml
-    cmds:
-      - "poetry init --no-interaction"
-
-  poetry:shell:
-    desc: Initialize the virtual environment for this project
-    status:
-      - test -d ${DASBOOTSTRAP_HOME}/.venv
-    cmds:
-      - "poetry shell"
-
-  poetry:install:
-    desc: Install the poetry packages if missing
-    deps:
-      - task: poetry:init
-      - task: poetry:shell
-    cmds:
-      - "{{.RUN_PREFIX}} lock"
-      - "{{.RUN_PREFIX}} install --no-root"
-    sources:
-      - "${DASBOOTSTRAP_HOME}/.venv/lib/python{{.PYTHON_VER}}/site-packages"
-      - "${DASBOOTSTRAP_HOME}/.venv/lib64/python{{.PYTHON_VER}}/site-packages"
-      - "${DASBOOTSTRAP_HOME}/pyproject.toml"
-
-  venv:install:
-    desc: Install the dasbootstrap project to the venv
-    deps:
-      - task: build
-    cmds:
-      - "pip install ${DASBOOTSTRAP_HOME}/dist/*.whl"
-    sources:
-      - "${DASBOOTSTRAP_HOME}/dist/*.whl"
-    generates:
-      - "${DASBOOTSTRAP_HOME}/.venv/lib/python{{.PYTHON_VER}}/site-packages/dasbootstrap"
 
   update:containers:
     deps:

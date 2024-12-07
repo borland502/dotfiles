@@ -1,13 +1,5 @@
 mkdir -p "${XDG_CACHE_HOME}/completions"
 
-zinit wait lucid for \
-  OMZL::git.zsh \
-  OMZP::git \
-  OMZP::git-extras \
-  OMZP::tig \
-  OMZP::git-auto-fetch \
-  unixorn/git-extra-commands
-
 zinit wait lucid depth"1" for \
       atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
       zdharma-continuum/fast-syntax-highlighting \

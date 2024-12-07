@@ -1,0 +1,20 @@
+# Unison preferences file
+
+# Common synchronization preferences
+auto = true
+batch = true
+dontchmod = true
+perms = 0
+backupdir = {{.xdg_cache_home}}/unison
+backuploc = central
+confirmbigdel = false
+fastcheck = true
+times = true
+
+# Resolve conflicts by favoring the newest files
+prefer = newer
+
+# Ignore some files and directories
+ignore = Name {.git,.DS_Store,*.bak,dist,node_modules,.idea, venv, .venv}
+
+# find . -type d -exec chmod 751 {} \; -o -type f -exec chmod 660 {} \;

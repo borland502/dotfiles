@@ -26,10 +26,8 @@
 {{- $rsyncPrefix := "rsync -avzPh" -}}
 
 keepassxc:
-  database: "{{ $xdg_data_home }}/keepass/secrets.kdbx"
-  args: ["--key-file", "{{ $xdg_state_home }}/keepass/secrets.keyx", "--yubikey", "2:19116593"]
+  database: "{{ $xdg_data_home }}/trapper_keeper/bootstrap.kdbx"
   mode: "open"
-  prompt: true
 
 hooks.read-source-state.pre:
   command: ".local/share/chezmoi/.install-password-manager.sh"

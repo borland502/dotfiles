@@ -1,0 +1,11 @@
+# Unison preferences file
+
+# Caddy is a single Go binary, so we can synchronize it directly for upgrades
+
+# Root directories to synchronize
+root = ssh://fenrus//usr/bin
+root = {{.xdg_data_home}}/automation/home-db/caddy/usr/bin
+
+path = caddy
+
+include default

@@ -25,6 +25,7 @@ tasks:
 
   sync:
     desc: "Synchronize development dir with working chezmoi dir"
+    interactive: true
     preconditions:
       - sh: "command -v chezmoi"
       - sh: "command -v rsync"
@@ -38,6 +39,7 @@ tasks:
 
   sync:bi:
     desc: "Synchronize chezmoi dir with working development dir in both directions"
+    interactive: true
     preconditions:
       - sh: test -f "${XDG_CONFIG_HOME}/unison/chezmoi.prf"
     cmds:
@@ -45,9 +47,9 @@ tasks:
       - task: init
       - task: apply
 
-  deploy:
-    desc: "Deploy chezmoi dotfiles"
-    deps:
-      - task: sync:bi
-    cmds:
-      -
+#  deploy:
+#    desc: "Deploy chezmoi dotfiles"
+#    deps:
+#      - task: sync:bi
+#    cmds:
+#      -
