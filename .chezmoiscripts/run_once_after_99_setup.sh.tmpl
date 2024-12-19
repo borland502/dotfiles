@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-pyenv global
-eval "$(pyenv virtualenv-init -)"
-
 {{ if eq .chezmoi.os "darwin" }}
 source /usr/local/opt/zinit/zinit.zsh
 {{ else }}

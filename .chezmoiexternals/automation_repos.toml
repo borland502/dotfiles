@@ -6,10 +6,6 @@
   refreshPeriod = "2160h"
   type = "git-repo"
   url = "https://github.com/borland502/acme.sh.git"
-[".local/share/automation/home-ops"]
-  refreshPeriod = "2160h"
-  type = "git-repo"
-  url = "https://github.com/borland502/home-ops"
 [".local/share/automation/proxmoxve"]
   refreshPeriod = "2160h"
   type = "git-repo"

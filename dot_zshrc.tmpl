@@ -63,7 +63,6 @@ zinit light-mode depth"1" for \
 zi load atuinsh/atuin
 zi light MichaelAquilina/zsh-you-should-use
 
-
 zinit wait lucid for \
 OMZP::mvn \
 OMZP::npm \
@@ -87,17 +86,12 @@ eval "$(ssh-agent)"
 ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
 {{end -}}
 
-{{ if (joinPath .chezmoi.homeDir "/.local/share/nvm/nvm.sh" | lstat) -}}
-source  "${XDG_DATA_HOME}/nvm/nvm.sh"
-{{end}}
-
 {{if (and (ne .chezmoi.homeDir "") (lookPath "starship")) -}}
 eval "$(starship init zsh)"
 {{end}}
 
-{{if (joinPath .chezmoi.homeDir "$HOME/.sdkman/bin/sdkman-init.sh" | lstat) -}}
-export SDKMAN_DIR="$HOME/.sdkman"
-zi snippet "$HOME/.sdkman/bin/sdkman-init.sh"
+{{if (joinPath .chezmoi.homeDir "$HOME/.asdf/asdf.sh" | lstat) -}}
+ . ~/.asdf/plugins/java/set-java-home.zsh
 {{end}}
 
 autoload -U +X bashcompinit && bashcompinit

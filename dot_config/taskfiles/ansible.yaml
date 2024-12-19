@@ -35,11 +35,8 @@ tasks:
           echo $(gum input --prompt="What is the hostname for the KVM template? " --placeholder "kvm")
   create:lxc:
     desc: Create an LXC by hostname
-    deps:
-      - task: venv:install
     cmds:
-      - |
-        poetry run python -m {{.DBS_MODULE_DASBOOTSTRAP}} create-lxc --app-name '{{ .LXC_HOST }}'
+      - task: pya:ans:create:lxc
     vars:
       LXC_HOST:
         sh: |
@@ -77,9 +74,9 @@ tasks:
     run: "once"
     desc: Download and validate external sources ansible depends upon
     cmds:
-      - "{{.ANSIBLE_PLAYBOOK}} {{.ANSIBLE_HOME}}/playbooks/maintainence/find_sqlite.yaml {{.ANSIBLE_ALL_INV_SUFFIX}}/ 2>/dev/null"
-      - "cp ${DASBOOTSTRAP_HOME}/ansible/collections/requirements.yml {{.ANSIBLE_HOME}}/collections/requirements.yml"
-      - "cp ${DASBOOTSTRAP_HOME}/ansible/roles/requirements.yml {{.ANSIBLE_HOME}}/roles/requirements.yml"
+      - "{{.ANSIBLE_PLAYBOOK}} {{.ANSIBLE_HOME}}/playbooks/maintenance/find_sqlite.yaml {{.ANSIBLE_ALL_INV_SUFFIX}}/ 2>/dev/null"
+      - "cp ${HO_HOME}/ansible/collections/requirements.yml {{.ANSIBLE_HOME}}/collections/requirements.yml"
+      - "cp ${HO_HOME}/ansible/roles/requirements.yml {{.ANSIBLE_HOME}}/roles/requirements.yml"
     generates:
       - "{{.ANSIBLE_HOME}}/secrets/db.sqlite"
 

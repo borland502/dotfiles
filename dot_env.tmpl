@@ -25,13 +25,9 @@
 {{ . | replace ": " "=" }}
 {{ end -}}
 
-{{range .pyenv.vars -}}
+{{ range .asdf.vars -}}
 {{ . | replace ": " "=" }}
-{{ end -}}
-
-{{range .nvm.vars -}}
-{{ . | replace ": " "=" }}
-{{ end -}}
+{{end -}}
 
 {{range .pipx.vars -}}
 {{ . | replace ": " "=" }}
