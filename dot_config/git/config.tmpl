@@ -7,19 +7,17 @@
   gpgSign = true
 [gpg]
   format = ssh
+[init]
+  defaultBranch = main
 [pull]
   rebase = true
-{{- if (eq .chezmoi.hostname "automation") }}
-[status]
-  submodulesummary = true
-{{- end }}
 {{ if or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin") -}}
 [credential "https://github.com"]
-    helper =
-    helper = !$(brew --prefix)/bin/gh auth git-credential
+  helper =
+  helper = !$(brew --prefix)/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-    helper =
-    helper = !$(brew --prefix)/bin/gh auth git-credential
+  helper =
+  helper = !$(brew --prefix)/bin/gh auth git-credential
 {{- end }}
 [core]
 {{ if or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin") -}}

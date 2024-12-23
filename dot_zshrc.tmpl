@@ -4,11 +4,42 @@
 # Sources
 # https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
 
-{{ if eq .chezmoi.os "darwin" }}
-source /opt/homebrew/opt/zinit/zinit.zsh
-{{ else }}
-source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
-{{ end }}
+# ASDF sets the environment for a lot of tools, so we need to source it first
+# https://notes.billmill.org/computer_usage/asdf/make_asdf_follow_the_XDG_spec.html
+if ! [[ -d $XDG_DATA_HOME/asdf ]]; then
+  git clone https://github.com/asdf-vm/asdf.git ${XDG_DATA_HOME}/asdf --branch v0.15.0
+fi
+
+if [[ -d $XDG_DATA_HOME/asdf ]]; then
+    # I really wish asdf supported XDG_CONFIG:
+    # https://github.com/asdf-vm/asdf/issues/687
+    #
+    # so let's set a bunch of variables that let us pretend it does
+    export ASDF_DIR="$XDG_DATA_HOME/asdf"
+    export ASDF_DATA_DIR="$XDG_DATA_HOME/asdf"
+
+    . "$ASDF_DIR/asdf.sh"
+
+    # https://asdf-vm.com/manage/configuration.html#asdfrc
+    export ASDF_CONFIG_FILE="$XDG_CONFIG_HOME/asdfrc"
+
+    # https://github.com/asdf-vm/asdf-nodejs#default-npm-packages
+    export ASDF_NPM_DEFAULT_PACKAGES_FILE="$XDG_CONFIG_HOME/default-npm-packages"
+
+    # https://github.com/asdf-community/asdf-python#default-python-packages
+    export ASDF_PYTHON_DEFAULT_PACKAGES_FILE="$XDG_CONFIG_HOME/default-python-packages"
+    export ASDF_JAVA_DEFAULT_PACKAGES_FILE="$XDG_CONFIG_HOME/default-java-packages"
+fi
+
+if [[ -d /opt/homebrew/opt/zinit ]]; then
+  source /opt/homebrew/opt/zinit/zinit.zsh
+elif [[ -d /home/linuxbrew/.linuxbrew/opt/zinit ]]; then
+  source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
+else
+  bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+fi
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
 source "${XDG_CONFIG_HOME}/zshrc/exports.zsh"
 
@@ -90,9 +121,4 @@ ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
 eval "$(starship init zsh)"
 {{end}}
 
-{{if (joinPath .chezmoi.homeDir "$HOME/.asdf/asdf.sh" | lstat) -}}
- . ~/.asdf/plugins/java/set-java-home.zsh
-{{end}}
-
-autoload -U +X bashcompinit && bashcompinit
 autoload -U +X compinit && compinit

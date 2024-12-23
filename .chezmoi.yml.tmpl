@@ -32,6 +32,8 @@ keepassxc:
 hooks.read-source-state.pre:
   command: ".local/share/chezmoi/.install-password-manager.sh"
 
+sourceDir: "{{ $xdg_data_home }}/automation/home-ops/scripts/dotfiles"
+
 scriptEnv:
   ANSIBLE_HOME: {{$ansible_home}}
   HOMEBREW_PREFIX: {{$homebrew_home}}
