@@ -10,3 +10,11 @@
   refreshPeriod = "2160h"
   type = "git-repo"
   url = "https://github.com/community-scripts/ProxmoxVE.git"
+[".local/share/nvm"]
+  refreshPeriod = "2160h"
+  type = "git-repo"
+  url = "https://github.com/nvm-sh/nvm.git"
+[".local/share/pyenv"]
+  refreshPeriod = "2160h"
+  type = "git-repo"
+  url = "https://github.com/pyenv/pyenv.git"

@@ -3,11 +3,33 @@
 
 set -o allexport
 {{range .xdg -}}
-{{ . | replace ": " "=" }}
+  {{ . | replace ": " "=" }}
 {{end -}}
 set +o allexport
 
 {{- if ne .chezmoi.os "darwin" }}
-# Set PATH, MANPATH, etc., for Homebrew linux.
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  # Set PATH, MANPATH, etc., for Homebrew linux.
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 {{ end }}
+
+# Set Pyenv
+set -o allexport
+{{- range .pyenv.vars -}}
+  {{- range $key, $value := . }}
+    {{ $key }}="{{ $value }}"
+  {{- end }}
+{{- end }}
+set +o allexport
+
+{{ .pyenv.cmds.INIT }}
+
+# Set NVM
+set -o allexport
+{{- range .nvm.vars -}}
+  {{- range $key, $value := . }}
+    {{ $key }}="{{ $value }}"
+  {{- end }}
+{{- end }}
+set +o allexport
+
+{{ .nvm.cmds.SOURCE }}

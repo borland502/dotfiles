@@ -12,20 +12,9 @@ if [[ $(command -v ng 2>/dev/null) ]]; then
   source <(ng completion script)
 fi
 
-if [[ -f "${ASDF_DIR}/completions/_asdf" ]]; then
-  source "${ASDF_DIR}/completions/_asdf"
-fi
-
 # Load completions from Homebrew
 if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
   for file in /opt/homebrew/share/zsh/site-functions/_*; do
-    cp --remove-destination "$file" "${XDG_DATA_HOME}/zinit/completions"
-  done
-fi
-
-# Load completions from asdf
-if [[ -d $XDG_DATA_HOME/asdf ]]; then
-  for file in $XDG_DATA_HOME/asdf/completions/_*; do
     cp --remove-destination "$file" "${XDG_DATA_HOME}/zinit/completions"
   done
 fi

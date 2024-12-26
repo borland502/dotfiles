@@ -2,6 +2,13 @@
 ## Comments grabbed from arch wiki on the variables
 
 set -o allexport
+{{- range $key, $value := .tool.versions }}
+{{ $key }}={{ $value }}
+{{- end }}
+set +o allexport
+
+# TODO: Phase out .versions.vars and convert all env to key value pairs
+set -o allexport
 {{range .versions.vars -}}
 {{ . | replace ": " "=" }}
 {{end -}}
@@ -20,7 +27,7 @@ set -o allexport
 set +o allexport
 
 if ! [[ -d ${PYENV_ROOT} ]]; then
-    git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/pyenv && pyenv install "3.12" && pyenv global "3.12"
+    git clone https://github.com/pyenv/pyenv ${XDG_DATA_HOME}/pyenv && pyenv install ${PYTHON_VERSION} && pyenv global ${PYTHON_VERSION}
 fi
 
 set -o allexport

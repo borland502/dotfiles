@@ -4,8 +4,11 @@
 {{ . | replace ": " "=" }}
 {{ end -}}
 
+
 {{range .env.vars -}}
-{{ . | replace ": " "=" }}
+{{range $key, $value := . -}}
+{{ $key }}="{{ $value }}"
+{{end}}
 {{ end -}}
 
 {{range .taskfile -}}
@@ -16,24 +19,33 @@
 {{ . | replace ": " "=" }}
 {{ end -}}
 
-# Duplicates .zshenv but a handful of scripts reference .env directly
-{{range .versions.vars -}}
-{{ . | replace ": " "=" }}
-{{ end -}}
-
 {{range .kitty.vars -}}
-{{ . | replace ": " "=" }}
+{{range $key, $value := . -}}
+{{ $key }}="{{ $value }}"
+{{end}}
 {{ end -}}
 
-{{ range .asdf.vars -}}
-{{ . | replace ": " "=" }}
-{{end -}}
+{{range .pyenv.vars -}}
+{{range $key, $value := . -}}
+{{ $key }}="{{ $value }}"
+{{end}}
+{{ end -}}
+
+{{range .nvm.vars -}}
+{{range $key, $value := . -}}
+{{ $key }}="{{ $value }}"
+{{end}}
+{{ end -}}
 
 {{range .pipx.vars -}}
-{{ . | replace ": " "=" }}
+{{range $key, $value := . -}}
+{{ $key }}="{{ $value }}"
+{{end}}
 {{ end -}}
 
 {{range .zsh.vars -}}
-{{ . | replace ": " "=" }}
+{{range $key, $value := . -}}
+{{ $key }}="{{ $value }}"
+{{end}}
 {{ end -}}
 

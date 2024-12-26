@@ -1,71 +1,26 @@
 #!/usr/bin/env zsh
-
-{{ if eq .chezmoi.os "darwin" }}
-source /usr/local/opt/zinit/zinit.zsh
-{{ else }}
-source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
-{{ end }}
+source $(brew --prefix)/zinit/zinit.zsh
 
 source ~/.zshrc
 
 if [[ $(command -v task) ]]; then
     task --version
+else
+    echo "task not found"
 fi
 
-# linuxbrew is not installed on arm
-{{ if findOneExecutable (list "brew") (list "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin" (env "PATH")) }}
+# NVM should be installed by this point, but may not yet be sourced
+if [[ -z ${NVM_DIR+x} ]]; then
+  export NVM_DIR="${XDG_DATA_HOME}/nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+fi
 
-# brew
-{{if eq .chezmoi.os "darwin" }}
-eval "$(/usr/local/bin/brew shellenv)"
-{{else}}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{end}}
-
-{{if not (findOneExecutable .brew.packages (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH"))) }}
-{{range .brew.packages -}}
-"brew" "install" {{.}}
-{{end}}
-{{end -}}
-{{end}}
-
-pipx ensurepath
-
-{{ if findOneExecutable (list "pipx") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
-{{if not (findOneExecutable .pipx.packages (list (env "PATH"))) }}
-{{range .pipx.packages -}}
-"pipx" "install" "--include-deps" {{.}}
-{{end}}
-{{end -}}
-{{end}}
-
-{{ if findOneExecutable (list "poetry") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
-{{if not (joinPath .chezmoi.homeDir "/.local/share/automation/dasbootstrap/.venv" | lstat )}}
-"cd" "$HOME/.local/share/automation/dasbootstrap"
-"poetry" "install"
-{{end}}
-
-"poetry" "env" "info"
-{{end}}
-
-{{if (findOneExecutable (list "npm") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin")) }}
-{{range .npm.packages -}}
-"npm" "install" {{.}}
-{{end}}
-{{range .npm.global_packages -}}
-"npm" "install" "-g" {{.}}
-{{end}}
-{{end -}}
-
-{{ if findOneExecutable (list "task") (list ".local/bin" "/usr/local/bin" "/home/linuxbrew/.linuxbrew/bin") -}}
-tg --list
-{{ else }}
-    {{if eq .chezmoi.os "windows" }}
-        ${XDG_DATA_HOME}/automation/dasbootstrap/bin/install_task.ps1
-    {{else}}
-        ${XDG_DATA_HOME}/automation/dasbootstrap/bin/install_task.sh
-    {{end}}
-{{end}}
+# PYENV should be installed by this point, but may not yet be sourced
+if [[ -z ${PYENV_ROOT+x} ]]; then
+  export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init --path)"
+fi
 
 source ~/.zshrc
 
