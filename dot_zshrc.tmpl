@@ -104,7 +104,27 @@ ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
 eval "$(starship init zsh)"
 {{end}}
 
+# Set Pyenv
+set -o allexport
+{{- range .pyenv.vars -}}
+  {{- range $key, $value := . }}
+    {{ $key }}="{{ $value }}"
+  {{- end }}
+{{- end }}
+set +o allexport
+
 {{ .pyenv.cmds.INIT }}
+
+# Set NVM
+set -o allexport
+{{- range .nvm.vars -}}
+  {{- range $key, $value := . }}
+    {{ $key }}="{{ $value }}"
+  {{- end }}
+{{- end }}
+set +o allexport
+
+{{ .nvm.cmds.SOURCE }}
 
 autoload -U +X bashcompinit && bashcompinit
 autoload -U +X compinit && compinit

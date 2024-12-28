@@ -52,6 +52,7 @@ data:
   home: "{{ $home }}"
   name: "{{ $name }}"
   email: "{{ $email }}"
+  sourceDir: "{{ $xdg_data_home }}/automation/home-ops/scripts/dotfiles"
   taskfile: [
     'ANSIBLE_HOME: "{{$home}}/.ansible"',
     'AUTOMATION_HOME: "{{$xdg_data_home}}/automation"',
