@@ -1,0 +1,8 @@
+---
+# This role needs API and SSH access to a PVE node with become privileges
+# in order to create a container. Please set pve_host to the corresponding
+# host present in the inventory
+#pve_host: pve.example.com
+pve_api_host: "{{ (keepassxcAttribute "6D00CD42-B9D8-4D3A-9C7E-845FF4E3BDB0" "API_URL") }}"
+pve_api_user: "{{ (keepassxcAttribute "6D00CD42-B9D8-4D3A-9C7E-845FF4E3BDB0" "API_ID") }}"
+pve_api_password: "{{ (keepassxcAttribute "6D00CD42-B9D8-4D3A-9C7E-845FF4E3BDB0" "API_PASSWORD") }}"
