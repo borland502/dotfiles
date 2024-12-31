@@ -7,7 +7,7 @@ vars:
 
 includes:
   inv:
-    taskfile: "${XDG_CONFIG_HOME}/taskfiles/inventory.yaml"
+    taskfile: "${XDG_DATA_HOME}/automation/home-ops/scripts/taskfiles/inventory.yaml"
     dir: "${ANSIBLE_HOME}"
 
 tasks:
