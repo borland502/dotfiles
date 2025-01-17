@@ -55,7 +55,7 @@ callbacks_enabled=community.general.syslog_json,json,community.general.yaml,ansi
 
 # (pathspec) Colon separated paths in which Ansible will search for collections content. Collections must be in nested *subdirectories*, not directly in these directories. For example, if ``COLLECTIONS_PATHS`` includes ``~/.ansible/collections``, and you want to add ``my.collection`` to that directory, it must be saved as ``~/.ansible/collections/ansible_collections/my/collection``.
 
-collections_path=~/.ansible/collections
+collections_path=~/.ansible/collections:{{.xdg_data_home}}/automation/home-ops/scripts/ansible/collections
 
 # (boolean) A boolean to enable or disable scanning the sys.path for installed collections
 ;collections_scan_sys_path=True
@@ -150,7 +150,7 @@ inventory=~/.ansible/inventory
 ;internal_poll_interval=0.001
 
 # (pathspec) Colon separated paths in which Ansible will search for Inventory Plugins.
-inventory_plugins=~/.ansible/plugins/inventory
+inventory_plugins=~/.ansible/plugins/inventory:{{.xdg_data_home}}/automation/home-ops/scripts/ansible/plugins/inventory
 
 # (string) This is a developer-specific feature that allows enabling additional Jinja2 extensions.
 # See the Jinja2 documentation for details. If you do not know what these do, you probably don't need to change this setting :)
@@ -226,7 +226,7 @@ lookup_plugins=~/.ansible/plugins/lookup:/usr/share/ansible/plugins/lookup
 # remote_user=ansible
 
 # (pathspec) Colon separated paths in which Ansible will search for Roles.
-roles_path=~/.ansible/roles
+roles_path=~/.ansible/roles:{{.xdg_data_home}}/automation/home-ops/scripts/ansible/roles
 
 # (string) Set the main callback used to display Ansible output. You can only have one at a time.
 # You can have many other callbacks, but just one can be in charge of stdout.

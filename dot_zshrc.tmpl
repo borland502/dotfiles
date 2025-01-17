@@ -104,6 +104,18 @@ ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
 eval "$(starship init zsh)"
 {{end}}
 
+if [[ -d ~/.local/share/sdkman ]]; then
+  # Set SDKMan
+  set -o allexport
+  {{- range .sdkman.vars -}}
+    {{- range $key, $value := . }}
+      {{ $key }}="{{ $value }}"
+    {{- end }}
+  {{- end }}
+
+  {{ .sdkman.cmds.SOURCE }}
+fi
+
 # Set Pyenv
 set -o allexport
 {{- range .pyenv.vars -}}

@@ -1,13 +1,6 @@
 # chezmoi:template:left-delimiter="[[" right-delimiter=]]
 version: "3"
 
-vars:
-  [[range .taskfile -]]
-  [[.]]
-  [[end -]]
-  [[range .taskfile_ansible -]]
-  [[.]]
-  [[end]]
 tasks:
   clean:
     desc: Purge inventory cache
