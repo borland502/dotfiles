@@ -1,0 +1,26 @@
+[bootstrap.constants]
+    XDG_BIN_HOME = "${HOME}/.local/bin"
+    XDG_CACHE_HOME = "${HOME}/.cache"
+    XDG_CONFIG_HOME = "${HOME}/.config"
+    XDG_DATA_HOME = "${HOME}/.local/share"
+    XDG_LIB_HOME = "${HOME}/.local/lib"
+    XDG_RUNTIME_DIR = "${HOME}/.run"
+    XDG_STATE_HOME = "${HOME}/.local/state"
+    bootstrap_entry = "36EF1A2C-773E-4F9D-AE8A-07B21E21C317"
+    bootstrap_uuid = "A9906776-8CEB-4044-8D65-97B5A93920DD"
+    default_file_mode = "0644"
+    default_username = "ansible"
+    encoding = "utf-8"
+    key_length = 128
+    passphrase_length = 7
+    user_dir_mode = "0700"
+    user_file_mode = "0600"
+
+[bootstrap.keepassxc]
+    db = "keepassxc/keepassxc.kdbx"
+    key = "keepassxc/keepassxc.key"
+    token = "keepassxc/keepassxc.token"
+
+[bootstrap.trapper_keeper]
+    db = "trapper_keeper/bootstrap.kdbx"
+    token = "trapper_keeper/bootstrap.token"

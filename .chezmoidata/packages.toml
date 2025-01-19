@@ -2,7 +2,6 @@
     packages = [
         "apt-transport-https",
         "apt-utils",
-        "bash-completion",
         "bzip2",
         "cloc",
         "dialog",
@@ -57,7 +56,6 @@
         "age",
         "atuin",
         "bat",
-        "bash-completion",
         "btop",
         "chezmoi",
         "coreutils",
@@ -80,7 +78,6 @@
         "gnu-getopt",
         "gnu-tar",
         "gnu-sed",
-        "gopass",
         "go-task",
         "gomplate",
         "grep",

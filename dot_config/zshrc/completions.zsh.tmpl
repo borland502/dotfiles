@@ -13,8 +13,24 @@ if [[ $(command -v ng 2>/dev/null) ]]; then
 fi
 
 # Load completions from Homebrew
-if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
-  for file in /opt/homebrew/share/zsh/site-functions/_*; do
+if [[ -d $(brew --prefix)/share/zsh/site-functions ]]; then
+  for file in $(brew --prefix)/share/zsh/site-functions/_*; do
     cp --remove-destination "$file" "${XDG_DATA_HOME}/zinit/completions"
   done
+fi
+
+if [[ $(command -v kubectl 2>/dev/null) ]]; then
+  source <(kubectl completion zsh)
+fi
+
+if [[ $(command -v helm 2>/dev/null) ]]; then
+  source <(helm completion zsh)
+fi
+
+if [[ $(command -v jbang 2>/dev/null) ]]; then
+  source <(jbang completion zsh)
+fi
+
+if [[ $(command -v colima 2>/dev/null) ]]; then
+  source <(colima completion zsh)
 fi
