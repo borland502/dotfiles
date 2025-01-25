@@ -15,7 +15,13 @@ set -o allexport
 set +o allexport
 
 # Set PATH, MANPATH, etc., for Homebrew linux.
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if [[ -d /home/linuxbrew/.linuxbrew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [[ -d $HOME/.linuxbrew ]]; then
+  eval "$($HOME/.linuxbrew/bin/brew shellenv)"
+elif [[ -d /opt/homebrew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
 set -o allexport
 {{range .pyenv.vars -}}

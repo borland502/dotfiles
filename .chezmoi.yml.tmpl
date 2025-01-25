@@ -11,7 +11,13 @@
 {{- $xdg_runtime_dir := expandenv ("$HOME/.local/run") -}}
 {{- $xdg_data_dirs := expandenv ("/usr/local/share:/usr/share:$HOME/.local/bin:/var/lib/flatpak/exports/share:/flatpak/exports/share") -}}
 {{- $ansible_home := expandenv ("$HOME/.ansible") -}}
-{{- $homebrew_home := "/home/linuxbrew/.linuxbrew" -}}
+{{- $homebrew_paths := list "/home/linuxbrew/.linuxbrew" "/opt/homebrew" (joinPath .chezmoi.homeDir ".linuxbrew") -}}
+{{- $homebrew_home := "" -}}
+{{- range $path := $homebrew_paths -}}
+  {{- if and (eq $homebrew_home "") (stat $path) -}}
+    {{- $homebrew_home = $path -}}
+  {{- end -}}
+{{- end -}}
 {{- $ansible_inv_home := joinPath $ansible_home "/inventory" -}}
 {{- $ansible_grp_vars_home := joinPath $ansible_inv_home "/group_vars" -}}
 {{- $dasbootstrap_home := joinPath $xdg_data_home "/automation/dasbootstrap" -}}

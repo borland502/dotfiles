@@ -32,7 +32,11 @@ set +o allexport
 
 {{- if ne .chezmoi.os "darwin" }}
 # Set PATH, MANPATH, etc., for Homebrew linux.
+{{ if stat "/home/linuxbrew/.linuxbrew/bin/brew" }}
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ else }}
+eval "$($HOME/.linuxbrew/bin/brew shellenv)"
+{{ end }}
 {{ end }}
 
 

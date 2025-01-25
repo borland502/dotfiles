@@ -109,15 +109,27 @@ RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
 # Run this as a distinct step so that brew populates autocomplete and other shell addons to zsh rather than bash
 RUN \
   --mount=type=cache,target=${XDG_CACHE_HOME}/Homebrew,uid="${USER_ID}" \
-  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
+  if [ -d /home/linuxbrew/.linuxbrew ]; then \
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
+  elif [ -d ${HOME}/.linuxbrew ]; then \
+  eval "$($HOME/.linuxbrew/bin/brew shellenv)"; \
+  elif [ -d /opt/homebrew ]; then \
+  eval "$(/opt/homebrew/bin/brew shellenv)"; \
+  fi && \
   brew install zsh && \
-  sudo chsh --shell /home/linuxbrew/.linuxbrew/bin/zsh vscode && zsh
+  sudo chsh --shell $(which zsh) vscode && zsh
 
 RUN \
   --mount=type=cache,target=${XDG_CACHE_HOME}/Homebrew,uid="${USER_ID}" \
-  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
+  if [ -d /home/linuxbrew/.linuxbrew ]; then \
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
+  elif [ -d ${HOME}/.linuxbrew ]; then \
+  eval "$($HOME/.linuxbrew/bin/brew shellenv)"; \
+  elif [ -d /opt/homebrew ]; then \
+  eval "$(/opt/homebrew/bin/brew shellenv)"; \
+  fi && \
   brew install eza btop curl wget bat fd rg sd gum wget fzf go-task git tldr gh vim jq yq \
-    pygments starship z zinit pipx
+  pygments starship z zinit pipx
 
 RUN \. ${NVM_DIR}/nvm.sh && npm install -g typescript ts-node nodemon tsx nx zx playwright jest eslint tsc prettier-eslint
 
