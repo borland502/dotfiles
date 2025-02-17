@@ -32,7 +32,7 @@
 {{- $rsyncPrefix := "rsync -avzPh" -}}
 
 keepassxc:
-  database: "{{ $xdg_data_home }}/trapper_keeper/bootstrap.kdbx"
+  database: "/srv/gdrive/.local/share/trapper_keeper/bootstrap.kdbx"
   mode: "open"
 
 hooks.read-source-state.pre:

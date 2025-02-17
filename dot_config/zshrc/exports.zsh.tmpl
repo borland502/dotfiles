@@ -1,3 +1,9 @@
+# construct the path manually
+{{- if eq or .chezmoi.os "darwin" "linux" }}
+export PATH=/bin:/usr/bin:/usr/share/bin:/usr/local/bin
+{{- end }}
+
+
 {{- if eq .chezmoi.os "darwin" }}
 # Use all gnu utils rather than the elderly BSD ones
 export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
@@ -16,17 +22,6 @@ export PKG_CONFIG_PATH="/usr/local/opt/libarchive/lib/pkgconfig"
 
 {{- else if eq .chezmoi.os "linux" }}
 
-# linuxbrew is not installed on arm
-{{if findOneExecutable (list "brew") (list "/home/linuxbrew/.linuxbrew/bin" (env "PATH")) }}
-if [[ -d /home/linuxbrew/.linuxbrew ]]; then
-    # Linuxbrew
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    # Zinit initialization -- assume prior install
-    source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
-    elif [[ -d "$HOME/.linuxbrew" ]]; then
-    eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
-    source "${HOME}/.linuxbrew/opt/zinit/zinit.zsh"
-fi
 {{end}}
 
 {{- if eq .chezmoi.os "microsoft" }}
