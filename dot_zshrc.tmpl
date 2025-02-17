@@ -4,13 +4,18 @@
 # Sources
 # https://github.com/zdharma/zinit-configs/blob/master/numToStr/zshrc.zsh
 
-source ${XDG_DATA_HOME}/zinit/zinit.git/zinit.zsh
+source ~/.profile
+
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
 {{ if eq .chezmoi.os "darwin" }}
 # Coreutils Overrides
 if [[ -d /opt/homebrew/opt/coreutils/libexec/gnubin ]]; then
   # expose additional GNU tools without a 'g' prefix
-  export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin":$PATH
+  export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 
   # override a few key commands that will remain hidden
   alias cp=gcp
@@ -100,9 +105,10 @@ eval "$(ssh-agent)"
 ssh-add {{ .chezmoi.homeDir }}/.ssh/id_ed25519
 {{end -}}
 
-{{if (and (ne .chezmoi.homeDir "") (lookPath "starship")) -}}
-eval "$(starship init zsh)"
-{{end}}
+if [[ $(command -v starship) ]]; then
+  eval "$(starship init zsh)"
+fi
+
 
 if [[ -d ~/.local/share/sdkman ]]; then
   # Set SDKMan

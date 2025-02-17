@@ -1,10 +1,6 @@
 #!/usr/bin/env zsh
 
-{{ if eq .chezmoi.os "darwin" }}
-source /usr/local/opt/zinit/zinit.zsh
-{{ else }}
-source /home/linuxbrew/.linuxbrew/opt/zinit/zinit.zsh
-{{ end }}
+zinit "${XDG_DATA_HOME}/zinit/zinit.zsh"
 
 if ! [[ $(command -v gum) ]]; then
   brew install gum
