@@ -6,13 +6,10 @@
 
 source ~/.profile
 
-if ! [[ -d ${XDG_DATA_HOME}/zinit ]]; then
-  cur_dir=$(pwd) && cd ${XDG_DATA_HOME}
-  git clone https://github.com/zdharma-continuum/zinit.git
-  cd "${cur_dir}"
-fi
-
-zinit "${XDG_DATA_HOME}/zinit/zinit.zsh"
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
 {{ if eq .chezmoi.os "darwin" }}
 # Coreutils Overrides
