@@ -1,3 +1,9 @@
+# construct the path manually
+{{- if eq or .chezmoi.os "darwin" "linux" }}
+export PATH=/bin:/usr/bin:/usr/share/bin:/usr/local/bin
+{{- end }}
+
+
 {{- if eq .chezmoi.os "darwin" }}
 # Use all gnu utils rather than the elderly BSD ones
 export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
