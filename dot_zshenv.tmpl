@@ -18,4 +18,10 @@ set +o allexport
   eval "$(/opt/homebrew/bin/brew shellenv)"
 {{- end }}
 
-
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
+export ZSH_HISTFILE="${XDG_CACHE_HOME}/zsh/history"
+export ZSH_LOG_DIR="${XDG_CACHE_HOME}/zsh/log"
+export ZSHFQDN="${HOST}.${DOMAIN}"
+export ZSHQDN="${HOST}"
+export ZSHRC="${XDG_CONFIG_HOME}/zshrc"

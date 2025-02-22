@@ -67,7 +67,7 @@ setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 
 ## History.
-HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
+HISTFILE="${ZDOTDIR:-.config/zsh}/.zhistory"
 HISTSIZE=90000
 SAVEHIST=90000
 
