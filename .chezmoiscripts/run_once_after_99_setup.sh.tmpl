@@ -1,7 +1,37 @@
 #!/usr/bin/env zsh
-zinit "${XDG_DATA_HOME}/zinit/zinit.zsh"
 
-source ~/.zshrc
+export ZDOTDIR="${XDG_CONFIG_HOME:-${HOME}/.config}/zsh"
+
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
+source "~/.config/zsh/.zshrc"
+
+# Ensure dasel is installed
+if ! command -v dasel >/dev/null 2>&1; then
+    echo "dasel not found, installing via Homebrew..."
+    brew install dasel
+fi
+
+# Ensure jq is installed
+if ! command -v jq >/dev/null 2>&1; then
+    echo "jq not found, installing via Homebrew..."
+    brew install jq
+fi
+
+echo "Extracting brew packages from packages.toml with dasel..."
+brew_packages=($(dasel -f "/home/jhettenh/.local/share/automation/home-ops/scripts/dotfiles/.chezmoidata/packages.toml" -r toml '.brew.packages' -w json | jq -rce '.[]'))
+
+for pkg in $brew_packages[@]; do
+    if ! brew list --formula | grep -q "^$pkg\$"; then
+        echo "Installing $pkg via Homebrew..."
+        brew install "$pkg"
+    else
+        echo "$pkg is already installed."
+    fi
+done
 
 if [[ $(command -v task) ]]; then
     task --version
@@ -11,18 +41,16 @@ fi
 
 # NVM should be installed by this point, but may not yet be sourced
 if [[ -z ${NVM_DIR+x} ]]; then
-  export NVM_DIR="${XDG_DATA_HOME}/nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    export NVM_DIR="${XDG_DATA_HOME}/nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 fi
 
 # PYENV should be installed by this point, but may not yet be sourced
 if [[ -z ${PYENV_ROOT+x} ]]; then
-  export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init --path)"
+    export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
 fi
-
-source ~/.zshrc
 
 # install vundle plugins
 vim +PluginInstall +qall

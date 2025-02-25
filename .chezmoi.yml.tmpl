@@ -30,9 +30,10 @@
 {{- $runPrefix := "$poetry run" -}}
 {{- $venvPrefix := "pyenv virtualenv" -}}
 {{- $rsyncPrefix := "rsync -avzPh" -}}
+{{- $database := expandenv ("$HOME/.local/state/gdrive/.local/share/trapper_keeper/bootstrap.kdbx") -}}
 
 keepassxc:
-  database: "/srv/gdrive/.local/share/trapper_keeper/bootstrap.kdbx"
+  database: {{ $database }}
   mode: "open"
 
 hooks.read-source-state.pre:

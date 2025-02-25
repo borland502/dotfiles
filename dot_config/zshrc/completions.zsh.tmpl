@@ -1,4 +1,4 @@
-mkdir -p "${XDG_CACHE_HOME}/completions"
+mkdir -p "${XDG_CACHE_HOME}/completions" 2>/dev/null
 
 zinit wait lucid depth"1" for \
       atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
@@ -6,7 +6,8 @@ zinit wait lucid depth"1" for \
       blockf \
       https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
       https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
+      https://github.com/pyenv/pyenv/blob/master/completions/pyenv.zsh
 
 if [[ $(command -v ng 2>/dev/null) ]]; then
   source <(ng completion script)
@@ -15,7 +16,7 @@ fi
 # Load completions from Homebrew
 if [[ -d $(brew --prefix)/share/zsh/site-functions ]]; then
   for file in $(brew --prefix)/share/zsh/site-functions/_*; do
-    cp --remove-destination "$file" "${XDG_DATA_HOME}/zinit/completions"
+    cp --remove-destination "$file" "${XDG_DATA_HOME}/zinit/completions" 2>/dev/null
   done
 fi
 
